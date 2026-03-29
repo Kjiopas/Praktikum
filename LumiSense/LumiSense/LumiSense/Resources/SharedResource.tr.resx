@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="Nav_LiveUv" xml:space="preserve">
+    <value>Canlı UV İzleme</value>
+  </data>
+  <data name="Nav_Shop" xml:space="preserve">
+    <value>Mağaza</value>
+  </data>
+  <data name="Nav_Orders" xml:space="preserve">
+    <value>Siparişler</value>
+  </data>
+  <data name="Nav_ArduinoPowered" xml:space="preserve">
+    <value>Arduino Destekli</value>
+  </data>
+
+  <data name="Auth_Hello" xml:space="preserve">
+    <value>Merhaba {0}!</value>
+  </data>
+  <data name="Auth_Login" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="Auth_Logout" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <data name="Auth_Register" xml:space="preserve">
+    <value>Kayıt Ol</value>
+  </data>
+
+  <data name="Common_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Common_Password" xml:space="preserve">
+    <value>Şifre</value>
+  </data>
+
+  <data name="Login_Title" xml:space="preserve">
+    <value>Giriş</value>
+  </data>
+  <data name="Login_HeroTitle" xml:space="preserve">
+    <value>SolSense UV Girişi</value>
+  </data>
+  <data name="Login_HeroSubtitle" xml:space="preserve">
+    <value>Siparişlerinizi ve UV ölçümlerini takip etmek için hesabınıza giriş yapın</value>
+  </data>
+  <data name="Login_SignIn" xml:space="preserve">
+    <value>Oturum Aç</value>
+  </data>
+  <data name="Login_DontHaveAccount" xml:space="preserve">
+    <value>Hesabınız yok mu? Kayıt olun</value>
+  </data>
+  <data name="Login_ForgotPassword" xml:space="preserve">
+    <value>Şifrenizi mi unuttunuz?</value>
+  </data>
+  <data name="Login_ResendEmailConfirmation" xml:space="preserve">
+    <value>E-posta doğrulamasını yeniden gönder</value>
+  </data>
+
+  <data name="Logout_Title" xml:space="preserve">
+    <value>Çıkış</value>
+  </data>
+  <data name="Logout_Success" xml:space="preserve">
+    <value>Başarıyla çıkış yaptınız.</value>
+  </data>
+  <data name="Logout_LoginAgain" xml:space="preserve">
+    <value>Tekrar giriş yap</value>
+  </data>
+
+  <data name="Home_Title" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+  <data name="Home_HeroTitle" xml:space="preserve">
+    <value>Akıllı UV Radyasyon Ölçer</value>
+  </data>
+  <data name="Home_HeroSubtitle" xml:space="preserve">
+    <value>Arduino destekli gerçek zamanlı UV izleme. Dışarı çıkmanın güvenli olup olmadığını bilin!</value>
+  </data>
+  <data name="Home_CheckUvNow" xml:space="preserve">
+    <value>Şimdi UV Kontrol Et</value>
+  </data>
+
+  <data name="Privacy_Title" xml:space="preserve">
+    <value>Gizlilik Politikası</value>
+  </data>
+  <data name="Privacy_Body" xml:space="preserve">
+    <value>Bu sayfayı sitenizin gizlilik politikasını detaylandırmak için kullanın.</value>
+  </data>
+
+  <data name="Live_Title" xml:space="preserve">
+    <value>Canlı UV Okuması</value>
+  </data>
+  <data name="Live_LocationDefault" xml:space="preserve">
+    <value>New York, ABD</value>
+  </data>
+  <data name="Live_UvIndexLabel" xml:space="preserve">
+    <value>UV İndeksi</value>
+  </data>
+  <data name="Live_LowRisk" xml:space="preserve">
+    <value>Düşük UV Riski</value>
+  </data>
+  <data name="Live_RecommendationDefault" xml:space="preserve">
+    <value>DIŞARI ÇIKMAK GÜVENLİ! Mükemmel plaj havası! Korunmaya gerek yok.</value>
+  </data>
+  <data name="Live_Protection" xml:space="preserve">
+    <value>Korunma:</value>
+  </data>
+  <data name="Live_NoProtection" xml:space="preserve">
+    <value>Korunmaya gerek yok</value>
+  </data>
+  <data name="Live_LastReading" xml:space="preserve">
+    <value>Son ölçüm:</value>
+  </data>
+  <data name="Live_DataSource" xml:space="preserve">
+    <value>Veri kaynağı: OpenUV API (Gerçek zamanlı)</value>
+  </data>
+  <data name="Live_AverageUvToday" xml:space="preserve">
+    <value>Bugün Ortalama UV</value>
+  </data>
+  <data name="Live_PeakUvToday" xml:space="preserve">
+    <value>Bugün En Yüksek UV</value>
+  </data>
+  <data name="Live_ReadingsToday" xml:space="preserve">
+    <value>Bugünkü Ölçümler</value>
+  </data>
+  <data name="Live_CurrentUvIndex" xml:space="preserve">
+    <value>Mevcut UV İndeksi</value>
+  </data>
+
+  <data name="Shop_Title" xml:space="preserve">
+    <value>Mağaza</value>
+  </data>
+  <data name="Shop_HeroTitle" xml:space="preserve">
+    <value>UV Koruma Ekipmanları</value>
+  </data>
+  <data name="Shop_HeroSubtitle" xml:space="preserve">
+    <value>Premium ürünlerimizle zararlı UV radyasyonundan kendinizi koruyun</value>
+  </data>
+  <data name="Shop_InStock" xml:space="preserve">
+    <value>✓ Stokta ({0})</value>
+  </data>
+  <data name="Shop_BuyNow" xml:space="preserve">
+    <value>Şimdi Satın Al</value>
+  </data>
+  <data name="Shop_OutOfStock" xml:space="preserve">
+    <value>✗ Stokta Yok</value>
+  </data>
+  <data name="Shop_SoldOut" xml:space="preserve">
+    <value>Tükendi</value>
+  </data>
+  <data name="Shop_PlaceOrder" xml:space="preserve">
+    <value>Sipariş Ver</value>
+  </data>
+  <data name="Shop_YourName" xml:space="preserve">
+    <value>Adınız *</value>
+  </data>
+  <data name="Shop_EmailRequired" xml:space="preserve">
+    <value>E-posta *</value>
+  </data>
+  <data name="Shop_EnterYourName" xml:space="preserve">
+    <value>Adınızı girin</value>
+  </data>
+  <data name="Shop_EnterYourEmail" xml:space="preserve">
+    <value>E-posta adresinizi girin</value>
+  </data>
+  <data name="Shop_Quantity" xml:space="preserve">
+    <value>Adet *</value>
+  </data>
+  <data name="Shop_Product" xml:space="preserve">
+    <value>Ürün:</value>
+  </data>
+  <data name="Shop_Price" xml:space="preserve">
+    <value>Fiyat:</value>
+  </data>
+  <data name="Shop_Each" xml:space="preserve">
+    <value>adet başına</value>
+  </data>
+  <data name="Shop_PriceEach" xml:space="preserve">
+    <value>Fiyat: ${0} adet başına</value>
+  </data>
+  <data name="Shop_Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="Shop_PlaceOrderButton" xml:space="preserve">
+    <value>Siparişi Gönder</value>
+  </data>
+  <data name="Shop_FillAllFieldsAlert" xml:space="preserve">
+    <value>Lütfen tüm alanları doldurun</value>
+  </data>
+  <data name="Shop_ErrorPlacingOrder" xml:space="preserve">
+    <value>Sipariş verilirken hata oluştu.</value>
+  </data>
+  <data name="Shop_AddedToCart" xml:space="preserve">
+    <value>Sepete eklendi</value>
+  </data>
+  <data name="Shop_AddToCartFailed" xml:space="preserve">
+    <value>Sepete eklenemedi.</value>
+  </data>
+
+  <data name="Error_Title" xml:space="preserve">
+    <value>Hata</value>
+  </data>
+  <data name="Error_Header" xml:space="preserve">
+    <value>Hata.</value>
+  </data>
+  <data name="Error_SubHeader" xml:space="preserve">
+    <value>İsteğiniz işlenirken bir hata oluştu.</value>
+  </data>
+  <data name="Error_RequestId" xml:space="preserve">
+    <value>İstek Kimliği:</value>
+  </data>
+  <data name="Error_DevModeTitle" xml:space="preserve">
+    <value>Geliştirme Modu</value>
+  </data>
+
+  <data name="Nav_Cart" xml:space="preserve">
+    <value>Sepet</value>
+  </data>
+  <data name="Cart_Title" xml:space="preserve">
+    <value>Sepetiniz</value>
+  </data>
+  <data name="Cart_Empty" xml:space="preserve">
+    <value>Sepetiniz boş.</value>
+  </data>
+  <data name="Cart_GoToShop" xml:space="preserve">
+    <value>Mağazaya git</value>
+  </data>
+  <data name="Cart_Product" xml:space="preserve">
+    <value>Ürün</value>
+  </data>
+  <data name="Cart_Price" xml:space="preserve">
+    <value>Fiyat</value>
+  </data>
+  <data name="Cart_Qty" xml:space="preserve">
+    <value>Adet</value>
+  </data>
+  <data name="Cart_Subtotal" xml:space="preserve">
+    <value>Ara toplam</value>
+  </data>
+  <data name="Cart_Total" xml:space="preserve">
+    <value>Toplam</value>
+  </data>
+  <data name="Cart_Remove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="Cart_Clear" xml:space="preserve">
+    <value>Sepeti temizle</value>
+  </data>
+  <data name="Cart_Checkout" xml:space="preserve">
+    <value>Ödeme</value>
+  </data>
+
+  <data name="Checkout_Title" xml:space="preserve">
+    <value>Ödeme</value>
+  </data>
+  <data name="Checkout_OrderSummary" xml:space="preserve">
+    <value>Sipariş özeti</value>
+  </data>
+  <data name="Checkout_Name" xml:space="preserve">
+    <value>Adınız</value>
+  </data>
+  <data name="Checkout_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Checkout_NamePlaceholder" xml:space="preserve">
+    <value>Adınızı girin</value>
+  </data>
+  <data name="Checkout_EmailPlaceholder" xml:space="preserve">
+    <value>E-posta adresinizi girin</value>
+  </data>
+  <data name="Checkout_CourierInfo" xml:space="preserve">
+    <value>Kurye bilgisi</value>
+  </data>
+  <data name="Checkout_CourierInfoPlaceholder" xml:space="preserve">
+    <value>Kurye / teslimat notu (opsiyonel)</value>
+  </data>
+  <data name="Checkout_BackToCart" xml:space="preserve">
+    <value>Sepete dön</value>
+  </data>
+  <data name="Checkout_PlaceOrder" xml:space="preserve">
+    <value>Siparişi ver</value>
+  </data>
+  <data name="Checkout_SuccessTitle" xml:space="preserve">
+    <value>Sipariş alındı</value>
+  </data>
+  <data name="Checkout_SuccessBody" xml:space="preserve">
+    <value>Siparişiniz başarıyla oluşturuldu.</value>
+  </data>
+  <data name="Checkout_OrderNumber" xml:space="preserve">
+    <value>Sipariş</value>
+  </data>
+
+  <data name="Orders_Title" xml:space="preserve">
+    <value>Siparişleriniz</value>
+  </data>
+  <data name="Orders_LookupTitle" xml:space="preserve">
+    <value>Siparişlerinizi bulun</value>
+  </data>
+  <data name="Orders_LookupHint" xml:space="preserve">
+    <value>Ödeme sırasında kullandığınız e-posta ile siparişlerinizi görüntüleyin.</value>
+  </data>
+  <data name="Orders_ViewOrders" xml:space="preserve">
+    <value>Siparişleri gör</value>
+  </data>
+  <data name="Orders_ClearLookup" xml:space="preserve">
+    <value>Temizle</value>
+  </data>
+  <data name="Orders_None" xml:space="preserve">
+    <value>Sipariş bulunamadı.</value>
+  </data>
+  <data name="Orders_Order" xml:space="preserve">
+    <value>Sipariş</value>
+  </data>
+  <data name="Orders_Date" xml:space="preserve">
+    <value>Tarih</value>
+  </data>
+  <data name="Orders_Email" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Orders_EmailPlaceholder" xml:space="preserve">
+    <value>E-posta adresinizi girin</value>
+  </data>
+  <data name="Orders_Name" xml:space="preserve">
+    <value>Ad</value>
+  </data>
+  <data name="Orders_Total" xml:space="preserve">
+    <value>Toplam</value>
+  </data>
+  <data name="Orders_Details" xml:space="preserve">
+    <value>Detaylar</value>
+  </data>
+  <data name="Orders_DetailsTitle" xml:space="preserve">
+    <value>Sipariş detayları</value>
+  </data>
+  <data name="Orders_Back" xml:space="preserve">
+    <value>Geri</value>
+  </data>
+  <data name="Orders_CourierInfo" xml:space="preserve">
+    <value>Kurye bilgisi</value>
+  </data>
+</root>
+

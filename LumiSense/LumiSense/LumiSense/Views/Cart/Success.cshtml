@@ -1,0 +1,18 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = L["Checkout_SuccessTitle"].Value;
+    var orderId = (int?)ViewData["OrderId"] ?? 0;
+    var message = ViewData["Message"]?.ToString();
+}
+
+<div class="uv-card" style="max-width:720px; margin:0 auto; text-align:center;">
+    <h2>@L["Checkout_SuccessTitle"]</h2>
+    <p>@(string.IsNullOrWhiteSpace(message) ? L["Checkout_SuccessBody"].Value : message)</p>
+    @if (orderId > 0)
+    {
+        <p style="font-weight:800;">@L["Checkout_OrderNumber"]: #@orderId</p>
+    }
+    <p><a href="/Shop">@L["Cart_GoToShop"]</a></p>
+</div>
+

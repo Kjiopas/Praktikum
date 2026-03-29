@@ -1,0 +1,22 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+
+<div class="nav-auth">
+@if (SignInManager.IsSignedIn(User))
+{
+    <a class="nav-auth-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+        @string.Format(L["Auth_Hello"].Value, User.Identity?.Name)
+    </a>
+
+    <form class="nav-auth-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <button type="submit" class="nav-auth-button">@L["Auth_Logout"]</button>
+    </form>
+}
+else
+{
+    <a class="nav-auth-link" asp-area="Identity" asp-page="/Account/Register">@L["Auth_Register"]</a>
+    <a class="nav-auth-link" asp-area="Identity" asp-page="/Account/Login">@L["Auth_Login"]</a>
+}
+</div>

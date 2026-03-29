@@ -1,0 +1,54 @@
+@model LumiSense.Models.Order
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@using System.Globalization
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = L["Orders_DetailsTitle"].Value;
+    var culture = CultureInfo.CurrentCulture;
+}
+
+<div class="uv-card" style="max-width:900px; margin:0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <h2 style="margin:0;">@L["Orders_Order"] #@Model.Id</h2>
+        <a class="cancel-btn" style="text-decoration:none; display:inline-block;" href="/Orders">@L["Orders_Back"]</a>
+    </div>
+
+    <div style="margin-top:1rem; background:white; border-radius:12px; padding:1rem;">
+        <div><strong>@L["Orders_Date"]:</strong> @Model.OrderDate.ToString("f", culture)</div>
+        <div><strong>@L["Orders_Email"]:</strong> @Model.CustomerEmail</div>
+        <div><strong>@L["Orders_Name"]:</strong> @Model.CustomerName</div>
+        @if (!string.IsNullOrWhiteSpace(Model.CourierInfo))
+        {
+            <div><strong>@L["Orders_CourierInfo"]:</strong> @Model.CourierInfo</div>
+        }
+        <div style="margin-top:0.5rem; font-weight:900;">
+            @L["Orders_Total"]: @Model.TotalAmount.ToString("C", culture)
+        </div>
+    </div>
+
+    <div style="margin-top:1rem; overflow:auto;">
+        <table class="table" style="width:100%; background:white; border-radius:12px; overflow:hidden;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding:12px;">@L["Cart_Product"]</th>
+                    <th style="text-align:center; padding:12px;">@L["Cart_Qty"]</th>
+                    <th style="text-align:right; padding:12px;">@L["Cart_Price"]</th>
+                    <th style="text-align:right; padding:12px;">@L["Cart_Subtotal"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var i in Model.Items)
+            {
+                <tr>
+                    <td style="padding:12px;">@i.ProductName</td>
+                    <td style="padding:12px; text-align:center;">@i.Quantity</td>
+                    <td style="padding:12px; text-align:right;">@i.UnitPrice.ToString("C", culture)</td>
+                    <td style="padding:12px; text-align:right;">@((i.UnitPrice * i.Quantity).ToString("C", culture))</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+

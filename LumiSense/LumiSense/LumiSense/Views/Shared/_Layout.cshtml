@@ -1,0 +1,98 @@
+@using System.Globalization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@{
+    var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
+    var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+    var dir = culture == "ar" ? "rtl" : "ltr";
+    var cartCount = 0;
+    try
+    {
+        var cartJson = Context.Session?.GetString("Cart");
+        if (!string.IsNullOrWhiteSpace(cartJson))
+        {
+            var items = System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.List<LumiSense.Models.CartItem>>(cartJson);
+            cartCount = items?.Sum(i => i.Quantity) ?? 0;
+        }
+    }
+    catch
+    {
+        cartCount = 0;
+    }
+}
+<!DOCTYPE html>
+<html lang="@culture" dir="@dir">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SolSense UV</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <i class="fas fa-microchip"></i> SolSense UV
+            </a>
+
+            <div class="nav-right">
+                <div class="nav-links">
+                    <a href="/">@L["Nav_Home"]</a>
+                    <a href="/LiveUV">@L["Nav_LiveUv"]</a>
+                    <a href="/Shop">@L["Nav_Shop"]</a>
+                    <a href="/Orders">@L["Nav_Orders"]</a>
+
+                    <span class="arduino-badge">
+                        <i class="fas fa-microchip"></i> @L["Nav_ArduinoPowered"]
+                    </span>
+                </div>
+
+                <div class="nav-actions">
+                    <div class="lang-switch">
+                        <a class="lang-link @(culture == "en" ? "active" : "")"
+                           asp-controller="Localization" asp-action="SetLanguage"
+                           asp-route-culture="en" asp-route-returnUrl="@returnUrl">EN</a>
+                        <a class="lang-link @(culture == "tr" ? "active" : "")"
+                           asp-controller="Localization" asp-action="SetLanguage"
+                           asp-route-culture="tr" asp-route-returnUrl="@returnUrl">TR</a>
+                        <a class="lang-link @(culture == "bg" ? "active" : "")"
+                           asp-controller="Localization" asp-action="SetLanguage"
+                           asp-route-culture="bg" asp-route-returnUrl="@returnUrl">BG</a>
+                        <a class="lang-link @(culture == "ar" ? "active" : "")"
+                           asp-controller="Localization" asp-action="SetLanguage"
+                           asp-route-culture="ar" asp-route-returnUrl="@returnUrl">AR</a>
+                    </div>
+
+                    <a class="nav-auth-link" href="/Cart" title="@L["Nav_Cart"]">
+                        <i class="fas fa-shopping-cart"></i> @L["Nav_Cart"]
+                        @if (cartCount > 0)
+                        {
+                            <span style="margin-left:6px; background:#F27121; color:white; padding:2px 8px; border-radius:999px; font-size:0.8rem;">
+                                @cartCount
+                            </span>
+                        }
+                    </a>
+
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p><i class="fas fa-microchip"></i> Arduino-Powered UV Meter | Protect Your Skin</p>
+        <p>© 2025 SolSense - Smart UV Protection</p>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

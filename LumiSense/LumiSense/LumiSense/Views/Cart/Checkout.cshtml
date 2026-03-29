@@ -1,0 +1,50 @@
+@model List<LumiSense.Models.CartItem>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@using System.Globalization
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = L["Checkout_Title"].Value;
+    var total = Model.Sum(i => i.UnitPrice * i.Quantity);
+    var culture = CultureInfo.CurrentCulture;
+}
+
+<div class="uv-card" style="max-width:720px; margin:0 auto;">
+    <h2>@L["Checkout_Title"]</h2>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div style="background:white; border-radius:12px; padding:1rem; margin-bottom:1rem;">
+        <div style="font-weight:800; margin-bottom:0.5rem;">@L["Checkout_OrderSummary"]</div>
+        <ul style="margin:0; padding-left:1.25rem;">
+            @foreach (var item in Model)
+            {
+                <li>@item.Name — @item.Quantity × @item.UnitPrice.ToString("C", culture)</li>
+            }
+        </ul>
+        <div style="margin-top:0.75rem; font-weight:900;">
+            @L["Cart_Total"]: @total.ToString("C", culture)
+        </div>
+    </div>
+
+    <form method="post" action="/Cart/Checkout">
+        <div class="form-group">
+            <label>@L["Checkout_Name"]</label>
+            <input class="form-control" name="CustomerName" placeholder="@L["Checkout_NamePlaceholder"]" />
+        </div>
+        <div class="form-group">
+            <label>@L["Checkout_Email"]</label>
+            <input class="form-control" name="CustomerEmail" placeholder="@L["Checkout_EmailPlaceholder"]" />
+        </div>
+        <div class="form-group">
+            <label>@L["Checkout_CourierInfo"]</label>
+            <input class="form-control" name="CourierInfo" placeholder="@L["Checkout_CourierInfoPlaceholder"]" />
+        </div>
+
+        <div style="display:flex; gap:0.75rem; margin-top:1rem; flex-wrap:wrap;">
+            <a class="cancel-btn" href="/Cart" style="text-decoration:none; display:inline-block;">@L["Checkout_BackToCart"]</a>
+            <button type="submit" class="buy-btn">@L["Checkout_PlaceOrder"]</button>
+        </div>
+    </form>
+</div>
+

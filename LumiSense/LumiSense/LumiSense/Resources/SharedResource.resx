@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Nav_LiveUv" xml:space="preserve">
+    <value>Live UV Monitor</value>
+  </data>
+  <data name="Nav_Shop" xml:space="preserve">
+    <value>Shop</value>
+  </data>
+  <data name="Nav_Orders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="Nav_ArduinoPowered" xml:space="preserve">
+    <value>Arduino Powered</value>
+  </data>
+
+  <data name="Auth_Hello" xml:space="preserve">
+    <value>Hello {0}!</value>
+  </data>
+  <data name="Auth_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Auth_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Auth_Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+
+  <data name="Common_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Common_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+
+  <data name="Login_Title" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Login_HeroTitle" xml:space="preserve">
+    <value>SolSense UV Login</value>
+  </data>
+  <data name="Login_HeroSubtitle" xml:space="preserve">
+    <value>Access your account to track orders and UV readings</value>
+  </data>
+  <data name="Login_SignIn" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="Login_DontHaveAccount" xml:space="preserve">
+    <value>Don't have an account? Register</value>
+  </data>
+  <data name="Login_ForgotPassword" xml:space="preserve">
+    <value>Forgot your password?</value>
+  </data>
+  <data name="Login_ResendEmailConfirmation" xml:space="preserve">
+    <value>Resend email confirmation</value>
+  </data>
+
+  <data name="Logout_Title" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Logout_Success" xml:space="preserve">
+    <value>You have successfully logged out.</value>
+  </data>
+  <data name="Logout_LoginAgain" xml:space="preserve">
+    <value>Login again</value>
+  </data>
+
+  <data name="Home_Title" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Home_HeroTitle" xml:space="preserve">
+    <value>Smart UV Radiation Meter</value>
+  </data>
+  <data name="Home_HeroSubtitle" xml:space="preserve">
+    <value>Arduino-powered real-time UV monitoring. Know if it's safe to go outside!</value>
+  </data>
+  <data name="Home_CheckUvNow" xml:space="preserve">
+    <value>Check UV Now</value>
+  </data>
+
+  <data name="Privacy_Title" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="Privacy_Body" xml:space="preserve">
+    <value>Use this page to detail your site's privacy policy.</value>
+  </data>
+
+  <data name="Live_Title" xml:space="preserve">
+    <value>Live UV Reading</value>
+  </data>
+  <data name="Live_LocationDefault" xml:space="preserve">
+    <value>New York, USA</value>
+  </data>
+  <data name="Live_UvIndexLabel" xml:space="preserve">
+    <value>UV Index</value>
+  </data>
+  <data name="Live_LowRisk" xml:space="preserve">
+    <value>Low UV Risk</value>
+  </data>
+  <data name="Live_RecommendationDefault" xml:space="preserve">
+    <value>SAFE TO GO OUT! Perfect beach weather! No protection needed.</value>
+  </data>
+  <data name="Live_Protection" xml:space="preserve">
+    <value>Protection:</value>
+  </data>
+  <data name="Live_NoProtection" xml:space="preserve">
+    <value>No protection needed</value>
+  </data>
+  <data name="Live_LastReading" xml:space="preserve">
+    <value>Last reading:</value>
+  </data>
+  <data name="Live_DataSource" xml:space="preserve">
+    <value>Data source: OpenUV API (Real-time)</value>
+  </data>
+  <data name="Live_AverageUvToday" xml:space="preserve">
+    <value>Average UV Today</value>
+  </data>
+  <data name="Live_PeakUvToday" xml:space="preserve">
+    <value>Peak UV Today</value>
+  </data>
+  <data name="Live_ReadingsToday" xml:space="preserve">
+    <value>Readings Today</value>
+  </data>
+  <data name="Live_CurrentUvIndex" xml:space="preserve">
+    <value>Current UV Index</value>
+  </data>
+
+  <data name="Shop_Title" xml:space="preserve">
+    <value>Shop</value>
+  </data>
+  <data name="Shop_HeroTitle" xml:space="preserve">
+    <value>UV Protection Gear</value>
+  </data>
+  <data name="Shop_HeroSubtitle" xml:space="preserve">
+    <value>Protect yourself from harmful UV radiation with our premium products</value>
+  </data>
+  <data name="Shop_InStock" xml:space="preserve">
+    <value>✓ In Stock ({0})</value>
+  </data>
+  <data name="Shop_BuyNow" xml:space="preserve">
+    <value>Buy Now</value>
+  </data>
+  <data name="Shop_OutOfStock" xml:space="preserve">
+    <value>✗ Out of Stock</value>
+  </data>
+  <data name="Shop_SoldOut" xml:space="preserve">
+    <value>Sold Out</value>
+  </data>
+  <data name="Shop_PlaceOrder" xml:space="preserve">
+    <value>Place Order</value>
+  </data>
+  <data name="Shop_YourName" xml:space="preserve">
+    <value>Your Name *</value>
+  </data>
+  <data name="Shop_EmailRequired" xml:space="preserve">
+    <value>Email *</value>
+  </data>
+  <data name="Shop_EnterYourName" xml:space="preserve">
+    <value>Enter your name</value>
+  </data>
+  <data name="Shop_EnterYourEmail" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
+  <data name="Shop_Quantity" xml:space="preserve">
+    <value>Quantity *</value>
+  </data>
+  <data name="Shop_Product" xml:space="preserve">
+    <value>Product:</value>
+  </data>
+  <data name="Shop_Price" xml:space="preserve">
+    <value>Price:</value>
+  </data>
+  <data name="Shop_Each" xml:space="preserve">
+    <value>each</value>
+  </data>
+  <data name="Shop_PriceEach" xml:space="preserve">
+    <value>Price: ${0} each</value>
+  </data>
+  <data name="Shop_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Shop_PlaceOrderButton" xml:space="preserve">
+    <value>Place Order</value>
+  </data>
+  <data name="Shop_FillAllFieldsAlert" xml:space="preserve">
+    <value>Please fill in all fields</value>
+  </data>
+  <data name="Shop_ErrorPlacingOrder" xml:space="preserve">
+    <value>Error placing order.</value>
+  </data>
+  <data name="Shop_AddedToCart" xml:space="preserve">
+    <value>Added to cart</value>
+  </data>
+  <data name="Shop_AddToCartFailed" xml:space="preserve">
+    <value>Could not add to cart.</value>
+  </data>
+
+  <data name="Error_Title" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Error_Header" xml:space="preserve">
+    <value>Error.</value>
+  </data>
+  <data name="Error_SubHeader" xml:space="preserve">
+    <value>An error occurred while processing your request.</value>
+  </data>
+  <data name="Error_RequestId" xml:space="preserve">
+    <value>Request ID:</value>
+  </data>
+  <data name="Error_DevModeTitle" xml:space="preserve">
+    <value>Development Mode</value>
+  </data>
+
+  <data name="Nav_Cart" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+
+  <data name="Cart_Title" xml:space="preserve">
+    <value>Your Cart</value>
+  </data>
+  <data name="Cart_Empty" xml:space="preserve">
+    <value>Your cart is empty.</value>
+  </data>
+  <data name="Cart_GoToShop" xml:space="preserve">
+    <value>Go to shop</value>
+  </data>
+  <data name="Cart_Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="Cart_Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Cart_Qty" xml:space="preserve">
+    <value>Qty</value>
+  </data>
+  <data name="Cart_Subtotal" xml:space="preserve">
+    <value>Subtotal</value>
+  </data>
+  <data name="Cart_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Cart_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Cart_Clear" xml:space="preserve">
+    <value>Clear cart</value>
+  </data>
+  <data name="Cart_Checkout" xml:space="preserve">
+    <value>Checkout</value>
+  </data>
+
+  <data name="Checkout_Title" xml:space="preserve">
+    <value>Checkout</value>
+  </data>
+  <data name="Checkout_OrderSummary" xml:space="preserve">
+    <value>Order summary</value>
+  </data>
+  <data name="Checkout_Name" xml:space="preserve">
+    <value>Your name</value>
+  </data>
+  <data name="Checkout_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Checkout_NamePlaceholder" xml:space="preserve">
+    <value>Enter your name</value>
+  </data>
+  <data name="Checkout_EmailPlaceholder" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
+  <data name="Checkout_CourierInfo" xml:space="preserve">
+    <value>Courier info</value>
+  </data>
+  <data name="Checkout_CourierInfoPlaceholder" xml:space="preserve">
+    <value>Courier / delivery notes (optional)</value>
+  </data>
+  <data name="Checkout_BackToCart" xml:space="preserve">
+    <value>Back to cart</value>
+  </data>
+  <data name="Checkout_PlaceOrder" xml:space="preserve">
+    <value>Place order</value>
+  </data>
+  <data name="Checkout_SuccessTitle" xml:space="preserve">
+    <value>Order placed</value>
+  </data>
+  <data name="Checkout_SuccessBody" xml:space="preserve">
+    <value>Your order has been placed successfully.</value>
+  </data>
+  <data name="Checkout_OrderNumber" xml:space="preserve">
+    <value>Order</value>
+  </data>
+
+  <data name="Orders_Title" xml:space="preserve">
+    <value>Your Orders</value>
+  </data>
+  <data name="Orders_LookupTitle" xml:space="preserve">
+    <value>Find your orders</value>
+  </data>
+  <data name="Orders_LookupHint" xml:space="preserve">
+    <value>Enter the email you used at checkout to view your orders.</value>
+  </data>
+  <data name="Orders_ViewOrders" xml:space="preserve">
+    <value>View orders</value>
+  </data>
+  <data name="Orders_ClearLookup" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Orders_None" xml:space="preserve">
+    <value>No orders found.</value>
+  </data>
+  <data name="Orders_Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="Orders_Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Orders_Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Orders_EmailPlaceholder" xml:space="preserve">
+    <value>Enter your email</value>
+  </data>
+  <data name="Orders_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Orders_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Orders_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Orders_DetailsTitle" xml:space="preserve">
+    <value>Order details</value>
+  </data>
+  <data name="Orders_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Orders_CourierInfo" xml:space="preserve">
+    <value>Courier info</value>
+  </data>
+</root>
+

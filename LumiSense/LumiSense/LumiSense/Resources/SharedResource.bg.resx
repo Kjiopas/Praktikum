@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+
+  <data name="Nav_Home" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="Nav_LiveUv" xml:space="preserve">
+    <value>UV на живо</value>
+  </data>
+  <data name="Nav_Shop" xml:space="preserve">
+    <value>Магазин</value>
+  </data>
+  <data name="Nav_Orders" xml:space="preserve">
+    <value>Поръчки</value>
+  </data>
+  <data name="Nav_ArduinoPowered" xml:space="preserve">
+    <value>С Arduino</value>
+  </data>
+
+  <data name="Auth_Hello" xml:space="preserve">
+    <value>Здравей {0}!</value>
+  </data>
+  <data name="Auth_Login" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="Auth_Logout" xml:space="preserve">
+    <value>Изход</value>
+  </data>
+  <data name="Auth_Register" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+
+  <data name="Common_Email" xml:space="preserve">
+    <value>Имейл</value>
+  </data>
+  <data name="Common_Password" xml:space="preserve">
+    <value>Парола</value>
+  </data>
+
+  <data name="Login_Title" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="Login_HeroTitle" xml:space="preserve">
+    <value>SolSense UV Вход</value>
+  </data>
+  <data name="Login_HeroSubtitle" xml:space="preserve">
+    <value>Влезте в акаунта си, за да следите поръчки и UV измервания</value>
+  </data>
+  <data name="Login_SignIn" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="Login_DontHaveAccount" xml:space="preserve">
+    <value>Нямате акаунт? Регистрирайте се</value>
+  </data>
+  <data name="Login_ForgotPassword" xml:space="preserve">
+    <value>Забравена парола?</value>
+  </data>
+  <data name="Login_ResendEmailConfirmation" xml:space="preserve">
+    <value>Изпрати отново потвърждение по имейл</value>
+  </data>
+
+  <data name="Logout_Title" xml:space="preserve">
+    <value>Изход</value>
+  </data>
+  <data name="Logout_Success" xml:space="preserve">
+    <value>Успешно излязохте.</value>
+  </data>
+  <data name="Logout_LoginAgain" xml:space="preserve">
+    <value>Влез отново</value>
+  </data>
+
+  <data name="Home_Title" xml:space="preserve">
+    <value>Начало</value>
+  </data>
+  <data name="Home_HeroTitle" xml:space="preserve">
+    <value>Умен UV измервател</value>
+  </data>
+  <data name="Home_HeroSubtitle" xml:space="preserve">
+    <value>Arduino-базирано UV наблюдение в реално време. Разберете дали е безопасно да излезете навън!</value>
+  </data>
+  <data name="Home_CheckUvNow" xml:space="preserve">
+    <value>Провери UV сега</value>
+  </data>
+
+  <data name="Privacy_Title" xml:space="preserve">
+    <value>Политика за поверителност</value>
+  </data>
+  <data name="Privacy_Body" xml:space="preserve">
+    <value>Използвайте тази страница, за да опишете политиката за поверителност на сайта си.</value>
+  </data>
+
+  <data name="Live_Title" xml:space="preserve">
+    <value>UV на живо</value>
+  </data>
+  <data name="Live_LocationDefault" xml:space="preserve">
+    <value>Ню Йорк, САЩ</value>
+  </data>
+  <data name="Live_UvIndexLabel" xml:space="preserve">
+    <value>UV индекс</value>
+  </data>
+  <data name="Live_LowRisk" xml:space="preserve">
+    <value>Нисък UV риск</value>
+  </data>
+  <data name="Live_RecommendationDefault" xml:space="preserve">
+    <value>БЕЗОПАСНО Е ДА ИЗЛЕЗЕТЕ! Перфектно време за плаж! Не е нужна защита.</value>
+  </data>
+  <data name="Live_Protection" xml:space="preserve">
+    <value>Защита:</value>
+  </data>
+  <data name="Live_NoProtection" xml:space="preserve">
+    <value>Не е нужна защита</value>
+  </data>
+  <data name="Live_LastReading" xml:space="preserve">
+    <value>Последно измерване:</value>
+  </data>
+  <data name="Live_DataSource" xml:space="preserve">
+    <value>Източник на данни: OpenUV API (в реално време)</value>
+  </data>
+  <data name="Live_AverageUvToday" xml:space="preserve">
+    <value>Среден UV днес</value>
+  </data>
+  <data name="Live_PeakUvToday" xml:space="preserve">
+    <value>Пиков UV днес</value>
+  </data>
+  <data name="Live_ReadingsToday" xml:space="preserve">
+    <value>Измервания днес</value>
+  </data>
+  <data name="Live_CurrentUvIndex" xml:space="preserve">
+    <value>Текущ UV индекс</value>
+  </data>
+
+  <data name="Shop_Title" xml:space="preserve">
+    <value>Магазин</value>
+  </data>
+  <data name="Shop_HeroTitle" xml:space="preserve">
+    <value>UV защитна екипировка</value>
+  </data>
+  <data name="Shop_HeroSubtitle" xml:space="preserve">
+    <value>Защитете се от вредната UV радиация с нашите премиум продукти</value>
+  </data>
+  <data name="Shop_InStock" xml:space="preserve">
+    <value>✓ В наличност ({0})</value>
+  </data>
+  <data name="Shop_BuyNow" xml:space="preserve">
+    <value>Купи сега</value>
+  </data>
+  <data name="Shop_OutOfStock" xml:space="preserve">
+    <value>✗ Няма наличност</value>
+  </data>
+  <data name="Shop_SoldOut" xml:space="preserve">
+    <value>Изчерпано</value>
+  </data>
+  <data name="Shop_PlaceOrder" xml:space="preserve">
+    <value>Направи поръчка</value>
+  </data>
+  <data name="Shop_YourName" xml:space="preserve">
+    <value>Вашето име *</value>
+  </data>
+  <data name="Shop_EmailRequired" xml:space="preserve">
+    <value>Имейл *</value>
+  </data>
+  <data name="Shop_EnterYourName" xml:space="preserve">
+    <value>Въведете името си</value>
+  </data>
+  <data name="Shop_EnterYourEmail" xml:space="preserve">
+    <value>Въведете имейла си</value>
+  </data>
+  <data name="Shop_Quantity" xml:space="preserve">
+    <value>Количество *</value>
+  </data>
+  <data name="Shop_Product" xml:space="preserve">
+    <value>Продукт:</value>
+  </data>
+  <data name="Shop_Price" xml:space="preserve">
+    <value>Цена:</value>
+  </data>
+  <data name="Shop_Each" xml:space="preserve">
+    <value>за брой</value>
+  </data>
+  <data name="Shop_PriceEach" xml:space="preserve">
+    <value>Цена: ${0} за брой</value>
+  </data>
+  <data name="Shop_Cancel" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="Shop_PlaceOrderButton" xml:space="preserve">
+    <value>Потвърди поръчка</value>
+  </data>
+  <data name="Shop_FillAllFieldsAlert" xml:space="preserve">
+    <value>Моля, попълнете всички полета</value>
+  </data>
+  <data name="Shop_ErrorPlacingOrder" xml:space="preserve">
+    <value>Грешка при създаване на поръчка.</value>
+  </data>
+  <data name="Shop_AddedToCart" xml:space="preserve">
+    <value>Добавено в количката</value>
+  </data>
+  <data name="Shop_AddToCartFailed" xml:space="preserve">
+    <value>Не можа да се добави в количката.</value>
+  </data>
+
+  <data name="Error_Title" xml:space="preserve">
+    <value>Грешка</value>
+  </data>
+  <data name="Error_Header" xml:space="preserve">
+    <value>Грешка.</value>
+  </data>
+  <data name="Error_SubHeader" xml:space="preserve">
+    <value>Възникна грешка при обработката на заявката ви.</value>
+  </data>
+  <data name="Error_RequestId" xml:space="preserve">
+    <value>Идентификатор на заявка:</value>
+  </data>
+  <data name="Error_DevModeTitle" xml:space="preserve">
+    <value>Режим разработка</value>
+  </data>
+
+  <data name="Nav_Cart" xml:space="preserve">
+    <value>Количка</value>
+  </data>
+  <data name="Cart_Title" xml:space="preserve">
+    <value>Вашата количка</value>
+  </data>
+  <data name="Cart_Empty" xml:space="preserve">
+    <value>Количката е празна.</value>
+  </data>
+  <data name="Cart_GoToShop" xml:space="preserve">
+    <value>Към магазина</value>
+  </data>
+  <data name="Cart_Product" xml:space="preserve">
+    <value>Продукт</value>
+  </data>
+  <data name="Cart_Price" xml:space="preserve">
+    <value>Цена</value>
+  </data>
+  <data name="Cart_Qty" xml:space="preserve">
+    <value>Бр.</value>
+  </data>
+  <data name="Cart_Subtotal" xml:space="preserve">
+    <value>Междинна сума</value>
+  </data>
+  <data name="Cart_Total" xml:space="preserve">
+    <value>Общо</value>
+  </data>
+  <data name="Cart_Remove" xml:space="preserve">
+    <value>Премахни</value>
+  </data>
+  <data name="Cart_Clear" xml:space="preserve">
+    <value>Изчисти количката</value>
+  </data>
+  <data name="Cart_Checkout" xml:space="preserve">
+    <value>Поръчка</value>
+  </data>
+
+  <data name="Checkout_Title" xml:space="preserve">
+    <value>Завършване</value>
+  </data>
+  <data name="Checkout_OrderSummary" xml:space="preserve">
+    <value>Обобщение</value>
+  </data>
+  <data name="Checkout_Name" xml:space="preserve">
+    <value>Вашето име</value>
+  </data>
+  <data name="Checkout_Email" xml:space="preserve">
+    <value>Имейл</value>
+  </data>
+  <data name="Checkout_NamePlaceholder" xml:space="preserve">
+    <value>Въведете името си</value>
+  </data>
+  <data name="Checkout_EmailPlaceholder" xml:space="preserve">
+    <value>Въведете имейла си</value>
+  </data>
+  <data name="Checkout_CourierInfo" xml:space="preserve">
+    <value>Инфо за куриер</value>
+  </data>
+  <data name="Checkout_CourierInfoPlaceholder" xml:space="preserve">
+    <value>Куриер / бележки за доставка (по желание)</value>
+  </data>
+  <data name="Checkout_BackToCart" xml:space="preserve">
+    <value>Назад към количката</value>
+  </data>
+  <data name="Checkout_PlaceOrder" xml:space="preserve">
+    <value>Потвърди</value>
+  </data>
+  <data name="Checkout_SuccessTitle" xml:space="preserve">
+    <value>Поръчката е направена</value>
+  </data>
+  <data name="Checkout_SuccessBody" xml:space="preserve">
+    <value>Поръчката ви беше направена успешно.</value>
+  </data>
+  <data name="Checkout_OrderNumber" xml:space="preserve">
+    <value>Поръчка</value>
+  </data>
+
+  <data name="Orders_Title" xml:space="preserve">
+    <value>Вашите поръчки</value>
+  </data>
+  <data name="Orders_LookupTitle" xml:space="preserve">
+    <value>Намери поръчките си</value>
+  </data>
+  <data name="Orders_LookupHint" xml:space="preserve">
+    <value>Въведете имейла, който сте използвали при поръчката, за да видите поръчките си.</value>
+  </data>
+  <data name="Orders_ViewOrders" xml:space="preserve">
+    <value>Виж поръчки</value>
+  </data>
+  <data name="Orders_ClearLookup" xml:space="preserve">
+    <value>Изчисти</value>
+  </data>
+  <data name="Orders_None" xml:space="preserve">
+    <value>Няма намерени поръчки.</value>
+  </data>
+  <data name="Orders_Order" xml:space="preserve">
+    <value>Поръчка</value>
+  </data>
+  <data name="Orders_Date" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="Orders_Email" xml:space="preserve">
+    <value>Имейл</value>
+  </data>
+  <data name="Orders_EmailPlaceholder" xml:space="preserve">
+    <value>Въведете имейла си</value>
+  </data>
+  <data name="Orders_Name" xml:space="preserve">
+    <value>Име</value>
+  </data>
+  <data name="Orders_Total" xml:space="preserve">
+    <value>Общо</value>
+  </data>
+  <data name="Orders_Details" xml:space="preserve">
+    <value>Детайли</value>
+  </data>
+  <data name="Orders_DetailsTitle" xml:space="preserve">
+    <value>Детайли за поръчка</value>
+  </data>
+  <data name="Orders_Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Orders_CourierInfo" xml:space="preserve">
+    <value>Инфо за куриер</value>
+  </data>
+</root>
+

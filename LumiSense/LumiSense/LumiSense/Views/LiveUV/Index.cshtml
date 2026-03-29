@@ -1,0 +1,89 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@{
+    ViewData["Title"] = L["Live_Title"].Value;
+}
+
+<div class="container">
+
+    <div class="uv-card">
+        <div class="uv-header">
+            <h2>
+                <i class="fas fa-chart-line"></i> @L["Live_Title"]
+                <span class="live-dot"></span>
+            </h2>
+
+            <div class="location-info">
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="location">@L["Live_LocationDefault"]</span>
+            </div>
+        </div>
+
+        <div class="uv-content">
+
+            <!-- LEFT -->
+            <div class="uv-value-container">
+                <div class="uv-value" id="uvValue">0.4</div>
+                <div class="uv-label">@L["Live_UvIndexLabel"]</div>
+
+                <div id="safetyMessage" class="safety-badge">
+                    <i class="fas fa-smile"></i> @L["Live_LowRisk"]
+                </div>
+            </div>
+
+            <!-- RIGHT -->
+            <div>
+                <div id="recommendationText" class="recommendation-text">
+                    @L["Live_RecommendationDefault"]
+                </div>
+
+                <div class="protection-box">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>@L["Live_Protection"]</strong>
+                    <span id="protectionAdvice">@L["Live_NoProtection"]</span>
+                </div>
+
+                <div class="timestamp">
+                    <i class="far fa-clock"></i>
+                    @L["Live_LastReading"] <span id="timestamp">18:16:24</span>
+                </div>
+
+                <div class="data-source">
+                    <i class="fas fa-microchip"></i>
+                    @L["Live_DataSource"]
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <i class="fas fa-chart-line"></i>
+            <div class="stat-value">2.2</div>
+            <div class="stat-label">@L["Live_AverageUvToday"]</div>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-chart-bar"></i>
+            <div class="stat-value">7.2</div>
+            <div class="stat-label">@L["Live_PeakUvToday"]</div>
+            <div class="stat-time">05:20</div>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-database"></i>
+            <div class="stat-value">32</div>
+            <div class="stat-label">@L["Live_ReadingsToday"]</div>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-thermometer-half"></i>
+            <div class="stat-value">0.4</div>
+            <div class="stat-label">@L["Live_CurrentUvIndex"]</div>
+        </div>
+
+    </div>
+
+</div>

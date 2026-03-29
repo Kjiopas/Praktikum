@@ -1,0 +1,93 @@
+@model List<LumiSense.Models.CartItem>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@using System.Globalization
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = L["Cart_Title"].Value;
+    var total = Model.Sum(i => i.UnitPrice * i.Quantity);
+    var culture = CultureInfo.CurrentCulture;
+}
+
+<div class="uv-card">
+    <h2>@L["Cart_Title"]</h2>
+
+    @if (Model.Count == 0)
+    {
+        <p>@L["Cart_Empty"]</p>
+        <p><a href="/Shop">@L["Cart_GoToShop"]</a></p>
+    }
+    else
+    {
+        <table class="table" style="width:100%; background:white; border-radius:12px; overflow:hidden;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding:12px;">@L["Cart_Product"]</th>
+                    <th style="text-align:right; padding:12px;">@L["Cart_Price"]</th>
+                    <th style="text-align:center; padding:12px;">@L["Cart_Qty"]</th>
+                    <th style="text-align:right; padding:12px;">@L["Cart_Subtotal"]</th>
+                    <th style="padding:12px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td style="padding:12px;">@item.Name</td>
+                    <td style="padding:12px; text-align:right;">@item.UnitPrice.ToString("C", culture)</td>
+                    <td style="padding:12px; text-align:center;">
+                        <input type="number" min="1" value="@item.Quantity" style="width:80px;"
+                               onchange="updateQty(@item.ProductId, this.value)" />
+                    </td>
+                    <td style="padding:12px; text-align:right;">@((item.UnitPrice * item.Quantity).ToString("C", culture))</td>
+                    <td style="padding:12px; text-align:right;">
+                        <button class="cancel-btn" onclick="removeItem(@item.ProductId)">@L["Cart_Remove"]</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:1rem; gap:1rem; flex-wrap:wrap;">
+            <div style="font-weight:800;">
+                @L["Cart_Total"]: @total.ToString("C", culture)
+            </div>
+            <div style="display:flex; gap:0.75rem; align-items:center;">
+                <button class="cancel-btn" onclick="clearCart()">@L["Cart_Clear"]</button>
+                <a class="buy-btn" href="/Cart/Checkout" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                    <i class="fas fa-credit-card"></i> @L["Cart_Checkout"]
+                </a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        async function updateQty(productId, quantity) {
+            const q = parseInt(quantity, 10);
+            if (!Number.isFinite(q) || q <= 0) return;
+            await fetch('/Cart/Update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId, quantity: q })
+            });
+            location.reload();
+        }
+
+        async function removeItem(productId) {
+            await fetch('/Cart/Remove', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ productId, quantity: 0 })
+            });
+            location.reload();
+        }
+
+        async function clearCart() {
+            await fetch('/Cart/Clear', { method: 'POST' });
+            location.reload();
+        }
+    </script>
+}
+

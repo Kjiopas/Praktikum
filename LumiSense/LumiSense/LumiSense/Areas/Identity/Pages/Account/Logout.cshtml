@@ -1,0 +1,26 @@
+@page
+@model LogoutModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@{
+    ViewData["Title"] = L["Logout_Title"].Value;
+}
+
+<div class="container" style="max-width:400px; margin:2rem auto;">
+    <div class="uv-card" style="text-align:center;">
+        <h2>@ViewData["Title"]</h2>
+
+        @if (User.Identity?.IsAuthenticated ?? false)
+        {
+            <form method="post" asp-route-returnUrl="@Url.Page("/", new { area = "" })">
+                <button type="submit" class="buy-btn" style="margin-top:1rem;">
+                    <i class="fas fa-sign-out-alt"></i> @L["Auth_Logout"]
+                </button>
+            </form>
+        }
+        else
+        {
+            <p>@L["Logout_Success"]</p>
+            <p><a asp-page="./Login" style="color:#F27121;">@L["Logout_LoginAgain"]</a></p>
+        }
+    </div>
+</div>
