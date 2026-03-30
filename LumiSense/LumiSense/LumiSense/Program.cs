@@ -85,6 +85,33 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 })
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = ctx =>
+    {
+        if (IsAjaxOrJsonRequest(ctx.Request))
+        {
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        }
+
+        ctx.Response.Redirect(ctx.RedirectUri);
+        return Task.CompletedTask;
+    };
+
+    options.Events.OnRedirectToAccessDenied = ctx =>
+    {
+        if (IsAjaxOrJsonRequest(ctx.Request))
+        {
+            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        }
+
+        ctx.Response.Redirect(ctx.RedirectUri);
+        return Task.CompletedTask;
+    };
+});
+
 var app = builder.Build();
 
 // Configure pipeline
@@ -94,7 +121,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-var supportedCultures = new[] { "en", "tr", "bg", "ar" }
+var supportedCultures = new[] { "en", "tr", "bg" }
     .Select(c => new CultureInfo(c))
     .ToList();
 
@@ -269,4 +296,21 @@ static bool CanConnectToSqlServer(string connectionString)
     {
         return false;
     }
+}
+
+static bool IsAjaxOrJsonRequest(HttpRequest request)
+{
+    if (request.Headers.TryGetValue("X-Requested-With", out var xrw) &&
+        string.Equals(xrw.ToString(), "XMLHttpRequest", StringComparison.OrdinalIgnoreCase))
+    {
+        return true;
+    }
+
+    if (request.Headers.TryGetValue("Accept", out var accept) &&
+        accept.ToString().Contains("application/json", StringComparison.OrdinalIgnoreCase))
+    {
+        return true;
+    }
+
+    return false;
 }

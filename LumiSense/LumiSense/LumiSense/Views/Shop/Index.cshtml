@@ -271,17 +271,34 @@
             try {
                 const response = await fetch('/Shop/PlaceOrder', {
                     method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
                     body: formData
                 });
 
-                const result = await response.json();
+                if (response.status === 401) {
+                    window.location.href = '/Identity/Account/Login?returnUrl=' + encodeURIComponent(window.location.pathname);
+                    return;
+                }
+                if (response.status === 403) {
+                    alert('Access denied.');
+                    return;
+                }
+
+                const result = await response.json().catch(() => null);
+                if (!result) {
+                    alert(tErrorPlacingOrder);
+                    return;
+                }
 
                 if (result.success) {
                     alert(result.message);
                     closeModal();
                     location.reload();
                 } else {
-                    alert(result.message);
+                    alert(result.message || tErrorPlacingOrder);
                 }
             } catch {
                 alert(tErrorPlacingOrder);

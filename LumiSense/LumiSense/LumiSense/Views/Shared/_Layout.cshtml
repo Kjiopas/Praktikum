@@ -3,7 +3,7 @@
 @{
     var returnUrl = $"{Context.Request.Path}{Context.Request.QueryString}";
     var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-    var dir = culture == "ar" ? "rtl" : "ltr";
+    var dir = "ltr";
     var cartCount = 0;
     try
     {
@@ -60,9 +60,6 @@
                         <a class="lang-link @(culture == "bg" ? "active" : "")"
                            asp-controller="Localization" asp-action="SetLanguage"
                            asp-route-culture="bg" asp-route-returnUrl="@returnUrl">BG</a>
-                        <a class="lang-link @(culture == "ar" ? "active" : "")"
-                           asp-controller="Localization" asp-action="SetLanguage"
-                           asp-route-culture="ar" asp-route-returnUrl="@returnUrl">AR</a>
                     </div>
 
                     <a class="nav-auth-link" href="/Cart" title="@L["Nav_Cart"]">

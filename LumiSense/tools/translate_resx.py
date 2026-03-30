@@ -135,7 +135,7 @@ def main(argv: list[str]) -> int:
     )
     parser.add_argument("--input", required=True, help="Path to source .resx file (e.g. Resources/SharedResource.resx).")
     parser.add_argument("--from", dest="from_code", default="en", help="Source language code (default: en).")
-    parser.add_argument("--to", dest="to_codes", nargs="+", default=["tr", "bg", "ar"], help="Target language codes.")
+    parser.add_argument("--to", dest="to_codes", nargs="+", default=["tr", "bg"], help="Target language codes.")
     parser.add_argument("--out-dir", default=None, help="Optional output directory. Defaults to input file directory.")
     parser.add_argument("--overwrite", action="store_true", help="Overwrite existing translated .resx files.")
     args = parser.parse_args(argv)

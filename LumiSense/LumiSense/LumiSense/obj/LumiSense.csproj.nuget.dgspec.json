@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/kjiop/DATASSD/LumiSense/LumiSense/LumiSense/LumiSense.csproj": {}
+    "/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/LumiSense.csproj": {}
   },
   "projects": {
-    "/home/kjiop/DATASSD/LumiSense/LumiSense/LumiSense/LumiSense.csproj": {
+    "/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/LumiSense.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/kjiop/DATASSD/LumiSense/LumiSense/LumiSense/LumiSense.csproj",
+        "projectUniqueName": "/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/LumiSense.csproj",
         "projectName": "LumiSense",
-        "projectPath": "/home/kjiop/DATASSD/LumiSense/LumiSense/LumiSense/LumiSense.csproj",
+        "projectPath": "/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/LumiSense.csproj",
         "packagesPath": "/home/kjiop/.nuget/packages/",
-        "outputPath": "/home/kjiop/DATASSD/LumiSense/LumiSense/LumiSense/obj/",
+        "outputPath": "/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/kjiop/.nuget/NuGet/NuGet.Config"
@@ -73,10 +73,6 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.12, )"
-            },
-            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[9.0.12, )"
             },

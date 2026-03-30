@@ -5,10 +5,13 @@ namespace LumiSense.Controllers;
 
 public sealed class LocalizationController : Controller
 {
+    private static readonly HashSet<string> SupportedCultures =
+        new(StringComparer.OrdinalIgnoreCase) { "en", "tr", "bg" };
+
     [HttpGet]
     public IActionResult SetLanguage(string culture, string returnUrl = "/")
     {
-        if (string.IsNullOrWhiteSpace(culture))
+        if (string.IsNullOrWhiteSpace(culture) || !SupportedCultures.Contains(culture))
         {
             culture = "en";
         }

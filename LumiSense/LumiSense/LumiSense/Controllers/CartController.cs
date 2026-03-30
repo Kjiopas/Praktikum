@@ -1,6 +1,7 @@
 using LumiSense.Data;
 using LumiSense.Models;
 using LumiSense.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +91,7 @@ public sealed class CartController : Controller
     }
 
     [HttpGet]
+    [Authorize]
     public IActionResult Checkout()
     {
         var items = _cart.GetItems();
@@ -108,6 +110,7 @@ public sealed class CartController : Controller
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Checkout([FromForm] CheckoutRequest req)
     {
         var items = _cart.GetItems();
@@ -116,10 +119,19 @@ public sealed class CartController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        if (string.IsNullOrWhiteSpace(req.CustomerName) || string.IsNullOrWhiteSpace(req.CustomerEmail))
+        if (string.IsNullOrWhiteSpace(req.CustomerName))
         {
-            ModelState.AddModelError(string.Empty, "Please fill in all fields");
+            ModelState.AddModelError(string.Empty, "Please enter your name");
             return View(items);
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        var userId = _userManager.GetUserId(User);
+        var email = user is null ? null : await _userManager.GetEmailAsync(user);
+        email = (email ?? string.Empty).Trim();
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(email))
+        {
+            return Forbid();
         }
 
         var productIds = items.Select(i => i.ProductId).ToList();
@@ -149,11 +161,11 @@ public sealed class CartController : Controller
         var order = new Order
         {
             CustomerName = req.CustomerName,
-            CustomerEmail = req.CustomerEmail,
+            CustomerEmail = email,
             OrderDate = DateTime.Now,
             TotalAmount = items.Sum(i => i.UnitPrice * i.Quantity),
             CourierInfo = string.IsNullOrWhiteSpace(req.CourierInfo) ? null : req.CourierInfo.Trim(),
-            UserId = User.Identity?.IsAuthenticated == true ? _userManager.GetUserId(User) : null
+            UserId = userId
         };
 
         _db.Orders.Add(order);

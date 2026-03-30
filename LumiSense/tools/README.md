@@ -5,7 +5,6 @@ This folder contains a small Python utility that can translate your ASP.NET `.re
 - Turkish (`tr`)
 - English (`en`, source)
 - Bulgarian (`bg`)
-- Arabic (`ar`)
 
 ## Install
 
@@ -21,7 +20,7 @@ From the repo root:
 python3 tools/translate_resx.py \
   --input "LumiSense/LumiSense/Resources/SharedResource.resx" \
   --from en \
-  --to tr bg ar \
+  --to tr bg \
   --overwrite
 ```
 
@@ -29,7 +28,6 @@ This will create:
 
 - `SharedResource.tr.resx`
 - `SharedResource.bg.resx`
-- `SharedResource.ar.resx`
 
 in the same `Resources/` folder (unless you pass `--out-dir`).
 
