@@ -158,7 +158,7 @@ using (var scope = app.Services.CreateScope())
         dbContext.Products.AddRange(
             new Product
             {
-                Name = "SolSense UV Meter Pro",
+                Name = "LumiSense UV Meter Pro",
                 Description = "Arduino-powered precision UV meter with real-time LCD display",
                 Price = 89.99m,
                 Stock = 25,
@@ -189,7 +189,7 @@ using (var scope = app.Services.CreateScope())
             new Product
             {
                 Name = "Beach Safety Kit",
-                Description = "Premium kit: SolSense Mini, UPF 50+ umbrella, SPF 50 sunscreen, and UV alert band",
+                Description = "Premium kit: LumiSense Mini, UPF 50+ umbrella, SPF 50 sunscreen, and UV alert band",
                 Price = 149.99m,
                 Stock = 15,
                 ImageIcon = "fa-umbrella-beach",

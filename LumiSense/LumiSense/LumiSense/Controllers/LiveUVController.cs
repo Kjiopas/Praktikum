@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -252,72 +252,11 @@ namespace LumiSense.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GenerateNewReading()
+        public IActionResult GenerateNewReading()
         {
-            var hour = DateTime.Now.Hour;
-            double finalUV;
-
-            if (hour >= 10 && hour <= 16)
-                finalUV = 6 + (_random.NextDouble() * 5);
-            else if ((hour >= 8 && hour < 10) || (hour > 16 && hour <= 18))
-                finalUV = 3 + (_random.NextDouble() * 4);
-            else if (hour >= 6 && hour < 8)
-                finalUV = 1 + (_random.NextDouble() * 2);
-            else
-                finalUV = _random.NextDouble() * 1;
-
-            finalUV = Math.Round(finalUV, 1);
-            finalUV = Math.Max(0, Math.Min(12, finalUV));
-
-            var newReading = new UVReading
-            {
-                Value = finalUV,
-                Timestamp = DateTime.Now,
-                Location = "Simulated Data",
-                DeviceId = "Arduino_Simulated",
-                SafetyStatus = GetRecommendation(finalUV).Status
-            };
-
-            _context.UVReadings.Add(newReading);
-            await _context.SaveChangesAsync();
-
-            var recommendation = GetRecommendation(finalUV);
-
-            var today = DateTime.Today;
-            var todayReadings = await _context.UVReadings
-                .Where(r => r.Timestamp.Date == today)
-                .ToListAsync();
-
-            var statistics = new
-            {
-                CurrentUV = finalUV,
-                AverageUV = todayReadings.Any() ? Math.Round(todayReadings.Average(r => r.Value), 1) : finalUV,
-                MaxUVToday = todayReadings.Any() ? todayReadings.Max(r => r.Value) : finalUV,
-                PeakTime = todayReadings.Any() ? todayReadings.OrderByDescending(r => r.Value).First().Timestamp.ToString("hh:mm tt") : DateTime.Now.ToString("hh:mm tt"),
-                ReadingsCount = todayReadings.Count
-            };
-
-            return Json(new
-            {
-                success = true,
-                isRealData = false,
-                reading = new
-                {
-                    newReading.Value,
-                    Timestamp = newReading.Timestamp.ToString("HH:mm:ss"),
-                    newReading.SafetyStatus,
-                    Location = "Simulated Data"
-                },
-                recommendation = new
-                {
-                    recommendation.Status,
-                    recommendation.Message,
-                    recommendation.ColorCode,
-                    recommendation.Icon,
-                    recommendation.Protection
-                },
-                statistics
-            });
+            // Keep the endpoint for compatibility, but do not generate simulated/random UV values.
+            // If the client wants real readings, it should call GetUVByLocation with actual coordinates.
+            return BadRequest(new { success = false, message = "Use the location refresh to fetch real UV data." });
         }
 
         [HttpGet]
@@ -327,7 +266,12 @@ namespace LumiSense.Controllers
             var history = await _context.UVReadings
                 .Where(r => r.Timestamp >= cutoff)
                 .OrderBy(r => r.Timestamp)
-                .Select(r => new { r.Value, Timestamp = r.Timestamp.ToString("HH:mm") })
+                .Select(r => new
+                {
+                    Value = r.Value,
+                    Timestamp = r.Timestamp,           // ISO in JSON
+                    Label = r.Timestamp.ToString("HH:mm")
+                })
                 .ToListAsync();
 
             return Json(history);

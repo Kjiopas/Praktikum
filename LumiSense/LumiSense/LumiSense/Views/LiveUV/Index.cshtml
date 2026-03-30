@@ -1,6 +1,15 @@
 @inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@model LumiSense.Models.HomeViewModel
 @{
     ViewData["Title"] = L["Live_Title"].Value;
+    var currentUv = Model?.Statistics?.CurrentUV ?? 0;
+    var avgUv = Model?.Statistics?.AverageUV ?? 0;
+    var peakUv = Model?.Statistics?.MaxUVToday ?? 0;
+    var peakTime = Model?.Statistics?.PeakTime ?? "N/A";
+    var readingsCount = Model?.Statistics?.ReadingsCount ?? 0;
+    var location = Model?.CurrentReading?.Location ?? L["Live_LocationDefault"].Value;
+    var timestamp = (Model?.CurrentReading?.Timestamp ?? DateTime.Now).ToString("HH:mm:ss");
+    var rec = Model?.SafetyRecommendation;
 }
 
 <div class="container">
@@ -12,9 +21,18 @@
                 <span class="live-dot"></span>
             </h2>
 
-            <div class="location-info">
-                <i class="fas fa-map-marker-alt"></i>
-                <span id="location">@L["Live_LocationDefault"]</span>
+            <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; justify-content:flex-end;">
+                <div class="location-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="location">@location</span>
+                </div>
+
+                <button id="refreshLocationBtn" type="button" class="buy-btn" style="margin-top:0;">
+                    <i class="fas fa-location-crosshairs"></i> Refresh location
+                </button>
+                <button id="generateReadingBtn" type="button" class="cancel-btn" style="margin-top:0;">
+                    <i class="fas fa-rotate"></i> Refresh UV
+                </button>
             </div>
         </div>
 
@@ -22,35 +40,38 @@
 
             <!-- LEFT -->
             <div class="uv-value-container">
-                <div class="uv-value" id="uvValue">0.4</div>
+                <div class="uv-value" id="uvValue">@currentUv.ToString("0.0")</div>
                 <div class="uv-label">@L["Live_UvIndexLabel"]</div>
 
-                <div id="safetyMessage" class="safety-badge">
-                    <i class="fas fa-smile"></i> @L["Live_LowRisk"]
+                <div id="safetyMessage" class="safety-badge" style="background:@(rec?.ColorCode ?? "#2ecc71");">
+                    <i class="fas @(string.IsNullOrWhiteSpace(rec?.Icon) ? "fa-smile" : rec!.Icon)"></i>
+                    <span id="safetyStatusText">@(rec?.Status ?? L["Live_LowRisk"].Value)</span>
                 </div>
             </div>
 
             <!-- RIGHT -->
             <div>
                 <div id="recommendationText" class="recommendation-text">
-                    @L["Live_RecommendationDefault"]
+                    @(rec?.Message ?? L["Live_RecommendationDefault"].Value)
                 </div>
 
                 <div class="protection-box">
                     <i class="fas fa-shield-alt"></i>
                     <strong>@L["Live_Protection"]</strong>
-                    <span id="protectionAdvice">@L["Live_NoProtection"]</span>
+                    <span id="protectionAdvice">@(rec?.Protection ?? L["Live_NoProtection"].Value)</span>
                 </div>
 
                 <div class="timestamp">
                     <i class="far fa-clock"></i>
-                    @L["Live_LastReading"] <span id="timestamp">18:16:24</span>
+                    @L["Live_LastReading"] <span id="timestamp">@timestamp</span>
                 </div>
 
                 <div class="data-source">
                     <i class="fas fa-microchip"></i>
                     @L["Live_DataSource"]
                 </div>
+
+                <div id="liveUvStatus" style="margin-top:0.75rem; font-size:0.9rem; color:#666;"></div>
             </div>
 
         </div>
@@ -61,29 +82,340 @@
 
         <div class="stat-card">
             <i class="fas fa-chart-line"></i>
-            <div class="stat-value">2.2</div>
+            <div class="stat-value" id="avgUv">@avgUv.ToString("0.0")</div>
             <div class="stat-label">@L["Live_AverageUvToday"]</div>
         </div>
 
         <div class="stat-card">
             <i class="fas fa-chart-bar"></i>
-            <div class="stat-value">7.2</div>
+            <div class="stat-value" id="peakUv">@peakUv.ToString("0.0")</div>
             <div class="stat-label">@L["Live_PeakUvToday"]</div>
-            <div class="stat-time">05:20</div>
+            <div class="stat-time" id="peakTime">@peakTime</div>
         </div>
 
         <div class="stat-card">
             <i class="fas fa-database"></i>
-            <div class="stat-value">32</div>
+            <div class="stat-value" id="readingsCount">@readingsCount</div>
             <div class="stat-label">@L["Live_ReadingsToday"]</div>
         </div>
 
         <div class="stat-card">
             <i class="fas fa-thermometer-half"></i>
-            <div class="stat-value">0.4</div>
+            <div class="stat-value" id="currentUv">@currentUv.ToString("0.0")</div>
             <div class="stat-label">@L["Live_CurrentUvIndex"]</div>
         </div>
 
     </div>
 
+    <div class="uv-card" style="padding:1.5rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+            <h3 style="margin:0; display:flex; align-items:center; gap:0.5rem;">
+                <i class="fas fa-chart-area" style="color:#F27121;"></i>
+                UV readings (last 24h)
+            </h3>
+            <div style="font-size:0.85rem; color:#666;">
+                Y: UV index, X: time
+            </div>
+        </div>
+
+        <div id="uvChartWrap" style="width:100%; height:260px; background:white; border-radius:14px; padding:12px; box-sizing:border-box;">
+            <svg id="uvChart" viewBox="0 0 800 260" preserveAspectRatio="none" style="width:100%; height:100%; display:block;">
+                <rect x="0" y="0" width="800" height="260" fill="transparent"></rect>
+                <g id="uvChartGrid"></g>
+                <polyline id="uvChartLine" fill="none" stroke="#F27121" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points=""></polyline>
+                <g id="uvChartDots"></g>
+                <g id="uvChartLabels"></g>
+            </svg>
+        </div>
+        <div id="uvChartHint" style="margin-top:0.5rem; font-size:0.85rem; color:#777;"></div>
+    </div>
+
 </div>
+
+@section Scripts {
+    <script>
+        const els = {
+            location: document.getElementById('location'),
+            uvValue: document.getElementById('uvValue'),
+            safetyMessage: document.getElementById('safetyMessage'),
+            safetyStatusText: document.getElementById('safetyStatusText'),
+            recommendationText: document.getElementById('recommendationText'),
+            protectionAdvice: document.getElementById('protectionAdvice'),
+            timestamp: document.getElementById('timestamp'),
+            avgUv: document.getElementById('avgUv'),
+            peakUv: document.getElementById('peakUv'),
+            peakTime: document.getElementById('peakTime'),
+            readingsCount: document.getElementById('readingsCount'),
+            currentUv: document.getElementById('currentUv'),
+            status: document.getElementById('liveUvStatus'),
+            refreshBtn: document.getElementById('refreshLocationBtn'),
+            generateBtn: document.getElementById('generateReadingBtn'),
+        };
+
+        function pick(obj, keys) {
+            if (!obj) return undefined;
+            for (const k of keys) {
+                if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+            }
+            return undefined;
+        }
+
+        function setStatus(text) {
+            if (!els.status) return;
+            els.status.textContent = text || '';
+        }
+
+        function setButtonsLoading(isLoading) {
+            if (els.refreshBtn) els.refreshBtn.disabled = isLoading;
+            if (els.generateBtn) els.generateBtn.disabled = isLoading;
+        }
+
+        const chart = {
+            svg: document.getElementById('uvChart'),
+            grid: document.getElementById('uvChartGrid'),
+            line: document.getElementById('uvChartLine'),
+            dots: document.getElementById('uvChartDots'),
+            labels: document.getElementById('uvChartLabels'),
+            hint: document.getElementById('uvChartHint')
+        };
+
+        function clearChart() {
+            if (chart.grid) chart.grid.innerHTML = '';
+            if (chart.dots) chart.dots.innerHTML = '';
+            if (chart.labels) chart.labels.innerHTML = '';
+            if (chart.line) chart.line.setAttribute('points', '');
+        }
+
+        function drawChart(points) {
+            // points: [{ ts: Date, value: number, label: string }]
+            if (!chart.svg || !chart.line || !chart.grid || !chart.dots || !chart.labels) return;
+            clearChart();
+
+            if (!Array.isArray(points) || points.length < 2) {
+                if (chart.hint) chart.hint.textContent = 'Not enough data yet. Refresh UV a few times to build a history.';
+                return;
+            }
+            if (chart.hint) chart.hint.textContent = `${points.length} readings plotted.`;
+
+            const W = 800, H = 260;
+            const pad = { l: 44, r: 16, t: 12, b: 32 };
+
+            const minTs = Math.min(...points.map(p => p.ts.getTime()));
+            const maxTs = Math.max(...points.map(p => p.ts.getTime()));
+            const minV = 0;
+            const maxV = Math.max(1, Math.ceil(Math.max(...points.map(p => p.value)) + 0.5));
+
+            const x = (ts) => {
+                if (maxTs === minTs) return pad.l;
+                return pad.l + ((ts - minTs) / (maxTs - minTs)) * (W - pad.l - pad.r);
+            };
+            const y = (v) => {
+                const vv = Math.max(minV, Math.min(maxV, v));
+                return pad.t + (1 - (vv - minV) / (maxV - minV)) * (H - pad.t - pad.b);
+            };
+
+            // Grid + Y labels
+            const yTicks = 4;
+            for (let i = 0; i <= yTicks; i++) {
+                const v = minV + (i / yTicks) * (maxV - minV);
+                const yy = y(v);
+                chart.grid.insertAdjacentHTML('beforeend',
+                    `<line x1="${pad.l}" y1="${yy}" x2="${W - pad.r}" y2="${yy}" stroke="rgba(0,0,0,0.06)" stroke-width="1" />`
+                );
+                chart.labels.insertAdjacentHTML('beforeend',
+                    `<text x="${pad.l - 8}" y="${yy + 4}" text-anchor="end" font-size="11" fill="#777">${v.toFixed(0)}</text>`
+                );
+            }
+
+            // X labels (up to 6 evenly spaced)
+            const xTicks = Math.min(6, points.length);
+            for (let i = 0; i < xTicks; i++) {
+                const idx = Math.round((i / (xTicks - 1)) * (points.length - 1));
+                const p = points[idx];
+                const xx = x(p.ts.getTime());
+                chart.grid.insertAdjacentHTML('beforeend',
+                    `<line x1="${xx}" y1="${pad.t}" x2="${xx}" y2="${H - pad.b}" stroke="rgba(0,0,0,0.04)" stroke-width="1" />`
+                );
+                chart.labels.insertAdjacentHTML('beforeend',
+                    `<text x="${xx}" y="${H - 10}" text-anchor="middle" font-size="11" fill="#777">${p.label}</text>`
+                );
+            }
+
+            const pts = points.map(p => `${x(p.ts.getTime()).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
+            chart.line.setAttribute('points', pts);
+
+            // Dots
+            const last = points[points.length - 1];
+            for (const p of points) {
+                const cx = x(p.ts.getTime());
+                const cy = y(p.value);
+                const isLast = p === last;
+                chart.dots.insertAdjacentHTML('beforeend',
+                    `<circle cx="${cx}" cy="${cy}" r="${isLast ? 4.2 : 3}" fill="${isLast ? '#F27121' : 'rgba(242,113,33,0.65)'}" />`
+                );
+            }
+        }
+
+        async function refreshHistoryChart() {
+            try {
+                const res = await fetch('/LiveUV/GetHistory', { headers: { 'Accept': 'application/json' } });
+                const data = await res.json().catch(() => null);
+                if (!res.ok || !Array.isArray(data)) return;
+
+                const points = data
+                    .map(d => {
+                        const v = pick(d, ['value', 'Value']);
+                        const tsRaw = pick(d, ['timestamp', 'Timestamp']);
+                        const label = pick(d, ['label', 'Label', 'timestampLabel']) || pick(d, ['Timestamp']);
+                        const ts = tsRaw ? new Date(tsRaw) : null;
+                        if (typeof v !== 'number' || !ts || Number.isNaN(ts.getTime())) return null;
+                        return { value: v, ts, label: (typeof label === 'string' ? label : ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) };
+                    })
+                    .filter(Boolean);
+
+                drawChart(points);
+            } catch {
+                // ignore
+            }
+        }
+
+        function renderPayload(payload) {
+            const reading = payload && payload.reading;
+            const rec = payload && payload.recommendation;
+            const stats = payload && payload.statistics;
+
+            if (reading) {
+                const loc = pick(reading, ['location', 'Location']);
+                const ts = pick(reading, ['timestamp', 'Timestamp']);
+                if (typeof loc === 'string' && els.location) els.location.textContent = loc;
+                if (typeof ts === 'string' && els.timestamp) els.timestamp.textContent = ts;
+            }
+
+            const uv = (stats && typeof pick(stats, ['currentUV', 'CurrentUV']) === 'number') ? pick(stats, ['currentUV', 'CurrentUV'])
+                : (reading && typeof pick(reading, ['value', 'Value']) === 'number') ? pick(reading, ['value', 'Value'])
+                : null;
+
+            if (uv != null) {
+                const formatted = uv.toFixed(1);
+                if (els.uvValue) els.uvValue.textContent = formatted;
+                if (els.currentUv) els.currentUv.textContent = formatted;
+            }
+
+            if (rec) {
+                const msg = pick(rec, ['message', 'Message']);
+                const prot = pick(rec, ['protection', 'Protection']);
+                const status = pick(rec, ['status', 'Status']);
+                const color = pick(rec, ['colorCode', 'ColorCode']);
+                const icon = pick(rec, ['icon', 'Icon']);
+
+                if (typeof msg === 'string' && els.recommendationText) els.recommendationText.textContent = msg;
+                if (typeof prot === 'string' && els.protectionAdvice) els.protectionAdvice.textContent = prot;
+                if (typeof status === 'string' && els.safetyStatusText) els.safetyStatusText.textContent = status;
+                if (typeof color === 'string' && els.safetyMessage) els.safetyMessage.style.background = color;
+
+                if (els.safetyMessage) {
+                    const iconEl = els.safetyMessage.querySelector('i');
+                    if (iconEl) {
+                        const cls = (typeof icon === 'string' && icon.trim()) ? icon.trim() : 'fa-smile';
+                        iconEl.className = `fas ${cls}`;
+                    }
+                }
+            }
+
+            if (stats) {
+                const avg = pick(stats, ['averageUV', 'AverageUV']);
+                const max = pick(stats, ['maxUVToday', 'MaxUVToday']);
+                const pt = pick(stats, ['peakTime', 'PeakTime']);
+                const count = pick(stats, ['readingsCount', 'ReadingsCount']);
+
+                if (typeof avg === 'number' && els.avgUv) els.avgUv.textContent = avg.toFixed(1);
+                if (typeof max === 'number' && els.peakUv) els.peakUv.textContent = max.toFixed(1);
+                if (typeof pt === 'string' && els.peakTime) els.peakTime.textContent = pt;
+                if (typeof count === 'number' && els.readingsCount) els.readingsCount.textContent = String(count);
+            }
+        }
+
+        async function refreshByCoords(lat, lng) {
+            setButtonsLoading(true);
+            setStatus('Updating from your location…');
+            try {
+                const res = await fetch('/LiveUV/GetUVByLocation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ lat, lng })
+                });
+                const data = await res.json().catch(() => null);
+                if (!res.ok || !data || !data.success) {
+                    setStatus((data && data.message) ? data.message : 'Could not refresh UV data.');
+                    return;
+                }
+                renderPayload(data);
+                refreshHistoryChart();
+                setStatus('Updated.');
+            } catch {
+                setStatus('Could not refresh UV data.');
+            } finally {
+                setButtonsLoading(false);
+                setTimeout(() => setStatus(''), 2500);
+            }
+        }
+
+        function getStoredCoords() {
+            try {
+                const raw = localStorage.getItem('liveuv_last_coords');
+                if (!raw) return null;
+                const parsed = JSON.parse(raw);
+                const lat = parsed && typeof parsed.lat === 'number' ? parsed.lat : null;
+                const lng = parsed && typeof parsed.lng === 'number' ? parsed.lng : null;
+                if (lat == null || lng == null) return null;
+                return { lat, lng };
+            } catch {
+                return null;
+            }
+        }
+
+        function storeCoords(lat, lng) {
+            try {
+                localStorage.setItem('liveuv_last_coords', JSON.stringify({ lat, lng, at: Date.now() }));
+            } catch { }
+        }
+
+        function refreshUsingBrowserLocation() {
+            if (!navigator.geolocation) {
+                setStatus('Geolocation is not supported in this browser.');
+                return;
+            }
+
+            setButtonsLoading(true);
+            setStatus('Requesting location permission…');
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    storeCoords(lat, lng);
+                    refreshByCoords(lat, lng);
+                },
+                () => {
+                    setButtonsLoading(false);
+                    setStatus('Location permission denied.');
+                    setTimeout(() => setStatus(''), 2500);
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
+            );
+        }
+
+        function refreshUsingStoredOrBrowserLocation() {
+            const stored = getStoredCoords();
+            if (stored) {
+                refreshByCoords(stored.lat, stored.lng);
+                return;
+            }
+            refreshUsingBrowserLocation();
+        }
+
+        if (els.refreshBtn) els.refreshBtn.addEventListener('click', refreshUsingBrowserLocation);
+        if (els.generateBtn) els.generateBtn.addEventListener('click', refreshUsingStoredOrBrowserLocation);
+
+        refreshHistoryChart();
+    </script>
+}

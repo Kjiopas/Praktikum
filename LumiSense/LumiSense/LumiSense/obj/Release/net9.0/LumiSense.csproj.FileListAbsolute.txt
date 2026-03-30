@@ -390,7 +390,6 @@
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/nezrqnk58p-muycvpuwrr.gz
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/v0zgfp0y55-87fc7y1x7t.gz
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/yfc7ypekbg-mlv21k5csn.gz
-/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/jk01qi1rwy-d2v68ddxwr.gz
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/49i8xeqqgq-61n19gt1b8.gz
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/mkac5vqo8z-xtxxf3hu2r.gz
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/bglbi7pgdj-bqjiyaj88i.gz
@@ -464,3 +463,4 @@
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/LumiSense.pdb
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/LumiSense.genruntimeconfig.cache
 /home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/ref/LumiSense.dll
+/home/kjiop/DATASSD/Praktikum/Praktikum/LumiSense/LumiSense/LumiSense/obj/Release/net9.0/compressed/jk01qi1rwy-vmwcqvf4wn.gz
