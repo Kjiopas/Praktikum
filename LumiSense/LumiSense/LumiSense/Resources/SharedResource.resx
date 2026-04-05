@@ -19,6 +19,12 @@
   <data name="Nav_Orders" xml:space="preserve">
     <value>Orders</value>
   </data>
+  <data name="Nav_About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
   <data name="Nav_ArduinoPowered" xml:space="preserve">
     <value>Arduino Powered</value>
   </data>
@@ -41,6 +47,12 @@
   </data>
   <data name="Common_Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="Common_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Common_AccessDenied" xml:space="preserve">
+    <value>Access denied.</value>
   </data>
 
   <data name="Login_Title" xml:space="preserve">
@@ -78,14 +90,81 @@
   <data name="Home_Title" xml:space="preserve">
     <value>Home</value>
   </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Home Page</value>
+  </data>
   <data name="Home_HeroTitle" xml:space="preserve">
     <value>Smart UV Radiation Meter</value>
   </data>
   <data name="Home_HeroSubtitle" xml:space="preserve">
     <value>Arduino-powered real-time UV monitoring. Know if it's safe to go outside!</value>
   </data>
+  <data name="Home_HeroKicker" xml:space="preserve">
+    <value>Real-time UV insights • Location-aware</value>
+  </data>
   <data name="Home_CheckUvNow" xml:space="preserve">
     <value>Check UV Now</value>
+  </data>
+  <data name="Home_LearnMore" xml:space="preserve">
+    <value>Learn more</value>
+  </data>
+  <data name="Home_SecondaryCta" xml:space="preserve">
+    <value>Shop protection gear</value>
+  </data>
+  <data name="Home_Feature1Emoji" xml:space="preserve">
+    <value>🌞</value>
+  </data>
+  <data name="Home_Feature1Title" xml:space="preserve">
+    <value>Live UV monitoring</value>
+  </data>
+  <data name="Home_Feature1Body" xml:space="preserve">
+    <value>See the UV Index for your location and refresh it anytime.</value>
+  </data>
+  <data name="Home_Feature2Emoji" xml:space="preserve">
+    <value>⚡</value>
+  </data>
+  <data name="Home_Feature2Title" xml:space="preserve">
+    <value>Smart recommendations</value>
+  </data>
+  <data name="Home_Feature2Body" xml:space="preserve">
+    <value>Get clear guidance on sunscreen, shade, and safe exposure time.</value>
+  </data>
+  <data name="Home_Feature3Emoji" xml:space="preserve">
+    <value>🛡️</value>
+  </data>
+  <data name="Home_Feature3Title" xml:space="preserve">
+    <value>Protection gear shop</value>
+  </data>
+  <data name="Home_Feature3Body" xml:space="preserve">
+    <value>Order UV essentials like sunscreen, sunglasses, and accessories.</value>
+  </data>
+  <data name="Home_AboutTitle" xml:space="preserve">
+    <value>About LumiSense</value>
+  </data>
+  <data name="Home_AboutSubtitle" xml:space="preserve">
+    <value>Who we are</value>
+  </data>
+  <data name="Home_AboutBody" xml:space="preserve">
+    <value>LumiSense combines Arduino sensor data with real-time UV information to help you make safer decisions outdoors. Check current UV levels, understand the risk, and get practical protection tips—then shop the gear you need in one place.</value>
+  </data>
+
+  <data name="About_Title" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="About_Heading" xml:space="preserve">
+    <value>About LumiSense</value>
+  </data>
+  <data name="About_Subheading" xml:space="preserve">
+    <value>Who We Are</value>
+  </data>
+  <data name="About_Body" xml:space="preserve">
+    <value>LumiSense is a smart UV monitoring platform that combines Arduino-powered technology with a modern web interface. Our goal is to provide real-time UV radiation data and offer products that help people stay safe under the sun.</value>
+  </data>
+  <data name="About_Cta1" xml:space="preserve">
+    <value>Check UV Index</value>
+  </data>
+  <data name="About_Cta2" xml:space="preserve">
+    <value>Shop Products</value>
   </data>
 
   <data name="Privacy_Title" xml:space="preserve">
@@ -149,6 +228,169 @@
   </data>
   <data name="Shop_BuyNow" xml:space="preserve">
     <value>Buy Now</value>
+  </data>
+  <data name="Shop_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Shop_SortProducts" xml:space="preserve">
+    <value>Sort products</value>
+  </data>
+  <data name="Shop_SortPopular" xml:space="preserve">
+    <value>Popular</value>
+  </data>
+  <data name="Shop_SortPriceAsc" xml:space="preserve">
+    <value>Price: Low → High</value>
+  </data>
+  <data name="Shop_SortPriceDesc" xml:space="preserve">
+    <value>Price: High → Low</value>
+  </data>
+  <data name="Shop_SortTopRated" xml:space="preserve">
+    <value>Top rated</value>
+  </data>
+  <data name="Shop_SortMostReviewed" xml:space="preserve">
+    <value>Most reviewed</value>
+  </data>
+
+  <data name="Reviews_Title" xml:space="preserve">
+    <value>Reviews</value>
+  </data>
+  <data name="Reviews_Subtitle" xml:space="preserve">
+    <value>See what others think before you buy.</value>
+  </data>
+  <data name="Reviews_WriteButton" xml:space="preserve">
+    <value>Write a review</value>
+  </data>
+  <data name="Reviews_LoginToReview" xml:space="preserve">
+    <value>Login to review</value>
+  </data>
+  <data name="Reviews_YourRating" xml:space="preserve">
+    <value>Your rating</value>
+  </data>
+  <data name="Reviews_TextLabel" xml:space="preserve">
+    <value>Write a review (max 250 characters)</value>
+  </data>
+  <data name="Reviews_TextPlaceholder" xml:space="preserve">
+    <value>Share your experience…</value>
+  </data>
+  <data name="Reviews_SubmitPending" xml:space="preserve">
+    <value>Submit (needs approval)</value>
+  </data>
+  <data name="Reviews_None" xml:space="preserve">
+    <value>No reviews yet.</value>
+  </data>
+  <data name="Reviews_UserFallback" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Reviews_PendingBadge" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Reviews_Report" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="Reviews_ErrorTextRequired" xml:space="preserve">
+    <value>Review text is required.</value>
+  </data>
+
+  <data name="Admin_OrdersTitle" xml:space="preserve">
+    <value>Admin: Orders</value>
+  </data>
+  <data name="Admin_UsersTitle" xml:space="preserve">
+    <value>Admin: Users</value>
+  </data>
+  <data name="Admin_ReviewsTitle" xml:space="preserve">
+    <value>Admin: Reviews</value>
+  </data>
+  <data name="Admin_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Admin_DeliveryOffice" xml:space="preserve">
+    <value>Office/locker</value>
+  </data>
+  <data name="Admin_DeliveryAddress" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Admin_UserEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Admin_UserPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Admin_UserRoles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="Admin_UserLockout" xml:space="preserve">
+    <value>Lockout</value>
+  </data>
+  <data name="Admin_LockedUntil" xml:space="preserve">
+    <value>Locked until</value>
+  </data>
+  <data name="Admin_PendingReviews" xml:space="preserve">
+    <value>Pending reviews</value>
+  </data>
+  <data name="Admin_NoPendingReviews" xml:space="preserve">
+    <value>No pending reviews.</value>
+  </data>
+  <data name="Admin_Approve" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Admin_Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="Admin_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Admin_RecentlyApprovedReviews" xml:space="preserve">
+    <value>Recently approved</value>
+  </data>
+  <data name="Admin_NoApprovedReviews" xml:space="preserve">
+    <value>No approved reviews yet.</value>
+  </data>
+
+  <!-- Product translations (seeded products) -->
+  <data name="Product_1_Name" xml:space="preserve">
+    <value>LumiSense UV Meter Pro</value>
+  </data>
+  <data name="Product_1_Description" xml:space="preserve">
+    <value>Arduino-powered precision UV meter with real-time LCD display</value>
+  </data>
+  <data name="Product_1_Category" xml:space="preserve">
+    <value>Devices</value>
+  </data>
+  <data name="Product_2_Name" xml:space="preserve">
+    <value>UV Armor Bundle</value>
+  </data>
+  <data name="Product_2_Description" xml:space="preserve">
+    <value>Complete protection kit: SPF 50+ sunscreen, UV-protective shirt, and cooling towel</value>
+  </data>
+  <data name="Product_2_Category" xml:space="preserve">
+    <value>Accessories</value>
+  </data>
+  <data name="Product_3_Name" xml:space="preserve">
+    <value>UV Sensor Module</value>
+  </data>
+  <data name="Product_3_Description" xml:space="preserve">
+    <value>DIY UV sensor module compatible with Arduino and Raspberry Pi</value>
+  </data>
+  <data name="Product_3_Category" xml:space="preserve">
+    <value>Components</value>
+  </data>
+  <data name="Product_4_Name" xml:space="preserve">
+    <value>Beach Safety Kit</value>
+  </data>
+  <data name="Product_4_Description" xml:space="preserve">
+    <value>Premium kit: LumiSense Mini, UPF 50+ umbrella, SPF 50 sunscreen, and UV alert band</value>
+  </data>
+  <data name="Product_4_Category" xml:space="preserve">
+    <value>Bundles</value>
+  </data>
+  <data name="Product_5_Name" xml:space="preserve">
+    <value>UV Protection Arm Sleeves</value>
+  </data>
+  <data name="Product_5_Description" xml:space="preserve">
+    <value>UPF 50+ cooling arm sleeves, perfect for beach sports</value>
+  </data>
+  <data name="Product_5_Category" xml:space="preserve">
+    <value>Accessories</value>
   </data>
   <data name="Shop_OutOfStock" xml:space="preserve">
     <value>✗ Out of Stock</value>

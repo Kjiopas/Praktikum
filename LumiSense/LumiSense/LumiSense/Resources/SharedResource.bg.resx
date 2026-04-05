@@ -19,6 +19,12 @@
   <data name="Nav_Orders" xml:space="preserve">
     <value>Поръчки</value>
   </data>
+  <data name="Nav_About" xml:space="preserve">
+    <value>За нас</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Админ</value>
+  </data>
   <data name="Nav_ArduinoPowered" xml:space="preserve">
     <value>С Arduino</value>
   </data>
@@ -41,6 +47,12 @@
   </data>
   <data name="Common_Password" xml:space="preserve">
     <value>Парола</value>
+  </data>
+  <data name="Common_Apply" xml:space="preserve">
+    <value>Приложи</value>
+  </data>
+  <data name="Common_AccessDenied" xml:space="preserve">
+    <value>Отказан достъп.</value>
   </data>
 
   <data name="Login_Title" xml:space="preserve">
@@ -78,14 +90,81 @@
   <data name="Home_Title" xml:space="preserve">
     <value>Начало</value>
   </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Начална страница</value>
+  </data>
   <data name="Home_HeroTitle" xml:space="preserve">
     <value>Умен UV измервател</value>
   </data>
   <data name="Home_HeroSubtitle" xml:space="preserve">
     <value>Arduino-базирано UV наблюдение в реално време. Разберете дали е безопасно да излезете навън!</value>
   </data>
+  <data name="Home_HeroKicker" xml:space="preserve">
+    <value>UV в реално време • По локация</value>
+  </data>
   <data name="Home_CheckUvNow" xml:space="preserve">
     <value>Провери UV сега</value>
+  </data>
+  <data name="Home_LearnMore" xml:space="preserve">
+    <value>Научи повече</value>
+  </data>
+  <data name="Home_SecondaryCta" xml:space="preserve">
+    <value>Магазин за защита</value>
+  </data>
+  <data name="Home_Feature1Emoji" xml:space="preserve">
+    <value>🌞</value>
+  </data>
+  <data name="Home_Feature1Title" xml:space="preserve">
+    <value>UV на живо</value>
+  </data>
+  <data name="Home_Feature1Body" xml:space="preserve">
+    <value>Вижте UV индекса за вашата локация и го обновявайте по всяко време.</value>
+  </data>
+  <data name="Home_Feature2Emoji" xml:space="preserve">
+    <value>⚡</value>
+  </data>
+  <data name="Home_Feature2Title" xml:space="preserve">
+    <value>Умни препоръки</value>
+  </data>
+  <data name="Home_Feature2Body" xml:space="preserve">
+    <value>Ясни съвети за слънцезащита, сянка и безопасно време навън.</value>
+  </data>
+  <data name="Home_Feature3Emoji" xml:space="preserve">
+    <value>🛡️</value>
+  </data>
+  <data name="Home_Feature3Title" xml:space="preserve">
+    <value>Магазин</value>
+  </data>
+  <data name="Home_Feature3Body" xml:space="preserve">
+    <value>Поръчайте нужните продукти за UV защита на едно място.</value>
+  </data>
+  <data name="Home_AboutTitle" xml:space="preserve">
+    <value>За LumiSense</value>
+  </data>
+  <data name="Home_AboutSubtitle" xml:space="preserve">
+    <value>Кои сме ние</value>
+  </data>
+  <data name="Home_AboutBody" xml:space="preserve">
+    <value>LumiSense комбинира данни от Arduino сензор и UV информация в реално време, за да ви помага да взимате по-безопасни решения навън. Проверете текущите UV нива, разберете риска и получете практични съвети—а след това поръчайте нужните продукти от магазина.</value>
+  </data>
+
+  <data name="About_Title" xml:space="preserve">
+    <value>За нас</value>
+  </data>
+  <data name="About_Heading" xml:space="preserve">
+    <value>За LumiSense</value>
+  </data>
+  <data name="About_Subheading" xml:space="preserve">
+    <value>Кои сме ние</value>
+  </data>
+  <data name="About_Body" xml:space="preserve">
+    <value>LumiSense е платформа за умно UV наблюдение, която комбинира Arduino технология с модерен уеб интерфейс. Целта ни е да предоставяме UV данни в реално време и продукти, които помагат на хората да се пазят от слънцето.</value>
+  </data>
+  <data name="About_Cta1" xml:space="preserve">
+    <value>Провери UV индекс</value>
+  </data>
+  <data name="About_Cta2" xml:space="preserve">
+    <value>Магазин</value>
   </data>
 
   <data name="Privacy_Title" xml:space="preserve">
@@ -149,6 +228,169 @@
   </data>
   <data name="Shop_BuyNow" xml:space="preserve">
     <value>Купи сега</value>
+  </data>
+  <data name="Shop_Details" xml:space="preserve">
+    <value>Детайли</value>
+  </data>
+  <data name="Shop_SortProducts" xml:space="preserve">
+    <value>Сортиране на продукти</value>
+  </data>
+  <data name="Shop_SortPopular" xml:space="preserve">
+    <value>Популярни</value>
+  </data>
+  <data name="Shop_SortPriceAsc" xml:space="preserve">
+    <value>Цена: Ниска → Висока</value>
+  </data>
+  <data name="Shop_SortPriceDesc" xml:space="preserve">
+    <value>Цена: Висока → Ниска</value>
+  </data>
+  <data name="Shop_SortTopRated" xml:space="preserve">
+    <value>Най-висок рейтинг</value>
+  </data>
+  <data name="Shop_SortMostReviewed" xml:space="preserve">
+    <value>Най-много отзиви</value>
+  </data>
+
+  <data name="Reviews_Title" xml:space="preserve">
+    <value>Отзиви</value>
+  </data>
+  <data name="Reviews_Subtitle" xml:space="preserve">
+    <value>Вижте мненията на другите преди да купите.</value>
+  </data>
+  <data name="Reviews_WriteButton" xml:space="preserve">
+    <value>Напиши отзив</value>
+  </data>
+  <data name="Reviews_LoginToReview" xml:space="preserve">
+    <value>Влез, за да оставиш отзив</value>
+  </data>
+  <data name="Reviews_YourRating" xml:space="preserve">
+    <value>Твоята оценка</value>
+  </data>
+  <data name="Reviews_TextLabel" xml:space="preserve">
+    <value>Напиши отзив (до 250 символа)</value>
+  </data>
+  <data name="Reviews_TextPlaceholder" xml:space="preserve">
+    <value>Сподели твоето преживяване…</value>
+  </data>
+  <data name="Reviews_SubmitPending" xml:space="preserve">
+    <value>Изпрати (чака одобрение)</value>
+  </data>
+  <data name="Reviews_None" xml:space="preserve">
+    <value>Все още няма отзиви.</value>
+  </data>
+  <data name="Reviews_UserFallback" xml:space="preserve">
+    <value>Потребител</value>
+  </data>
+  <data name="Reviews_PendingBadge" xml:space="preserve">
+    <value>В изчакване</value>
+  </data>
+  <data name="Reviews_Report" xml:space="preserve">
+    <value>Докладвай</value>
+  </data>
+  <data name="Reviews_ErrorTextRequired" xml:space="preserve">
+    <value>Текстът на отзива е задължителен.</value>
+  </data>
+
+  <data name="Admin_OrdersTitle" xml:space="preserve">
+    <value>Админ: Поръчки</value>
+  </data>
+  <data name="Admin_UsersTitle" xml:space="preserve">
+    <value>Админ: Потребители</value>
+  </data>
+  <data name="Admin_ReviewsTitle" xml:space="preserve">
+    <value>Админ: Отзиви</value>
+  </data>
+  <data name="Admin_Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Admin_DeliveryOffice" xml:space="preserve">
+    <value>Офис/локър</value>
+  </data>
+  <data name="Admin_DeliveryAddress" xml:space="preserve">
+    <value>Адрес</value>
+  </data>
+  <data name="Admin_UserEmail" xml:space="preserve">
+    <value>Имейл</value>
+  </data>
+  <data name="Admin_UserPhone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="Admin_UserRoles" xml:space="preserve">
+    <value>Роли</value>
+  </data>
+  <data name="Admin_UserLockout" xml:space="preserve">
+    <value>Блокиране</value>
+  </data>
+  <data name="Admin_LockedUntil" xml:space="preserve">
+    <value>Блокиран до</value>
+  </data>
+  <data name="Admin_PendingReviews" xml:space="preserve">
+    <value>Чакащи отзиви</value>
+  </data>
+  <data name="Admin_NoPendingReviews" xml:space="preserve">
+    <value>Няма чакащи отзиви.</value>
+  </data>
+  <data name="Admin_Approve" xml:space="preserve">
+    <value>Одобри</value>
+  </data>
+  <data name="Admin_Hide" xml:space="preserve">
+    <value>Скрий</value>
+  </data>
+  <data name="Admin_Delete" xml:space="preserve">
+    <value>Изтрий</value>
+  </data>
+  <data name="Admin_RecentlyApprovedReviews" xml:space="preserve">
+    <value>Последно одобрени</value>
+  </data>
+  <data name="Admin_NoApprovedReviews" xml:space="preserve">
+    <value>Все още няма одобрени отзиви.</value>
+  </data>
+
+  <!-- Product translations (seeded products) -->
+  <data name="Product_1_Name" xml:space="preserve">
+    <value>LumiSense UV Meter Pro</value>
+  </data>
+  <data name="Product_1_Description" xml:space="preserve">
+    <value>Arduino-базиран прецизен UV измервател с LCD дисплей в реално време</value>
+  </data>
+  <data name="Product_1_Category" xml:space="preserve">
+    <value>Устройства</value>
+  </data>
+  <data name="Product_2_Name" xml:space="preserve">
+    <value>UV Armor Комплект</value>
+  </data>
+  <data name="Product_2_Description" xml:space="preserve">
+    <value>Пълен комплект защита: SPF 50+ слънцезащита, UV тениска и охлаждаща кърпа</value>
+  </data>
+  <data name="Product_2_Category" xml:space="preserve">
+    <value>Аксесоари</value>
+  </data>
+  <data name="Product_3_Name" xml:space="preserve">
+    <value>UV Сензорен Модул</value>
+  </data>
+  <data name="Product_3_Description" xml:space="preserve">
+    <value>DIY UV сензорен модул, съвместим с Arduino и Raspberry Pi</value>
+  </data>
+  <data name="Product_3_Category" xml:space="preserve">
+    <value>Компоненти</value>
+  </data>
+  <data name="Product_4_Name" xml:space="preserve">
+    <value>Комплект за Плажна Безопасност</value>
+  </data>
+  <data name="Product_4_Description" xml:space="preserve">
+    <value>Премиум комплект: LumiSense Mini, UPF 50+ чадър, SPF 50 слънцезащита и UV гривна</value>
+  </data>
+  <data name="Product_4_Category" xml:space="preserve">
+    <value>Комплекти</value>
+  </data>
+  <data name="Product_5_Name" xml:space="preserve">
+    <value>UV Защитни Ръкави</value>
+  </data>
+  <data name="Product_5_Description" xml:space="preserve">
+    <value>UPF 50+ охлаждащи ръкави, идеални за спорт на плажа</value>
+  </data>
+  <data name="Product_5_Category" xml:space="preserve">
+    <value>Аксесоари</value>
   </data>
   <data name="Shop_OutOfStock" xml:space="preserve">
     <value>✗ Няма наличност</value>

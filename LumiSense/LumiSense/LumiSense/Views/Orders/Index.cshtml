@@ -11,29 +11,7 @@
 <div class="uv-card">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
         <h2 style="margin:0;">@L["Orders_Title"]</h2>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-            <form method="post" action="/Orders/ClearLookup" style="margin:0;">
-                <button type="submit" class="cancel-btn">@L["Orders_ClearLookup"]</button>
-            </form>
-        </div>
     </div>
-
-    @if (!(User?.Identity?.IsAuthenticated ?? false))
-    {
-        <div style="margin-top:1rem; background:white; border-radius:12px; padding:1rem;">
-            <div style="font-weight:800; margin-bottom:0.5rem;">@L["Orders_LookupTitle"]</div>
-            <form method="post" action="/Orders/SetLookupEmail" style="display:flex; gap:0.75rem; flex-wrap:wrap; align-items:flex-end;">
-                <div style="flex:1; min-width:240px;">
-                    <label style="display:block; font-weight:700; margin-bottom:6px;">@L["Orders_Email"]</label>
-                    <input class="form-control" name="email" placeholder="@L["Orders_EmailPlaceholder"]" />
-                </div>
-                <button type="submit" class="buy-btn">@L["Orders_ViewOrders"]</button>
-            </form>
-            <div style="margin-top:0.75rem; color:#666; font-size:0.95rem;">
-                @L["Orders_LookupHint"]
-            </div>
-        </div>
-    }
 
     @if (Model.Count == 0)
     {

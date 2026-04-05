@@ -1,0 +1,81 @@
+@model List<LumiSense.Models.Order>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@using System.Globalization
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = L["Admin_OrdersTitle"].Value;
+    var culture = CultureInfo.CurrentCulture;
+    var statuses = (ViewData["AllowedOrderStatuses"] as string[]) ?? new[] { "Pending", "Processing", "Shipped", "Delivered", "Cancelled" };
+}
+
+<div class="uv-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <h2 style="margin:0;">@L["Admin_OrdersTitle"]</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="buy-btn" style="text-decoration:none;" href="/Admin/Users">@L["Admin_UsersTitle"]</a>
+            <a class="buy-btn" style="text-decoration:none;" href="/Admin/Reviews">@L["Admin_ReviewsTitle"]</a>
+        </div>
+    </div>
+
+    <div style="margin-top:1rem; overflow:auto;">
+        <table class="table" style="width:100%; background:white; border-radius:12px; overflow:hidden;">
+            <thead>
+                <tr>
+                    <th style="text-align:left; padding:12px;">#</th>
+                    <th style="text-align:left; padding:12px;">@L["Orders_Date"]</th>
+                    <th style="text-align:left; padding:12px;">@L["Orders_Email"]</th>
+                    <th style="text-align:right; padding:12px;">@L["Orders_Total"]</th>
+                    <th style="text-align:left; padding:12px;">@L["Admin_Status"]</th>
+                    <th style="padding:12px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var o in Model)
+            {
+                <tr>
+                    <td style="padding:12px;">#@o.Id</td>
+                    <td style="padding:12px;">@o.OrderDate.ToString("g", culture)</td>
+                    <td style="padding:12px;">@o.CustomerEmail</td>
+                    <td style="padding:12px; text-align:right;">@o.TotalAmount.ToString("C", culture)</td>
+                    <td style="padding:12px;">
+                        <form method="post" action="/Admin/Orders/@o.Id/Status" style="display:flex; gap:10px; align-items:center; margin:0; flex-wrap:wrap;">
+                            @Html.AntiForgeryToken()
+                            <select class="form-control" name="status" style="min-width:160px;">
+                                @foreach (var s in statuses)
+                                {
+                                    if (string.Equals(o.Status, s, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        <option value="@s" selected>@s</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@s">@s</option>
+                                    }
+                                }
+                            </select>
+                            <button type="submit" class="buy-btn" style="margin-top:0;">@L["Common_Apply"]</button>
+                        </form>
+                        <div style="margin-top:6px; color:#777; font-size:0.9rem;">
+                            @if (o.DeliveryMethod == "address")
+                            {
+                                <span>@L["Admin_DeliveryAddress"]: @o.AddressCity @o.AddressLine1</span>
+                            }
+                            else
+                            {
+                                <span>@L["Admin_DeliveryOffice"]: @o.DeliveryCompany @o.DeliveryPointCity @o.DeliveryPointName</span>
+                            }
+                        </div>
+                    </td>
+                    <td style="padding:12px; text-align:right;">
+                        <a class="buy-btn" style="text-decoration:none; display:inline-block;" href="/Orders/Details/@o.Id">
+                            @L["Orders_Details"]
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+

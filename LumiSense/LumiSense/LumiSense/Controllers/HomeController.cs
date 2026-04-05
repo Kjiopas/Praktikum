@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LumiSense.Controllers
 {
@@ -9,6 +9,12 @@ namespace LumiSense.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [HttpGet("/About")]
+        public IActionResult About()
         {
             return View();
         }

@@ -1,0 +1,104 @@
+@model LumiSense.Controllers.AdminController.AdminReviewsViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = L["Admin_ReviewsTitle"].Value;
+}
+
+<div class="uv-card" style="max-width:1100px; margin:0 auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <h2 style="margin:0;">@L["Admin_ReviewsTitle"]</h2>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a class="buy-btn" style="text-decoration:none;" href="/Admin/Orders">@L["Admin_OrdersTitle"]</a>
+            <a class="buy-btn" style="text-decoration:none;" href="/Admin/Users">@L["Admin_UsersTitle"]</a>
+        </div>
+    </div>
+
+    <div style="margin-top:14px;">
+        <h3 style="margin:0 0 10px;">@L["Admin_PendingReviews"] (@Model.Pending.Count)</h3>
+        @if (Model.Pending.Count == 0)
+        {
+            <div style="color:#666;">@L["Admin_NoPendingReviews"]</div>
+        }
+        else
+        {
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                @foreach (var r in Model.Pending)
+                {
+                    var prodName = r.Product?.Name ?? $"#{r.ProductId}";
+                    <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px;">
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div style="font-weight:950;">
+                                <i class="fas fa-box" style="color:#666;"></i>
+                                <a href="/Shop/Product/@r.ProductId" style="text-decoration:none; color:inherit;">@prodName</a>
+                                <span style="margin-left:8px; color:#777; font-weight:700;">@r.UserDisplayName</span>
+                            </div>
+                            <div style="color:#777; font-size:0.9rem;">@r.CreatedAtUtc.ToLocalTime().ToString("g")</div>
+                        </div>
+                        <div style="margin-top:6px; color:#F27121;">
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                if (i <= r.Rating) { <i class="fas fa-star"></i> }
+                                else { <i class="far fa-star" style="opacity:0.55;"></i> }
+                            }
+                        </div>
+                        <div style="margin-top:8px; color:#333; white-space:pre-wrap;">@r.Text</div>
+
+                        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
+                            <form method="post" action="/Admin/Reviews/@r.Id/Approve" style="margin:0;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="buy-btn" style="margin-top:0;">
+                                    <i class="fas fa-check"></i> @L["Admin_Approve"]
+                                </button>
+                            </form>
+                            <form method="post" action="/Admin/Reviews/@r.Id/Delete" style="margin:0;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="cancel-btn" style="margin-top:0;">
+                                    <i class="fas fa-trash"></i> @L["Admin_Delete"]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <div style="margin-top:22px;">
+        <h3 style="margin:0 0 10px;">@L["Admin_RecentlyApprovedReviews"] (@Model.Approved.Count)</h3>
+        @if (Model.Approved.Count == 0)
+        {
+            <div style="color:#666;">@L["Admin_NoApprovedReviews"]</div>
+        }
+        else
+        {
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                @foreach (var r in Model.Approved)
+                {
+                    var prodName = r.Product?.Name ?? $"#{r.ProductId}";
+                    <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px;">
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div style="font-weight:950;">
+                                <i class="fas fa-box" style="color:#666;"></i>
+                                <a href="/Shop/Product/@r.ProductId" style="text-decoration:none; color:inherit;">@prodName</a>
+                                <span style="margin-left:8px; color:#777; font-weight:700;">@r.UserDisplayName</span>
+                            </div>
+                            <div style="color:#777; font-size:0.9rem;">@r.CreatedAtUtc.ToLocalTime().ToString("g")</div>
+                        </div>
+                        <div style="margin-top:8px; color:#333; white-space:pre-wrap;">@r.Text</div>
+                        <div style="margin-top:12px; display:flex; justify-content:flex-end;">
+                            <form method="post" action="/Admin/Reviews/@r.Id/Hide" style="margin:0;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="cancel-btn" style="margin-top:0;">
+                                    <i class="fas fa-eye-slash"></i> @L["Admin_Hide"]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+

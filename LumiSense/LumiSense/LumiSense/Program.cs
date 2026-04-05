@@ -35,6 +35,8 @@ builder.Services
     .AddDataAnnotationsLocalization();
 
 builder.Services.AddScoped<LumiSense.Services.CartSessionService>();
+builder.Services.AddSingleton<LumiSense.Services.DeliveryPointsService>();
+builder.Services.AddScoped<LumiSense.Services.ProfileImageStorage>();
 
 var dbProvider = (builder.Configuration["Database:Provider"] ?? "auto").Trim().ToLowerInvariant();
 
@@ -42,8 +44,30 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     if (dbProvider == "auto" || dbProvider == "sqlserver" || dbProvider == "mssql")
     {
-        var sqlConn = builder.Configuration.GetConnectionString("SqlServerConnection");
-        if (!string.IsNullOrWhiteSpace(sqlConn) && CanConnectToSqlServer(sqlConn))
+        var rawSqlConn = builder.Configuration.GetConnectionString("SqlServerConnection");
+        var sqlConn = ResolveSqlServerConnectionString(builder.Configuration);
+
+        if (!string.IsNullOrWhiteSpace(rawSqlConn) &&
+            rawSqlConn.Contains("Password=CHANGE_ME", StringComparison.OrdinalIgnoreCase) &&
+            string.IsNullOrWhiteSpace(builder.Configuration["MSSQL_SA_PASSWORD"]) &&
+            string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD")) &&
+            string.IsNullOrWhiteSpace(builder.Configuration["SqlServer:SaPassword"]) &&
+            string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("SqlServer__SaPassword")))
+        {
+            if (dbProvider == "sqlserver" || dbProvider == "mssql")
+            {
+                throw new InvalidOperationException(
+                    "SQL Server is selected but the connection string still contains Password=CHANGE_ME. " +
+                    "Set the environment variable MSSQL_SA_PASSWORD (or set SqlServer:SaPassword) " +
+                    "or update ConnectionStrings:SqlServerConnection with the real password.");
+            }
+
+            // auto mode: ignore placeholder and fall through
+            sqlConn = null;
+        }
+
+        var (sqlOk, sqlErr) = TryConnectToSqlServer(sqlConn);
+        if (!string.IsNullOrWhiteSpace(sqlConn) && sqlOk)
         {
             options.UseSqlServer(sqlConn);
             return;
@@ -51,7 +75,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
         if (dbProvider == "sqlserver" || dbProvider == "mssql")
         {
-            throw new InvalidOperationException("SQL Server is selected but is not reachable or connection string is missing.");
+            var safe = SafeSqlServerConnectionSummary(builder.Configuration.GetConnectionString("SqlServerConnection"));
+            var hint = string.IsNullOrWhiteSpace(sqlErr) ? "Unknown error." : sqlErr;
+            throw new InvalidOperationException(
+                "SQL Server is selected but the connection failed.\n" +
+                $"Connection: {safe}\n" +
+                $"Error: {hint}\n" +
+                "Fix: set MSSQL_SA_PASSWORD (or update ConnectionStrings:SqlServerConnection), or switch Database:Provider back to 'auto'."
+            );
         }
         // else: auto fall-through to MySQL/SQLite
     }
@@ -83,6 +114,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireLowercase = false;
 })
+.AddRoles<IdentityRole>()
 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -151,6 +183,9 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     dbContext.Database.EnsureCreated();
     EnsureSqliteSchema(dbContext);
+
+    // Seed Admin role + default Admin user (override via env vars).
+    await SeedAdminAsync(scope.ServiceProvider, app.Configuration, app.Environment);
 
     // Seed products if empty
     if (!dbContext.Products.Any())
@@ -227,6 +262,67 @@ using (var scope = app.Services.CreateScope())
 
 app.Run();
 
+static async Task SeedAdminAsync(IServiceProvider services, IConfiguration config, IHostEnvironment env)
+{
+    // Defaults are development-friendly; override via env vars in real deployments:
+    // - LUMISENSE_ADMIN_EMAIL
+    // - LUMISENSE_ADMIN_PASSWORD
+    var adminEmail =
+        (Environment.GetEnvironmentVariable("LUMISENSE_ADMIN_EMAIL") ??
+         config["AdminSeed:Email"] ??
+         "admin@lumisense.local").Trim();
+
+    var adminPassword =
+        (Environment.GetEnvironmentVariable("LUMISENSE_ADMIN_PASSWORD") ??
+         config["AdminSeed:Password"] ??
+         string.Empty).Trim();
+
+    if (string.IsNullOrWhiteSpace(adminPassword))
+    {
+        // Only auto-seed a simple password in Development to avoid surprises in production.
+        if (env.IsDevelopment())
+        {
+            adminPassword = "Admin123!";
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+    const string adminRole = "Admin";
+    if (!await roleManager.RoleExistsAsync(adminRole))
+    {
+        await roleManager.CreateAsync(new IdentityRole(adminRole));
+    }
+
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser is null)
+    {
+        adminUser = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var created = await userManager.CreateAsync(adminUser, adminPassword);
+        if (!created.Succeeded)
+        {
+            var msg = string.Join("; ", created.Errors.Select(e => e.Description));
+            throw new InvalidOperationException($"Admin seed failed: {msg}");
+        }
+    }
+
+    if (!await userManager.IsInRoleAsync(adminUser, adminRole))
+    {
+        await userManager.AddToRoleAsync(adminUser, adminRole);
+    }
+}
+
 static void EnsureSqliteSchema(ApplicationDbContext dbContext)
 {
     if (!dbContext.Database.IsSqlite())
@@ -234,8 +330,72 @@ static void EnsureSqliteSchema(ApplicationDbContext dbContext)
         return;
     }
 
+    EnsureSqliteTableExists(
+        dbContext,
+        tableName: "ProductReviews",
+        createSql: """
+CREATE TABLE IF NOT EXISTS "ProductReviews" (
+  "Id" INTEGER NOT NULL CONSTRAINT "PK_ProductReviews" PRIMARY KEY AUTOINCREMENT,
+  "ProductId" INTEGER NOT NULL,
+  "UserId" TEXT NOT NULL,
+  "UserDisplayName" TEXT NULL,
+  "Text" TEXT NOT NULL,
+  "Rating" INTEGER NOT NULL DEFAULT 5,
+  "CreatedAtUtc" TEXT NOT NULL,
+  "IsApproved" INTEGER NOT NULL DEFAULT 0,
+  CONSTRAINT "FK_ProductReviews_Products_ProductId" FOREIGN KEY ("ProductId") REFERENCES "Products" ("Id") ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS "IX_ProductReviews_ProductId" ON "ProductReviews" ("ProductId");
+CREATE INDEX IF NOT EXISTS "IX_ProductReviews_UserId" ON "ProductReviews" ("UserId");
+""");
+
+    EnsureSqliteTableExists(
+        dbContext,
+        tableName: "ProductReviewReports",
+        createSql: """
+CREATE TABLE IF NOT EXISTS "ProductReviewReports" (
+  "Id" INTEGER NOT NULL CONSTRAINT "PK_ProductReviewReports" PRIMARY KEY AUTOINCREMENT,
+  "ReviewId" INTEGER NOT NULL,
+  "ReporterUserId" TEXT NOT NULL,
+  "Reason" TEXT NULL,
+  "CreatedAtUtc" TEXT NOT NULL,
+  "Resolved" INTEGER NOT NULL DEFAULT 0,
+  CONSTRAINT "FK_ProductReviewReports_ProductReviews_ReviewId" FOREIGN KEY ("ReviewId") REFERENCES "ProductReviews" ("Id") ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS "IX_ProductReviewReports_ReviewId" ON "ProductReviewReports" ("ReviewId");
+CREATE INDEX IF NOT EXISTS "IX_ProductReviewReports_ReporterUserId" ON "ProductReviewReports" ("ReporterUserId");
+""");
+
+    EnsureSqliteTableExists(
+        dbContext,
+        tableName: "UserProfiles",
+        createSql: """
+CREATE TABLE IF NOT EXISTS "UserProfiles" (
+  "UserId" TEXT NOT NULL CONSTRAINT "PK_UserProfiles" PRIMARY KEY,
+  "ProfileImagePath" TEXT NULL,
+  "UpdatedAtUtc" TEXT NOT NULL
+);
+""");
+
     EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "UserId", columnDefinitionSql: "TEXT NULL");
     EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "CourierInfo", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "PhoneNumber", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "Status", columnDefinitionSql: "TEXT NOT NULL DEFAULT 'Pending'");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryMethod", columnDefinitionSql: "TEXT NOT NULL DEFAULT 'office'");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryCompany", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryPointName", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryPointType", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryPointCity", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryPointAddress", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryPointLat", columnDefinitionSql: "REAL NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "DeliveryPointLng", columnDefinitionSql: "REAL NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "AddressCity", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "AddressLine1", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "AddressLine2", columnDefinitionSql: "TEXT NULL");
+    EnsureSqliteColumnExists(dbContext, tableName: "Orders", columnName: "AddressPostCode", columnDefinitionSql: "TEXT NULL");
+
+    // Reviews schema evolution
+    EnsureSqliteColumnExists(dbContext, tableName: "ProductReviews", columnName: "Rating", columnDefinitionSql: "INTEGER NOT NULL DEFAULT 5");
 }
 
 static void EnsureSqliteColumnExists(
@@ -252,9 +412,35 @@ static void EnsureSqliteColumnExists(
 
     // This is a tiny schema patch for this app's known tables/columns.
     // Keep it whitelisted to avoid executing arbitrary SQL.
-    if (!string.Equals(tableName, "Orders", StringComparison.Ordinal) ||
+    if (!(string.Equals(tableName, "Orders", StringComparison.Ordinal) ||
+          string.Equals(tableName, "ProductReviews", StringComparison.Ordinal)))
+    {
+        throw new InvalidOperationException("Unexpected schema patch request.");
+    }
+
+    if (string.Equals(tableName, "Orders", StringComparison.Ordinal) &&
         !(string.Equals(columnName, "UserId", StringComparison.Ordinal) ||
-          string.Equals(columnName, "CourierInfo", StringComparison.Ordinal)))
+          string.Equals(columnName, "CourierInfo", StringComparison.Ordinal) ||
+          string.Equals(columnName, "PhoneNumber", StringComparison.Ordinal) ||
+          string.Equals(columnName, "Status", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryMethod", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryCompany", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryPointName", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryPointType", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryPointCity", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryPointAddress", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryPointLat", StringComparison.Ordinal) ||
+          string.Equals(columnName, "DeliveryPointLng", StringComparison.Ordinal) ||
+          string.Equals(columnName, "AddressCity", StringComparison.Ordinal) ||
+          string.Equals(columnName, "AddressLine1", StringComparison.Ordinal) ||
+          string.Equals(columnName, "AddressLine2", StringComparison.Ordinal) ||
+          string.Equals(columnName, "AddressPostCode", StringComparison.Ordinal)))
+    {
+        throw new InvalidOperationException("Unexpected schema patch request.");
+    }
+
+    if (string.Equals(tableName, "ProductReviews", StringComparison.Ordinal) &&
+        !string.Equals(columnName, "Rating", StringComparison.Ordinal))
     {
         throw new InvalidOperationException("Unexpected schema patch request.");
     }
@@ -277,8 +463,34 @@ static void EnsureSqliteColumnExists(
     dbContext.Database.ExecuteSqlRaw(sql);
 }
 
-static bool CanConnectToSqlServer(string connectionString)
+static void EnsureSqliteTableExists(ApplicationDbContext dbContext, string tableName, string createSql)
 {
+    using var connection = dbContext.Database.GetDbConnection();
+    if (connection.State != System.Data.ConnectionState.Open)
+    {
+        connection.Open();
+    }
+
+    using var cmd = connection.CreateCommand();
+    cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name=$name;";
+    var p = cmd.CreateParameter();
+    p.ParameterName = "$name";
+    p.Value = tableName;
+    cmd.Parameters.Add(p);
+
+    var exists = cmd.ExecuteScalar() is not null;
+    if (exists) return;
+
+    dbContext.Database.ExecuteSqlRaw(createSql);
+}
+
+static (bool ok, string? error) TryConnectToSqlServer(string? connectionString)
+{
+    if (string.IsNullOrWhiteSpace(connectionString))
+    {
+        return (false, "Connection string is empty.");
+    }
+
     try
     {
         var builder = new SqlConnectionStringBuilder(connectionString);
@@ -290,11 +502,11 @@ static bool CanConnectToSqlServer(string connectionString)
         using var conn = new SqlConnection(builder.ConnectionString);
         conn.Open();
         conn.Close();
-        return true;
+        return (true, null);
     }
-    catch
+    catch (Exception ex)
     {
-        return false;
+        return (false, ex.Message);
     }
 }
 
@@ -313,4 +525,51 @@ static bool IsAjaxOrJsonRequest(HttpRequest request)
     }
 
     return false;
+}
+
+static string? ResolveSqlServerConnectionString(IConfiguration config)
+{
+    var sqlConn = config.GetConnectionString("SqlServerConnection");
+    if (string.IsNullOrWhiteSpace(sqlConn)) return sqlConn;
+
+    // Allow keeping the connection string in source control while supplying the secret password
+    // via environment/config. Example:
+    //   export MSSQL_SA_PASSWORD='YourStrong!Passw0rd'
+    // and keep Password=CHANGE_ME in appsettings.json.
+    const string marker = "Password=CHANGE_ME";
+    if (!sqlConn.Contains(marker, StringComparison.OrdinalIgnoreCase))
+    {
+        return sqlConn;
+    }
+
+    var password =
+        config["MSSQL_SA_PASSWORD"]
+        ?? Environment.GetEnvironmentVariable("MSSQL_SA_PASSWORD")
+        ?? config["SqlServer:SaPassword"]
+        ?? Environment.GetEnvironmentVariable("SqlServer__SaPassword");
+
+    if (string.IsNullOrWhiteSpace(password))
+    {
+        return sqlConn;
+    }
+
+    return sqlConn.Replace("Password=CHANGE_ME", $"Password={password}", StringComparison.OrdinalIgnoreCase);
+}
+
+static string SafeSqlServerConnectionSummary(string? connectionString)
+{
+    if (string.IsNullOrWhiteSpace(connectionString)) return "<missing>";
+    try
+    {
+        var b = new SqlConnectionStringBuilder(connectionString);
+        var server = string.IsNullOrWhiteSpace(b.DataSource) ? "<unknown-server>" : b.DataSource;
+        var db = string.IsNullOrWhiteSpace(b.InitialCatalog) ? "<default-db>" : b.InitialCatalog;
+        var user = string.IsNullOrWhiteSpace(b.UserID) ? "<integrated>" : b.UserID;
+        return $"{server};Database={db};User={user};Password=***";
+    }
+    catch
+    {
+        // Avoid echoing secrets; return a generic indicator.
+        return "<invalid-connection-string>";
+    }
 }

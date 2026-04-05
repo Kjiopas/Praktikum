@@ -2,12 +2,19 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 @inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+@inject LumiSense.Services.ProfileImageStorage ProfileImages
 
 <div class="nav-auth">
 @if (SignInManager.IsSignedIn(User))
 {
+    var currentUser = await UserManager.GetUserAsync(User);
+    var avatar = currentUser is null ? null : await ProfileImages.GetForUserAsync(currentUser.Id);
+    var avatarUrl = string.IsNullOrWhiteSpace(avatar) ? "/images/default-avatar.svg" : avatar;
+
     <a class="nav-auth-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-        @string.Format(L["Auth_Hello"].Value, User.Identity?.Name)
+        <img src="@avatarUrl"
+             alt="Profile"
+             style="width:34px; height:34px; border-radius:999px; object-fit:cover; border:1px solid rgba(0,0,0,0.10);" />
     </a>
 
     <form class="nav-auth-form" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

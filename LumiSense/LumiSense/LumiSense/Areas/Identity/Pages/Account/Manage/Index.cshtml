@@ -1,0 +1,89 @@
+@page
+@model LumiSense.Areas.Identity.Pages.Account.Manage.IndexModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Account settings";
+}
+
+<div class="uv-card" style="max-width:980px; margin:0 auto;">
+    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px; flex-wrap:wrap;">
+        <div>
+            <h2 style="margin:0;">Account settings</h2>
+            <div style="color:#666; margin-top:6px;">Update your profile photo and contact info.</div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <a class="cancel-btn" style="text-decoration:none; display:inline-block;" href="/Orders">
+                <i class="fas fa-receipt"></i> My orders
+            </a>
+            <a class="buy-btn" style="text-decoration:none; display:inline-block;" href="/Shop">
+                <i class="fas fa-store"></i> Shop
+            </a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.StatusMessage))
+    {
+        <div style="margin-top:14px; background:#e9f7ef; border:1px solid #bfe5cf; color:#1d6b3a; padding:10px 12px; border-radius:12px;">
+            <i class="fas fa-check-circle"></i> @Model.StatusMessage
+        </div>
+    }
+
+    <form method="post" enctype="multipart/form-data" style="margin-top:16px;">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1.4fr; gap:18px; align-items:start;">
+            <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px;">
+                <div style="font-weight:950; margin-bottom:10px;"><i class="fas fa-image"></i> Profile photo</div>
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <img id="profilePreview"
+                         src="@(string.IsNullOrWhiteSpace(Model.ProfileImagePath) ? "/images/default-avatar.svg" : Model.ProfileImagePath)"
+                         alt="Profile photo"
+                         style="width:74px; height:74px; border-radius:999px; object-fit:cover; border:1px solid rgba(0,0,0,0.10);" />
+                    <div style="flex:1;">
+                        <div style="font-weight:900;">@Model.Email</div>
+                        <div style="color:#666; font-size:0.9rem;">JPG/PNG/WEBP up to 2MB.</div>
+                    </div>
+                </div>
+                <div style="margin-top:12px;">
+                    <input asp-for="Input.ProfileImage" type="file" class="form-control" accept="image/*" />
+                    <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px;">
+                <div style="font-weight:950; margin-bottom:10px;"><i class="fas fa-user-gear"></i> Contact</div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input class="form-control" value="@Model.Email" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label>Phone number</label>
+                    <input asp-for="Input.PhoneNumber" class="form-control" placeholder="+359…" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="buy-btn" style="width:100%; margin-top:6px;">
+                    <i class="fas fa-save"></i> Save changes
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const fileInput = document.getElementById('Input_ProfileImage');
+        const preview = document.getElementById('profilePreview');
+        if (fileInput && preview) {
+            fileInput.addEventListener('change', () => {
+                const f = fileInput.files && fileInput.files[0];
+                if (!f) return;
+                preview.src = URL.createObjectURL(f);
+            });
+        }
+    </script>
+}
+

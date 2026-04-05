@@ -19,6 +19,12 @@
   <data name="Nav_Orders" xml:space="preserve">
     <value>Siparişler</value>
   </data>
+  <data name="Nav_About" xml:space="preserve">
+    <value>Hakkımızda</value>
+  </data>
+  <data name="Nav_Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
   <data name="Nav_ArduinoPowered" xml:space="preserve">
     <value>Arduino Destekli</value>
   </data>
@@ -41,6 +47,12 @@
   </data>
   <data name="Common_Password" xml:space="preserve">
     <value>Şifre</value>
+  </data>
+  <data name="Common_Apply" xml:space="preserve">
+    <value>Uygula</value>
+  </data>
+  <data name="Common_AccessDenied" xml:space="preserve">
+    <value>Erişim reddedildi.</value>
   </data>
 
   <data name="Login_Title" xml:space="preserve">
@@ -78,14 +90,81 @@
   <data name="Home_Title" xml:space="preserve">
     <value>Ana Sayfa</value>
   </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
   <data name="Home_HeroTitle" xml:space="preserve">
     <value>Akıllı UV Radyasyon Ölçer</value>
   </data>
   <data name="Home_HeroSubtitle" xml:space="preserve">
     <value>Arduino destekli gerçek zamanlı UV izleme. Dışarı çıkmanın güvenli olup olmadığını bilin!</value>
   </data>
+  <data name="Home_HeroKicker" xml:space="preserve">
+    <value>Gerçek zamanlı UV • Konum bazlı</value>
+  </data>
   <data name="Home_CheckUvNow" xml:space="preserve">
     <value>Şimdi UV Kontrol Et</value>
+  </data>
+  <data name="Home_LearnMore" xml:space="preserve">
+    <value>Daha fazla bilgi</value>
+  </data>
+  <data name="Home_SecondaryCta" xml:space="preserve">
+    <value>Korunma ürünleri</value>
+  </data>
+  <data name="Home_Feature1Emoji" xml:space="preserve">
+    <value>🌞</value>
+  </data>
+  <data name="Home_Feature1Title" xml:space="preserve">
+    <value>Canlı UV izleme</value>
+  </data>
+  <data name="Home_Feature1Body" xml:space="preserve">
+    <value>Konumunuz için UV İndeksini görün ve istediğiniz zaman yenileyin.</value>
+  </data>
+  <data name="Home_Feature2Emoji" xml:space="preserve">
+    <value>⚡</value>
+  </data>
+  <data name="Home_Feature2Title" xml:space="preserve">
+    <value>Akıllı öneriler</value>
+  </data>
+  <data name="Home_Feature2Body" xml:space="preserve">
+    <value>Güneş kremi, gölge ve güvenli süre için net tavsiyeler alın.</value>
+  </data>
+  <data name="Home_Feature3Emoji" xml:space="preserve">
+    <value>🛡️</value>
+  </data>
+  <data name="Home_Feature3Title" xml:space="preserve">
+    <value>Mağaza</value>
+  </data>
+  <data name="Home_Feature3Body" xml:space="preserve">
+    <value>Güneş koruması için gerekli ürünleri tek yerden satın alın.</value>
+  </data>
+  <data name="Home_AboutTitle" xml:space="preserve">
+    <value>LumiSense Hakkında</value>
+  </data>
+  <data name="Home_AboutSubtitle" xml:space="preserve">
+    <value>Biz kimiz</value>
+  </data>
+  <data name="Home_AboutBody" xml:space="preserve">
+    <value>LumiSense, Arduino sensör verilerini gerçek zamanlı UV bilgisiyle birleştirerek dışarıda daha güvenli kararlar vermenize yardımcı olur. Güncel UV seviyelerini kontrol edin, riski anlayın ve pratik korunma önerileri alın—sonra ihtiyacınız olan ürünleri mağazadan tek yerden edinin.</value>
+  </data>
+
+  <data name="About_Title" xml:space="preserve">
+    <value>Hakkımızda</value>
+  </data>
+  <data name="About_Heading" xml:space="preserve">
+    <value>LumiSense Hakkında</value>
+  </data>
+  <data name="About_Subheading" xml:space="preserve">
+    <value>Biz kimiz</value>
+  </data>
+  <data name="About_Body" xml:space="preserve">
+    <value>LumiSense, Arduino destekli teknolojiyi modern bir web arayüzüyle birleştiren akıllı bir UV izleme platformudur. Amacımız gerçek zamanlı UV verisi sunmak ve insanlara güneş altında daha güvenli kalmaları için ürünler sağlamaktır.</value>
+  </data>
+  <data name="About_Cta1" xml:space="preserve">
+    <value>UV İndeksini Kontrol Et</value>
+  </data>
+  <data name="About_Cta2" xml:space="preserve">
+    <value>Ürünleri İncele</value>
   </data>
 
   <data name="Privacy_Title" xml:space="preserve">
@@ -149,6 +228,169 @@
   </data>
   <data name="Shop_BuyNow" xml:space="preserve">
     <value>Şimdi Satın Al</value>
+  </data>
+  <data name="Shop_Details" xml:space="preserve">
+    <value>Detaylar</value>
+  </data>
+  <data name="Shop_SortProducts" xml:space="preserve">
+    <value>Ürünleri sırala</value>
+  </data>
+  <data name="Shop_SortPopular" xml:space="preserve">
+    <value>Popüler</value>
+  </data>
+  <data name="Shop_SortPriceAsc" xml:space="preserve">
+    <value>Fiyat: Düşük → Yüksek</value>
+  </data>
+  <data name="Shop_SortPriceDesc" xml:space="preserve">
+    <value>Fiyat: Yüksek → Düşük</value>
+  </data>
+  <data name="Shop_SortTopRated" xml:space="preserve">
+    <value>En yüksek puan</value>
+  </data>
+  <data name="Shop_SortMostReviewed" xml:space="preserve">
+    <value>En çok yorum</value>
+  </data>
+
+  <data name="Reviews_Title" xml:space="preserve">
+    <value>Yorumlar</value>
+  </data>
+  <data name="Reviews_Subtitle" xml:space="preserve">
+    <value>Satın almadan önce diğer kullanıcıların görüşlerine bakın.</value>
+  </data>
+  <data name="Reviews_WriteButton" xml:space="preserve">
+    <value>Yorum yaz</value>
+  </data>
+  <data name="Reviews_LoginToReview" xml:space="preserve">
+    <value>Yorum yapmak için giriş yapın</value>
+  </data>
+  <data name="Reviews_YourRating" xml:space="preserve">
+    <value>Puanınız</value>
+  </data>
+  <data name="Reviews_TextLabel" xml:space="preserve">
+    <value>Yorum yazın (en fazla 250 karakter)</value>
+  </data>
+  <data name="Reviews_TextPlaceholder" xml:space="preserve">
+    <value>Deneyiminizi paylaşın…</value>
+  </data>
+  <data name="Reviews_SubmitPending" xml:space="preserve">
+    <value>Gönder (onay bekliyor)</value>
+  </data>
+  <data name="Reviews_None" xml:space="preserve">
+    <value>Henüz yorum yok.</value>
+  </data>
+  <data name="Reviews_UserFallback" xml:space="preserve">
+    <value>Kullanıcı</value>
+  </data>
+  <data name="Reviews_PendingBadge" xml:space="preserve">
+    <value>Beklemede</value>
+  </data>
+  <data name="Reviews_Report" xml:space="preserve">
+    <value>Bildir</value>
+  </data>
+  <data name="Reviews_ErrorTextRequired" xml:space="preserve">
+    <value>Yorum metni zorunludur.</value>
+  </data>
+
+  <data name="Admin_OrdersTitle" xml:space="preserve">
+    <value>Admin: Siparişler</value>
+  </data>
+  <data name="Admin_UsersTitle" xml:space="preserve">
+    <value>Admin: Kullanıcılar</value>
+  </data>
+  <data name="Admin_ReviewsTitle" xml:space="preserve">
+    <value>Admin: Yorumlar</value>
+  </data>
+  <data name="Admin_Status" xml:space="preserve">
+    <value>Durum</value>
+  </data>
+  <data name="Admin_DeliveryOffice" xml:space="preserve">
+    <value>Ofis/Locker</value>
+  </data>
+  <data name="Admin_DeliveryAddress" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="Admin_UserEmail" xml:space="preserve">
+    <value>E-posta</value>
+  </data>
+  <data name="Admin_UserPhone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="Admin_UserRoles" xml:space="preserve">
+    <value>Roller</value>
+  </data>
+  <data name="Admin_UserLockout" xml:space="preserve">
+    <value>Kilit</value>
+  </data>
+  <data name="Admin_LockedUntil" xml:space="preserve">
+    <value>Şu zamana kadar kilitli</value>
+  </data>
+  <data name="Admin_PendingReviews" xml:space="preserve">
+    <value>Onay bekleyen yorumlar</value>
+  </data>
+  <data name="Admin_NoPendingReviews" xml:space="preserve">
+    <value>Bekleyen yorum yok.</value>
+  </data>
+  <data name="Admin_Approve" xml:space="preserve">
+    <value>Onayla</value>
+  </data>
+  <data name="Admin_Hide" xml:space="preserve">
+    <value>Gizle</value>
+  </data>
+  <data name="Admin_Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+  <data name="Admin_RecentlyApprovedReviews" xml:space="preserve">
+    <value>Son onaylananlar</value>
+  </data>
+  <data name="Admin_NoApprovedReviews" xml:space="preserve">
+    <value>Henüz onaylanan yorum yok.</value>
+  </data>
+
+  <!-- Product translations (seeded products) -->
+  <data name="Product_1_Name" xml:space="preserve">
+    <value>LumiSense UV Meter Pro</value>
+  </data>
+  <data name="Product_1_Description" xml:space="preserve">
+    <value>Arduino destekli, gerçek zamanlı LCD ekranlı hassas UV ölçer</value>
+  </data>
+  <data name="Product_1_Category" xml:space="preserve">
+    <value>Cihazlar</value>
+  </data>
+  <data name="Product_2_Name" xml:space="preserve">
+    <value>UV Armor Paketi</value>
+  </data>
+  <data name="Product_2_Description" xml:space="preserve">
+    <value>Tam koruma seti: SPF 50+ güneş kremi, UV korumalı tişört ve serinletici havlu</value>
+  </data>
+  <data name="Product_2_Category" xml:space="preserve">
+    <value>Aksesuarlar</value>
+  </data>
+  <data name="Product_3_Name" xml:space="preserve">
+    <value>UV Sensör Modülü</value>
+  </data>
+  <data name="Product_3_Description" xml:space="preserve">
+    <value>Arduino ve Raspberry Pi ile uyumlu DIY UV sensör modülü</value>
+  </data>
+  <data name="Product_3_Category" xml:space="preserve">
+    <value>Bileşenler</value>
+  </data>
+  <data name="Product_4_Name" xml:space="preserve">
+    <value>Sahil Güvenlik Kiti</value>
+  </data>
+  <data name="Product_4_Description" xml:space="preserve">
+    <value>Premium set: LumiSense Mini, UPF 50+ şemsiye, SPF 50 güneş kremi ve UV uyarı bandı</value>
+  </data>
+  <data name="Product_4_Category" xml:space="preserve">
+    <value>Paketler</value>
+  </data>
+  <data name="Product_5_Name" xml:space="preserve">
+    <value>UV Koruyucu Kol Kılıfları</value>
+  </data>
+  <data name="Product_5_Description" xml:space="preserve">
+    <value>UPF 50+ serinletici kol kılıfları, plaj sporları için ideal</value>
+  </data>
+  <data name="Product_5_Category" xml:space="preserve">
+    <value>Aksesuarlar</value>
   </data>
   <data name="Shop_OutOfStock" xml:space="preserve">
     <value>✗ Stokta Yok</value>

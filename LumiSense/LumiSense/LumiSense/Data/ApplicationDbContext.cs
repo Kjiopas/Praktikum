@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using LumiSense.Models;
@@ -16,6 +16,9 @@ namespace LumiSense.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<ProductReview> ProductReviews { get; set; }
+        public DbSet<ProductReviewReport> ProductReviewReports { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,6 +42,21 @@ namespace LumiSense.Data
                 .WithMany()
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ProductReview>()
+                .HasOne(r => r.Product)
+                .WithMany()
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductReviewReport>()
+                .HasOne(r => r.Review)
+                .WithMany()
+                .HasForeignKey(r => r.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UserProfile>()
+                .HasKey(p => p.UserId);
 
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)

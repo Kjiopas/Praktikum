@@ -107,6 +107,25 @@ public sealed class CartController : Controller
         public string CustomerName { get; set; } = string.Empty;
         public string CustomerEmail { get; set; } = string.Empty;
         public string? CourierInfo { get; set; }
+        public string? PhoneNumber { get; set; }
+
+        // Delivery
+        public string DeliveryMethod { get; set; } = "office"; // office | address
+        public string? DeliveryCompany { get; set; } // Econt | Speedy | BoxNow
+
+        // Office/locker selection (from JSON)
+        public string? DeliveryPointName { get; set; }
+        public string? DeliveryPointType { get; set; } // office | locker
+        public string? DeliveryPointCity { get; set; }
+        public string? DeliveryPointAddress { get; set; }
+        public double? DeliveryPointLat { get; set; }
+        public double? DeliveryPointLng { get; set; }
+
+        // Address delivery fields
+        public string? AddressCity { get; set; }
+        public string? AddressLine1 { get; set; }
+        public string? AddressLine2 { get; set; }
+        public string? AddressPostCode { get; set; }
     }
 
     [HttpPost]
@@ -123,6 +142,51 @@ public sealed class CartController : Controller
         {
             ModelState.AddModelError(string.Empty, "Please enter your name");
             return View(items);
+        }
+
+        var phone = (req.PhoneNumber ?? string.Empty).Trim();
+        if (phone.Length > 30) phone = phone[..30];
+        if (string.IsNullOrWhiteSpace(phone))
+        {
+            ModelState.AddModelError(string.Empty, "Please enter your phone number");
+            return View(items);
+        }
+
+        var deliveryMethod = (req.DeliveryMethod ?? string.Empty).Trim().ToLowerInvariant();
+        if (deliveryMethod is not ("office" or "address"))
+        {
+            deliveryMethod = "office";
+        }
+
+        var deliveryCompany = (req.DeliveryCompany ?? string.Empty).Trim();
+        if (!string.Equals(deliveryCompany, "Econt", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(deliveryCompany, "Speedy", StringComparison.OrdinalIgnoreCase) &&
+            !string.Equals(deliveryCompany, "BoxNow", StringComparison.OrdinalIgnoreCase))
+        {
+            deliveryCompany = string.Empty;
+        }
+
+        if (deliveryMethod == "office")
+        {
+            if (string.IsNullOrWhiteSpace(deliveryCompany) ||
+                string.IsNullOrWhiteSpace(req.DeliveryPointName) ||
+                string.IsNullOrWhiteSpace(req.DeliveryPointCity) ||
+                string.IsNullOrWhiteSpace(req.DeliveryPointAddress) ||
+                string.IsNullOrWhiteSpace(req.DeliveryPointType))
+            {
+                ModelState.AddModelError(string.Empty, "Please select a courier office/locker.");
+                return View(items);
+            }
+        }
+        else
+        {
+            if (string.IsNullOrWhiteSpace(deliveryCompany) ||
+                string.IsNullOrWhiteSpace(req.AddressCity) ||
+                string.IsNullOrWhiteSpace(req.AddressLine1))
+            {
+                ModelState.AddModelError(string.Empty, "Please fill your delivery address.");
+                return View(items);
+            }
         }
 
         var user = await _userManager.GetUserAsync(User);
@@ -165,7 +229,24 @@ public sealed class CartController : Controller
             OrderDate = DateTime.Now,
             TotalAmount = items.Sum(i => i.UnitPrice * i.Quantity),
             CourierInfo = string.IsNullOrWhiteSpace(req.CourierInfo) ? null : req.CourierInfo.Trim(),
-            UserId = userId
+            UserId = userId,
+            PhoneNumber = phone,
+
+            DeliveryMethod = deliveryMethod,
+            DeliveryCompany = string.IsNullOrWhiteSpace(deliveryCompany) ? null : deliveryCompany,
+            DeliveryPointName = deliveryMethod == "office" ? req.DeliveryPointName?.Trim() : null,
+            DeliveryPointType = deliveryMethod == "office" ? req.DeliveryPointType?.Trim() : null,
+            DeliveryPointCity = deliveryMethod == "office" ? req.DeliveryPointCity?.Trim() : null,
+            DeliveryPointAddress = deliveryMethod == "office" ? req.DeliveryPointAddress?.Trim() : null,
+            DeliveryPointLat = deliveryMethod == "office" ? req.DeliveryPointLat : null,
+            DeliveryPointLng = deliveryMethod == "office" ? req.DeliveryPointLng : null,
+
+            AddressCity = deliveryMethod == "address" ? req.AddressCity?.Trim() : null,
+            AddressLine1 = deliveryMethod == "address" ? req.AddressLine1?.Trim() : null,
+            AddressLine2 = deliveryMethod == "address" ? req.AddressLine2?.Trim() : null,
+            AddressPostCode = deliveryMethod == "address" ? req.AddressPostCode?.Trim() : null,
+
+            Status = "Pending"
         };
 
         _db.Orders.Add(order);

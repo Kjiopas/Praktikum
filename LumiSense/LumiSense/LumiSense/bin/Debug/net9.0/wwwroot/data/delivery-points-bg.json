@@ -1,0 +1,81 @@
+[
+  { "name": "Econt Bigla", "type": "office", "company": "Econt", "city": "Sofia", "address": "ul. Bigla 37", "latitude": 42.6717, "longitude": 23.318 },
+  { "name": "Econt Ovcha Kupel", "type": "office", "company": "Econt", "city": "Sofia", "address": "blvd. President Lincoln 114", "latitude": 42.6705, "longitude": 23.268 },
+  { "name": "Econt Center", "type": "office", "company": "Econt", "city": "Sofia", "address": "ul. Kuzman Shapkarev 5", "latitude": 42.6977, "longitude": 23.3219 },
+  { "name": "Econt Lyulin", "type": "office", "company": "Econt", "city": "Sofia", "address": "bul. Tsaritsa Yoanna 68", "latitude": 42.72, "longitude": 23.27 },
+  { "name": "Econt Mladost 1", "type": "office", "company": "Econt", "city": "Sofia", "address": "bul. Andrey Lyapchev 54", "latitude": 42.65, "longitude": 23.379 },
+  { "name": "Econt Mladost 4", "type": "office", "company": "Econt", "city": "Sofia", "address": "Business Park Sofia", "latitude": 42.6505, "longitude": 23.3795 },
+  { "name": "Econt Druzhba", "type": "office", "company": "Econt", "city": "Sofia", "address": "bul. Iskarsko shose 7", "latitude": 42.66, "longitude": 23.4 },
+  { "name": "Econt Nadezhda", "type": "office", "company": "Econt", "city": "Sofia", "address": "ul. Han Kubrat 45", "latitude": 42.73, "longitude": 23.3 },
+  { "name": "Econt Studentski Grad", "type": "office", "company": "Econt", "city": "Sofia", "address": "ul. Akademik Boris Stefanov 12", "latitude": 42.6508, "longitude": 23.35 },
+  { "name": "Econt Lozenets", "type": "office", "company": "Econt", "city": "Sofia", "address": "bul. Cherni Vrah 25", "latitude": 42.68, "longitude": 23.32 },
+
+  { "name": "Speedy Gladstone", "type": "office", "company": "Speedy", "city": "Sofia", "address": "ul. William Gladstone 40", "latitude": 42.6955, "longitude": 23.322 },
+  { "name": "Speedy Simeonovsko", "type": "office", "company": "Speedy", "city": "Sofia", "address": "Simeonovsko shose 12", "latitude": 42.6605, "longitude": 23.33 },
+  { "name": "Speedy Mladost", "type": "office", "company": "Speedy", "city": "Sofia", "address": "bul. Aleksandar Malinov", "latitude": 42.648, "longitude": 23.38 },
+  { "name": "Speedy Lyulin", "type": "office", "company": "Speedy", "city": "Sofia", "address": "bul. Tsaritsa Yoanna", "latitude": 42.715, "longitude": 23.28 },
+  { "name": "Speedy Druzhba", "type": "office", "company": "Speedy", "city": "Sofia", "address": "bul. Iskarsko shose", "latitude": 42.665, "longitude": 23.4005 },
+  { "name": "Speedy Opalchenska Locker", "type": "locker", "company": "Speedy", "city": "Sofia", "address": "ul. Opalchenska 35", "latitude": 42.7, "longitude": 23.31 },
+  { "name": "Speedy Kaufland Mladost", "type": "locker", "company": "Speedy", "city": "Sofia", "address": "Okolovrasten pat 271", "latitude": 42.64, "longitude": 23.39 },
+
+  { "name": "BoxNow Bulgaria Mall", "type": "locker", "company": "BoxNow", "city": "Sofia", "address": "Bulgaria Mall", "latitude": 42.664, "longitude": 23.29 },
+  { "name": "BoxNow Paradise Mall", "type": "locker", "company": "BoxNow", "city": "Sofia", "address": "Paradise Center", "latitude": 42.6625, "longitude": 23.314 },
+  { "name": "BoxNow Mladost", "type": "locker", "company": "BoxNow", "city": "Sofia", "address": "Mladost zone", "latitude": 42.65, "longitude": 23.38 },
+  { "name": "BoxNow Lyulin", "type": "locker", "company": "BoxNow", "city": "Sofia", "address": "Lyulin zone", "latitude": 42.72, "longitude": 23.27 },
+
+  { "name": "Econt Plovdiv Center", "type": "office", "company": "Econt", "city": "Plovdiv", "address": "bul. Tsar Boris III 122", "latitude": 42.1354, "longitude": 24.7453 },
+  { "name": "Econt Trakia", "type": "office", "company": "Econt", "city": "Plovdiv", "address": "Trakia bl.15", "latitude": 42.14, "longitude": 24.77 },
+  { "name": "Econt Smirnenski", "type": "office", "company": "Econt", "city": "Plovdiv", "address": "Peshtersko shose", "latitude": 42.13, "longitude": 24.72 },
+  { "name": "Econt Karshiyaka", "type": "office", "company": "Econt", "city": "Plovdiv", "address": "bul. Bulgaria 45", "latitude": 42.15, "longitude": 24.74 },
+  { "name": "Econt Kyuchuk Parij", "type": "office", "company": "Econt", "city": "Plovdiv", "address": "bul. Vaptsarov", "latitude": 42.12, "longitude": 24.75 },
+  { "name": "Econt Industrial Zone", "type": "office", "company": "Econt", "city": "Plovdiv", "address": "Industrialna zona", "latitude": 42.16, "longitude": 24.73 },
+
+  { "name": "Speedy Plovdiv Center", "type": "office", "company": "Speedy", "city": "Plovdiv", "address": "ul. Kapitan Raycho 56", "latitude": 42.142, "longitude": 24.75 },
+  { "name": "Speedy Plovdiv North", "type": "office", "company": "Speedy", "city": "Plovdiv", "address": "bul. Dunav", "latitude": 42.16, "longitude": 24.74 },
+  { "name": "Speedy Plovdiv South", "type": "office", "company": "Speedy", "city": "Plovdiv", "address": "bul. Komatevsko shose", "latitude": 42.12, "longitude": 24.72 },
+  { "name": "Speedy Kaufland Plovdiv", "type": "locker", "company": "Speedy", "city": "Plovdiv", "address": "Kaufland", "latitude": 42.13, "longitude": 24.76 },
+  { "name": "Speedy Retail Park", "type": "locker", "company": "Speedy", "city": "Plovdiv", "address": "Retail Park", "latitude": 42.14, "longitude": 24.78 },
+
+  { "name": "BoxNow Plovdiv Plaza", "type": "locker", "company": "BoxNow", "city": "Plovdiv", "address": "Plovdiv Plaza", "latitude": 42.13, "longitude": 24.78 },
+  { "name": "BoxNow Markovo Tepe", "type": "locker", "company": "BoxNow", "city": "Plovdiv", "address": "Mall Markovo Tepe", "latitude": 42.14, "longitude": 24.74 },
+
+  { "name": "Econt Varna Center", "type": "office", "company": "Econt", "city": "Varna", "address": "bul. Hristo Botev 18", "latitude": 43.2141, "longitude": 27.9147 },
+  { "name": "Econt Vladislavovo", "type": "office", "company": "Econt", "city": "Varna", "address": "ul. Narva", "latitude": 43.23, "longitude": 27.87 },
+  { "name": "Econt Levski", "type": "office", "company": "Econt", "city": "Varna", "address": "bul. Vasil Levski", "latitude": 43.22, "longitude": 27.9 },
+  { "name": "Econt Asparuhovo", "type": "office", "company": "Econt", "city": "Varna", "address": "kv. Asparuhovo", "latitude": 43.19, "longitude": 27.91 },
+  { "name": "Econt Vinitsa", "type": "office", "company": "Econt", "city": "Varna", "address": "kv. Vinitsa", "latitude": 43.25, "longitude": 27.95 },
+
+  { "name": "Speedy Varna Center", "type": "office", "company": "Speedy", "city": "Varna", "address": "ul. Strahil Voyvoda", "latitude": 43.215, "longitude": 27.91 },
+  { "name": "Speedy Asparuhovo", "type": "office", "company": "Speedy", "city": "Varna", "address": "ul. Sredets", "latitude": 43.1905, "longitude": 27.905 },
+  { "name": "Speedy Varna Mall", "type": "locker", "company": "Speedy", "city": "Varna", "address": "Grand Mall", "latitude": 43.217, "longitude": 27.898 },
+  { "name": "Speedy Kaufland Varna", "type": "locker", "company": "Speedy", "city": "Varna", "address": "Kaufland", "latitude": 43.225, "longitude": 27.89 },
+
+  { "name": "BoxNow Delta Mall", "type": "locker", "company": "BoxNow", "city": "Varna", "address": "Delta Planet Mall", "latitude": 43.205, "longitude": 27.89 },
+  { "name": "BoxNow Varna Center", "type": "locker", "company": "BoxNow", "city": "Varna", "address": "Center", "latitude": 43.2145, "longitude": 27.914 },
+
+  { "name": "Econt Burgas Center", "type": "office", "company": "Econt", "city": "Burgas", "address": "ul. Aleksandrovska 83", "latitude": 42.5048, "longitude": 27.4626 },
+  { "name": "Econt Meden Rudnik", "type": "office", "company": "Econt", "city": "Burgas", "address": "Meden Rudnik", "latitude": 42.48, "longitude": 27.45 },
+  { "name": "Econt Lazur", "type": "office", "company": "Econt", "city": "Burgas", "address": "Lazur", "latitude": 42.51, "longitude": 27.47 },
+  { "name": "Econt Slaveykov", "type": "office", "company": "Econt", "city": "Burgas", "address": "Slaveykov", "latitude": 42.52, "longitude": 27.46 },
+
+  { "name": "Speedy Burgas Center", "type": "office", "company": "Speedy", "city": "Burgas", "address": "ul. Ferdinandova", "latitude": 42.505, "longitude": 27.47 },
+  { "name": "Speedy Slaveykov", "type": "office", "company": "Speedy", "city": "Burgas", "address": "Slaveykov", "latitude": 42.5205, "longitude": 27.465 },
+  { "name": "Speedy Galleria", "type": "locker", "company": "Speedy", "city": "Burgas", "address": "Mall Galleria", "latitude": 42.51, "longitude": 27.48 },
+  { "name": "Speedy Kaufland Burgas", "type": "locker", "company": "Speedy", "city": "Burgas", "address": "Kaufland", "latitude": 42.5, "longitude": 27.455 },
+
+  { "name": "BoxNow Burgas Plaza", "type": "locker", "company": "BoxNow", "city": "Burgas", "address": "Burgas Plaza", "latitude": 42.52, "longitude": 27.46 },
+  { "name": "BoxNow Center Burgas", "type": "locker", "company": "BoxNow", "city": "Burgas", "address": "Center", "latitude": 42.505, "longitude": 27.462 },
+
+  { "name": "Econt Stara Zagora Center", "type": "office", "company": "Econt", "city": "Stara Zagora", "address": "bul. Tsar Simeon Veliki", "latitude": 42.4258, "longitude": 25.6345 },
+  { "name": "Econt Kazanski", "type": "office", "company": "Econt", "city": "Stara Zagora", "address": "Kazanski", "latitude": 42.43, "longitude": 25.64 },
+  { "name": "Econt Zheleznik", "type": "office", "company": "Econt", "city": "Stara Zagora", "address": "Zheleznik", "latitude": 42.42, "longitude": 25.62 },
+  { "name": "Econt Samara", "type": "office", "company": "Econt", "city": "Stara Zagora", "address": "Samara", "latitude": 42.44, "longitude": 25.65 },
+
+  { "name": "Speedy Stara Zagora Center", "type": "office", "company": "Speedy", "city": "Stara Zagora", "address": "ul. Stoletov", "latitude": 42.426, "longitude": 25.635 },
+  { "name": "Speedy Park Mall", "type": "locker", "company": "Speedy", "city": "Stara Zagora", "address": "Park Mall", "latitude": 42.43, "longitude": 25.64 },
+  { "name": "Speedy Billa", "type": "locker", "company": "Speedy", "city": "Stara Zagora", "address": "Billa", "latitude": 42.435, "longitude": 25.63 },
+
+  { "name": "BoxNow Stara Zagora", "type": "locker", "company": "BoxNow", "city": "Stara Zagora", "address": "Center", "latitude": 42.427, "longitude": 25.636 },
+  { "name": "BoxNow Retail Park", "type": "locker", "company": "BoxNow", "city": "Stara Zagora", "address": "Retail Park", "latitude": 42.432, "longitude": 25.645 }
+]
+

@@ -1,0 +1,179 @@
+@model LumiSense.Models.ProductDetailsViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var tName = L[$"Product_{Model.Product.Id}_Name"];
+    var tDesc = L[$"Product_{Model.Product.Id}_Description"];
+    var tCat = L[$"Product_{Model.Product.Id}_Category"];
+
+    var productName = tName.ResourceNotFound ? Model.Product.Name : tName.Value;
+    var productDesc = tDesc.ResourceNotFound ? Model.Product.Description : tDesc.Value;
+    var productCategory = tCat.ResourceNotFound ? Model.Product.Category : tCat.Value;
+
+    ViewData["Title"] = productName;
+}
+
+<div class="uv-card" style="max-width:980px; margin:0 auto;">
+    <div style="display:flex; gap:18px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;">
+        <div style="min-width:260px;">
+            <div style="display:flex; gap:10px; align-items:center;">
+                <div style="font-size:2rem; color:#F27121;">
+                    <i class="fas @Model.Product.ImageIcon"></i>
+                </div>
+                <div>
+                    <div style="font-size:1.6rem; font-weight:950;">@productName</div>
+                    <div style="color:#666;">@productCategory</div>
+                </div>
+            </div>
+            <div style="margin-top:10px; color:#555;">@productDesc</div>
+        </div>
+
+        <div style="text-align:right;">
+            <div style="font-size:1.6rem; font-weight:950;">$@Model.Product.Price.ToString("F2")</div>
+            <div style="margin-top:6px; color:@(Model.Product.Stock > 0 ? "green" : "red"); font-weight:800;">
+                @(Model.Product.Stock > 0
+                    ? string.Format(L["Shop_InStock"].Value, Model.Product.Stock)
+                    : L["Shop_SoldOut"].Value)
+            </div>
+            @if (Model.Product.Stock > 0)
+            {
+                <a class="buy-btn" style="text-decoration:none; display:inline-block; margin-top:10px;"
+                   href="/Cart/BuyNow?productId=@Model.Product.Id&amp;quantity=1">
+                    @L["Shop_BuyNow"] <i class="fas fa-shopping-cart"></i>
+                </a>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="uv-card" style="max-width:980px; margin:18px auto 0;">
+    <h3 style="margin-top:0; display:flex; align-items:center; gap:10px;">
+        <i class="fas fa-star" style="color:#F27121;"></i>
+        @L["Reviews_Title"]
+    </h3>
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
+        <div style="color:#666;">@L["Reviews_Subtitle"]</div>
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <button type="button" class="buy-btn" id="writeReviewBtn" style="margin-top:0;">
+                <i class="fas fa-pen"></i> @L["Reviews_WriteButton"]
+            </button>
+        }
+        else
+        {
+            <a href="/Identity/Account/Login?returnUrl=@Uri.EscapeDataString($"/Shop/Product/{Model.Product.Id}")"
+               class="buy-btn" style="text-decoration:none; display:inline-block; margin-top:0;">
+                <i class="fas fa-right-to-bracket"></i> @L["Reviews_LoginToReview"]
+            </a>
+        }
+    </div>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <form method="post" action="/Shop/Product/@Model.Product.Id/Reviews" id="reviewForm" style="display:none; margin-bottom:18px;">
+            <div class="form-group">
+                <label>@L["Reviews_YourRating"]</label>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 12px;">
+                    @for (var i = 5; i >= 1; i--)
+                    {
+                        <label style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; background:#fff; border:1px solid rgba(0,0,0,0.08); padding:8px 10px; border-radius:12px;">
+                            <input type="radio" name="rating" value="@i" @(i == 5 ? "checked" : "") />
+                            <span style="color:#F27121; font-weight:900;">
+                                @for (var s = 1; s <= i; s++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                @for (var s = i + 1; s <= 5; s++)
+                                {
+                                    <i class="far fa-star" style="opacity:0.55;"></i>
+                                }
+                            </span>
+                        </label>
+                    }
+                </div>
+
+                <label>@L["Reviews_TextLabel"]</label>
+                <textarea class="form-control" name="text" maxlength="250" rows="3"
+                          placeholder="@L["Reviews_TextPlaceholder"]"></textarea>
+            </div>
+            <button type="submit" class="buy-btn">
+                <i class="fas fa-paper-plane"></i> @L["Reviews_SubmitPending"]
+            </button>
+        </form>
+    }
+
+    @if (Model.Reviews.Count == 0)
+    {
+        <div style="color:#666;">@L["Reviews_None"]</div>
+    }
+    else
+    {
+        <div style="display:flex; flex-direction:column; gap:12px;">
+            @foreach (var r in Model.Reviews)
+            {
+                var mine = !string.IsNullOrWhiteSpace(Model.CurrentUserId) && string.Equals(Model.CurrentUserId, r.UserId, StringComparison.Ordinal);
+                <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px;">
+                    <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                        <div style="font-weight:950;">
+                            <i class="fas fa-user-circle" style="color:#666;"></i>
+                            @(string.IsNullOrWhiteSpace(r.UserDisplayName) ? L["Reviews_UserFallback"].Value : r.UserDisplayName)
+                            @if (!r.IsApproved)
+                            {
+                                <span style="margin-left:8px; background:#fff3cd; border:1px solid #ffe69c; color:#8a6d3b; padding:2px 8px; border-radius:999px; font-size:0.8rem; font-weight:900;">
+                                    @L["Reviews_PendingBadge"]
+                                </span>
+                            }
+                        </div>
+                        <div style="color:#777; font-size:0.9rem;">
+                            @r.CreatedAtUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+                        </div>
+                    </div>
+                    <div style="margin-top:6px; color:#F27121;">
+                        @for (var i = 1; i <= 5; i++)
+                        {
+                            if (i <= r.Rating)
+                            {
+                                <i class="fas fa-star"></i>
+                            }
+                            else
+                            {
+                                <i class="far fa-star" style="opacity:0.55;"></i>
+                            }
+                        }
+                    </div>
+                    <div style="margin-top:8px; color:#333; white-space:pre-wrap;">@r.Text</div>
+
+                    <div style="margin-top:10px; display:flex; justify-content:flex-end; gap:10px;">
+                        @if (User.Identity?.IsAuthenticated == true && !mine)
+                        {
+                            <form method="post" action="/Reviews/@r.Id/Report" style="margin:0;">
+                                <button type="submit" class="cancel-btn" style="padding:6px 10px;">
+                                    <i class="fas fa-flag"></i> @L["Reviews_Report"]
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        const btn = document.getElementById('writeReviewBtn');
+        const form = document.getElementById('reviewForm');
+        if (btn && form) {
+            btn.addEventListener('click', () => {
+                form.style.display = (form.style.display === 'none' || !form.style.display) ? '' : 'none';
+                if (form.style.display !== 'none') {
+                    const ta = form.querySelector('textarea');
+                    if (ta) ta.focus();
+                }
+            });
+        }
+    </script>
+}
+

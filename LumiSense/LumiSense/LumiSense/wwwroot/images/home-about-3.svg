@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#667eea"/>
+      <stop offset="1" stop-color="#764ba2"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F27121"/>
+      <stop offset="1" stop-color="#F9A826"/>
+    </linearGradient>
+  </defs>
+  <rect x="54" y="58" width="792" height="484" rx="28" fill="url(#g)" opacity="0.14"/>
+
+  <g transform="translate(130 120)">
+    <rect x="0" y="0" width="640" height="360" rx="26" fill="#ffffff" opacity="0.92"/>
+    <rect x="34" y="40" width="240" height="18" rx="9" fill="rgba(0,0,0,0.10)"/>
+    <rect x="34" y="70" width="180" height="18" rx="9" fill="rgba(0,0,0,0.08)"/>
+
+    <!-- sunscreen bottle -->
+    <g transform="translate(70 128)">
+      <rect x="0" y="32" width="140" height="170" rx="24" fill="rgba(17,24,39,0.08)"/>
+      <rect x="30" y="0" width="80" height="46" rx="14" fill="rgba(17,24,39,0.12)"/>
+      <rect x="18" y="92" width="104" height="44" rx="16" fill="url(#accent)" opacity="0.92"/>
+      <circle cx="70" cy="114" r="14" fill="rgba(255,255,255,0.55)"/>
+    </g>
+
+    <!-- sunglasses -->
+    <g transform="translate(270 170)" opacity="0.95">
+      <rect x="0" y="46" width="120" height="74" rx="22" fill="rgba(17,24,39,0.10)"/>
+      <rect x="150" y="46" width="120" height="74" rx="22" fill="rgba(17,24,39,0.10)"/>
+      <rect x="120" y="74" width="30" height="18" rx="9" fill="rgba(17,24,39,0.10)"/>
+      <path d="M120 60c-22-22-48-22-70 0" fill="none" stroke="rgba(17,24,39,0.10)" stroke-width="14" stroke-linecap="round"/>
+      <path d="M150 60c22-22 48-22 70 0" fill="none" stroke="rgba(17,24,39,0.10)" stroke-width="14" stroke-linecap="round"/>
+    </g>
+
+    <!-- hat -->
+    <g transform="translate(420 132)" opacity="0.95">
+      <path d="M56 120c-10-58 20-98 70-98s80 40 70 98" fill="rgba(17,24,39,0.08)"/>
+      <rect x="0" y="118" width="252" height="34" rx="17" fill="rgba(17,24,39,0.10)"/>
+      <rect x="66" y="98" width="120" height="26" rx="13" fill="url(#accent)" opacity="0.75"/>
+    </g>
+  </g>
+</svg>
+

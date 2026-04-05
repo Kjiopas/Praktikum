@@ -36,6 +36,89 @@
             <label>@L["Checkout_Email"]</label>
             <input class="form-control" name="CustomerEmail" placeholder="@L["Checkout_EmailPlaceholder"]" value="@User.Identity?.Name" readonly />
         </div>
+
+        <div class="form-group">
+            <label>Phone number</label>
+            <input class="form-control" name="PhoneNumber" placeholder="+359…" />
+        </div>
+
+        <div class="form-group" style="margin-top:0.5rem;">
+            <label>Delivery</label>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid rgba(0,0,0,0.08); padding:10px 12px; border-radius:12px; cursor:pointer;">
+                    <input type="radio" name="DeliveryMethod" value="office" checked />
+                    <span><i class="fas fa-building"></i> Office / locker</span>
+                </label>
+                <label style="display:flex; align-items:center; gap:8px; background:#fff; border:1px solid rgba(0,0,0,0.08); padding:10px 12px; border-radius:12px; cursor:pointer;">
+                    <input type="radio" name="DeliveryMethod" value="address" />
+                    <span><i class="fas fa-house"></i> Address</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Courier company</label>
+            <select class="form-control" name="DeliveryCompany" id="deliveryCompany">
+                <option value="">Select company…</option>
+                <option value="Econt">Econt</option>
+                <option value="Speedy">Speedy</option>
+                <option value="BoxNow">BoxNow</option>
+            </select>
+        </div>
+
+        <div id="officeFields" style="margin-top:0.5rem;">
+            <div class="form-group">
+                <label>Pickup point</label>
+                <select class="form-control" id="deliveryPointSelect">
+                    <option value="">Select from map or list…</option>
+                </select>
+            </div>
+
+            <input type="hidden" name="DeliveryPointName" id="dpName" />
+            <input type="hidden" name="DeliveryPointType" id="dpType" />
+            <input type="hidden" name="DeliveryPointCity" id="dpCity" />
+            <input type="hidden" name="DeliveryPointAddress" id="dpAddress" />
+            <input type="hidden" name="DeliveryPointLat" id="dpLat" />
+            <input type="hidden" name="DeliveryPointLng" id="dpLng" />
+
+            <div class="uv-card" style="background:#fff; padding:12px; margin:0.75rem 0 0; border:1px solid rgba(0,0,0,0.06);">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+                    <div style="font-weight:900;"><i class="fas fa-map"></i> Bulgaria pickup map</div>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <select class="form-control" id="filterCity" style="width:auto; min-width:180px;">
+                            <option value="">All cities</option>
+                        </select>
+                        <select class="form-control" id="filterType" style="width:auto; min-width:150px;">
+                            <option value="">All types</option>
+                            <option value="office">Office</option>
+                            <option value="locker">Locker</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="bgMap" style="height:320px; border-radius:12px; overflow:hidden; margin-top:10px;"></div>
+                <div id="dpHint" style="margin-top:8px; color:#666; font-size:0.9rem;"></div>
+            </div>
+        </div>
+
+        <div id="addressFields" style="display:none; margin-top:0.5rem;">
+            <div class="form-group">
+                <label>City</label>
+                <input class="form-control" name="AddressCity" placeholder="e.g. Sofia" />
+            </div>
+            <div class="form-group">
+                <label>Address line 1</label>
+                <input class="form-control" name="AddressLine1" placeholder="Street, number" />
+            </div>
+            <div class="form-group">
+                <label>Address line 2 (optional)</label>
+                <input class="form-control" name="AddressLine2" placeholder="Entrance, floor, apartment" />
+            </div>
+            <div class="form-group">
+                <label>Post code (optional)</label>
+                <input class="form-control" name="AddressPostCode" placeholder="1000" />
+            </div>
+        </div>
+
         <div class="form-group">
             <label>@L["Checkout_CourierInfo"]</label>
             <input class="form-control" name="CourierInfo" placeholder="@L["Checkout_CourierInfoPlaceholder"]" />
@@ -47,4 +130,180 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        const els = {
+            methodRadios: Array.from(document.querySelectorAll('input[name="DeliveryMethod"]')),
+            office: document.getElementById('officeFields'),
+            address: document.getElementById('addressFields'),
+            company: document.getElementById('deliveryCompany'),
+            select: document.getElementById('deliveryPointSelect'),
+            filterCity: document.getElementById('filterCity'),
+            filterType: document.getElementById('filterType'),
+            hint: document.getElementById('dpHint'),
+            dpName: document.getElementById('dpName'),
+            dpType: document.getElementById('dpType'),
+            dpCity: document.getElementById('dpCity'),
+            dpAddress: document.getElementById('dpAddress'),
+            dpLat: document.getElementById('dpLat'),
+            dpLng: document.getElementById('dpLng'),
+        };
+
+        function getMethod() {
+            const sel = els.methodRadios.find(r => r.checked);
+            return sel ? sel.value : 'office';
+        }
+
+        function renderMethod() {
+            const m = getMethod();
+            if (els.office) els.office.style.display = m === 'office' ? '' : 'none';
+            if (els.address) els.address.style.display = m === 'address' ? '' : 'none';
+        }
+
+        els.methodRadios.forEach(r => r.addEventListener('change', renderMethod));
+        renderMethod();
+
+        let map = null;
+        let markersLayer = null;
+        let allPoints = [];
+
+        function setHint(text) {
+            if (els.hint) els.hint.textContent = text || '';
+        }
+
+        function setSelectedPoint(p) {
+            if (!p) return;
+            els.dpName.value = p.name || '';
+            els.dpType.value = p.type || '';
+            els.dpCity.value = p.city || '';
+            els.dpAddress.value = p.address || '';
+            els.dpLat.value = String(p.latitude ?? '');
+            els.dpLng.value = String(p.longitude ?? '');
+            setHint(`${p.company} ${p.type} — ${p.city}, ${p.address}`);
+        }
+
+        function rebuildSelect(points) {
+            if (!els.select) return;
+            els.select.innerHTML = '<option value="">Select from map or list…</option>';
+            for (const p of points) {
+                const opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = `${p.company} • ${p.city} • ${p.name} (${p.type})`;
+                opt.dataset.point = JSON.stringify(p);
+                els.select.appendChild(opt);
+            }
+        }
+
+        function rebuildCityFilter(points) {
+            if (!els.filterCity) return;
+            const cities = Array.from(new Set(points.map(p => p.city).filter(Boolean))).sort();
+            const current = els.filterCity.value;
+            els.filterCity.innerHTML = '<option value="">All cities</option>';
+            for (const c of cities) {
+                const opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = c;
+                els.filterCity.appendChild(opt);
+            }
+            if (cities.includes(current)) els.filterCity.value = current;
+        }
+
+        function applyFilters() {
+            const company = (els.company?.value || '').trim();
+            const city = (els.filterCity?.value || '').trim();
+            const type = (els.filterType?.value || '').trim();
+            return allPoints.filter(p => {
+                if (company && p.company !== company) return false;
+                if (city && p.city !== city) return false;
+                if (type && p.type !== type) return false;
+                return true;
+            });
+        }
+
+        function rebuildMarkers(points) {
+            if (!map || !markersLayer) return;
+            markersLayer.clearLayers();
+            for (const p of points) {
+                const m = L.marker([p.latitude, p.longitude]);
+                m.bindPopup(`<strong>${p.name}</strong><br/>${p.company} • ${p.type}<br/>${p.city}, ${p.address}`);
+                m.on('click', () => {
+                    setSelectedPoint(p);
+                    // sync dropdown
+                    if (els.select) {
+                        for (const opt of Array.from(els.select.options)) {
+                            if (opt.value === p.name) {
+                                els.select.value = p.name;
+                                break;
+                            }
+                        }
+                    }
+                });
+                markersLayer.addLayer(m);
+            }
+        }
+
+        function refreshUI() {
+            const filtered = applyFilters();
+            rebuildSelect(filtered);
+            rebuildCityFilter(allPoints.filter(p => !els.company?.value || p.company === els.company.value));
+            rebuildMarkers(filtered);
+            if (filtered.length === 0) setHint('No pickup points match your filters.');
+        }
+
+        async function loadPoints() {
+            const res = await fetch('/api/delivery-points');
+            const data = await res.json();
+            allPoints = Array.isArray(data) ? data : [];
+        }
+
+        function ensureMap() {
+            if (map) return;
+            map = L.map('bgMap', {
+                scrollWheelZoom: true,
+                zoomControl: true
+            });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+            markersLayer = L.layerGroup().addTo(map);
+
+            // Bulgaria view
+            map.setView([42.7339, 25.4858], 7);
+        }
+
+        (async function initDeliveryPicker() {
+            try {
+                ensureMap();
+                await loadPoints();
+
+                els.company?.addEventListener('change', refreshUI);
+                els.filterCity?.addEventListener('change', refreshUI);
+                els.filterType?.addEventListener('change', refreshUI);
+                els.select?.addEventListener('change', () => {
+                    const opt = els.select.options[els.select.selectedIndex];
+                    const raw = opt && opt.dataset ? opt.dataset.point : null;
+                    if (!raw) return;
+                    try {
+                        const p = JSON.parse(raw);
+                        setSelectedPoint(p);
+                        if (map) map.setView([p.latitude, p.longitude], 13);
+                    } catch { }
+                });
+
+                refreshUI();
+            } catch {
+                setHint('Could not load pickup points.');
+            }
+        })();
+    </script>
+}
 

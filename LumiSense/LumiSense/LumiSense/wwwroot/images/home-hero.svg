@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="0.55" stop-color="#1b2a6b"/>
+      <stop offset="1" stop-color="#764ba2"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f9a826" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#f27121" stop-opacity="0.0"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="700" fill="url(#bg)"/>
+
+  <!-- sun glow -->
+  <g filter="url(#soft)" opacity="0.9">
+    <circle cx="1240" cy="160" r="140" fill="#f9a826"/>
+    <circle cx="1240" cy="160" r="260" fill="url(#glow)"/>
+  </g>
+
+  <!-- abstract waves -->
+  <path d="M0,520 C240,440 420,610 650,520 C880,430 1060,610 1600,460 L1600,700 L0,700 Z"
+        fill="rgba(255,255,255,0.08)"/>
+  <path d="M0,585 C260,510 420,670 690,585 C960,500 1110,680 1600,520 L1600,700 L0,700 Z"
+        fill="rgba(255,255,255,0.06)"/>
+
+  <!-- device silhouette -->
+  <g transform="translate(190 195)" opacity="0.95">
+    <rect x="0" y="0" width="430" height="300" rx="26" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.18)" />
+    <rect x="34" y="34" width="362" height="140" rx="16" fill="rgba(0,0,0,0.28)" stroke="rgba(255,255,255,0.18)"/>
+    <circle cx="96" cy="236" r="28" fill="rgba(255,255,255,0.18)"/>
+    <circle cx="96" cy="236" r="14" fill="rgba(242,113,33,0.85)"/>
+    <rect x="150" y="214" width="246" height="18" rx="9" fill="rgba(255,255,255,0.14)"/>
+    <rect x="150" y="246" width="210" height="18" rx="9" fill="rgba(255,255,255,0.10)"/>
+  </g>
+
+  <!-- tiny stars -->
+  <g fill="rgba(255,255,255,0.65)">
+    <circle cx="720" cy="120" r="2"/><circle cx="770" cy="80" r="1.5"/><circle cx="860" cy="150" r="2"/>
+    <circle cx="940" cy="110" r="1.8"/><circle cx="1030" cy="90" r="1.4"/><circle cx="1120" cy="140" r="2.2"/>
+    <circle cx="1380" cy="260" r="1.6"/><circle cx="1460" cy="210" r="2.0"/><circle cx="1320" cy="320" r="1.4"/>
+  </g>
+</svg>
+

@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -25,6 +25,16 @@ namespace LumiSense.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            // Clear cart on logout (cart is stored in session).
+            try
+            {
+                HttpContext.Session?.Remove("Cart");
+            }
+            catch
+            {
+                // Ignore session errors during logout
+            }
+
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
             if (returnUrl != null)

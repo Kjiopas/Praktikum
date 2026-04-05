@@ -1,5 +1,5 @@
 @using LumiSense.Models
-@model IEnumerable<Product>
+@model IEnumerable<ProductListItemViewModel>
 @using System.Text.Json
 @inject Microsoft.Extensions.Localization.IStringLocalizer<LumiSense.SharedResource> L
 
@@ -154,25 +154,122 @@
     <p>@L["Shop_HeroSubtitle"]</p>
 </div>
 
+<div style="max-width:1200px; margin:0 auto; padding:0 2rem;">
+    <div class="uv-card" style="background:#fff; padding:12px 14px; margin:0 auto 10px; border:1px solid rgba(0,0,0,0.06);">
+        <form method="get" action="/Shop" style="display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; margin:0;">
+            <div style="font-weight:950; display:flex; align-items:center; gap:8px;">
+                <i class="fas fa-filter" style="color:#F27121;"></i> @L["Shop_SortProducts"]
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                @{
+                    var sort = (ViewData["Sort"]?.ToString() ?? string.Empty);
+                }
+                <select class="form-control" name="sort" style="min-width:240px;">
+                    @if (string.IsNullOrWhiteSpace(sort))
+                    {
+                        <option value="" selected>@L["Shop_SortPopular"]</option>
+                    }
+                    else
+                    {
+                        <option value="">@L["Shop_SortPopular"]</option>
+                    }
+
+                    @if (sort == "price_asc")
+                    {
+                        <option value="price_asc" selected>@L["Shop_SortPriceAsc"]</option>
+                    }
+                    else
+                    {
+                        <option value="price_asc">@L["Shop_SortPriceAsc"]</option>
+                    }
+
+                    @if (sort == "price_desc")
+                    {
+                        <option value="price_desc" selected>@L["Shop_SortPriceDesc"]</option>
+                    }
+                    else
+                    {
+                        <option value="price_desc">@L["Shop_SortPriceDesc"]</option>
+                    }
+
+                    @if (sort == "rating_desc")
+                    {
+                        <option value="rating_desc" selected>@L["Shop_SortTopRated"]</option>
+                    }
+                    else
+                    {
+                        <option value="rating_desc">@L["Shop_SortTopRated"]</option>
+                    }
+
+                    @if (sort == "reviews_desc")
+                    {
+                        <option value="reviews_desc" selected>@L["Shop_SortMostReviewed"]</option>
+                    }
+                    else
+                    {
+                        <option value="reviews_desc">@L["Shop_SortMostReviewed"]</option>
+                    }
+                </select>
+                <button type="submit" class="buy-btn" style="margin-top:0;">
+                    @L["Common_Apply"]
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="products-grid">
-    @foreach (var product in Model)
+    @foreach (var item in Model)
     {
+        var product = item.Product;
+    var tName = L[$"Product_{product.Id}_Name"];
+    var tDesc = L[$"Product_{product.Id}_Description"];
+    var productName = tName.ResourceNotFound ? product.Name : tName.Value;
+    var productDesc = tDesc.ResourceNotFound ? product.Description : tDesc.Value;
         <div class="product-card">
             <div class="product-icon">
                 <i class="fas @product.ImageIcon"></i>
             </div>
             <div class="product-info">
-                <div class="product-title">@product.Name</div>
-                <div class="product-desc">@product.Description</div>
+                    <div class="product-title">
+                        <a href="/Shop/Product/@product.Id" style="text-decoration:none; color:inherit;">@productName</a>
+                    </div>
+                <div class="product-desc">@productDesc</div>
                 <div class="product-price">$@product.Price.ToString("F2")</div>
+                <div style="margin-top:6px; color:#F27121; font-size:0.95rem;">
+                    @{
+                        var stars = (int)Math.Round(item.AvgRating, MidpointRounding.AwayFromZero);
+                        if (item.ApprovedReviewCount == 0) { stars = 0; }
+                    }
+                    @for (var i = 1; i <= 5; i++)
+                    {
+                        if (i <= stars)
+                        {
+                            <i class="fas fa-star"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star" style="opacity:0.55;"></i>
+                        }
+                    }
+                    <span style="color:#666; margin-left:8px;">
+                        (@item.ApprovedReviewCount)
+                    </span>
+                </div>
 
                 @if (product.Stock > 0)
                 {
                     <div class="product-stock stock-in">@string.Format(L["Shop_InStock"].Value, product.Stock)</div>
-                    <a class="buy-btn" style="text-decoration:none; display:inline-block;"
-                       href="/Cart/BuyNow?productId=@product.Id&amp;quantity=1">
-                        @L["Shop_BuyNow"] <i class="fas fa-shopping-cart"></i>
-                    </a>
+                    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                        <a class="buy-btn" style="text-decoration:none; display:inline-block; margin-top:0;"
+                           href="/Cart/BuyNow?productId=@product.Id&amp;quantity=1">
+                            @L["Shop_BuyNow"] <i class="fas fa-shopping-cart"></i>
+                        </a>
+                        <a class="cancel-btn" style="text-decoration:none; display:inline-block; margin-top:0;"
+                           href="/Shop/Product/@product.Id">
+                            <i class="fas fa-circle-info"></i> @L["Shop_Details"]
+                        </a>
+                    </div>
                 }
                 else
                 {
@@ -283,7 +380,7 @@
                     return;
                 }
                 if (response.status === 403) {
-                    alert('Access denied.');
+                    alert(@JsonSerializer.Serialize(L["Common_AccessDenied"].Value));
                     return;
                 }
 
