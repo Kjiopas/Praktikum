@@ -74,6 +74,25 @@ public sealed class AdminController : Controller
         public DateTimeOffset? LockoutEnd { get; init; }
     }
 
+    private static DateTimeOffset? ParseBanDuration(string? duration)
+    {
+        duration = (duration ?? string.Empty).Trim().ToLowerInvariant();
+        if (duration is "" or "none" or "0" or "unban") return null;
+        if (duration is "permanent" or "perm") return DateTimeOffset.UtcNow.AddYears(100);
+
+        // Supported: "6h", "12h", "1d", "2d", "7d"
+        if (duration.EndsWith("h") && int.TryParse(duration[..^1], out var hours) && hours > 0)
+        {
+            return DateTimeOffset.UtcNow.AddHours(hours);
+        }
+        if (duration.EndsWith("d") && int.TryParse(duration[..^1], out var days) && days > 0)
+        {
+            return DateTimeOffset.UtcNow.AddDays(days);
+        }
+
+        return DateTimeOffset.UtcNow.AddDays(1);
+    }
+
     [HttpGet("/Admin/Users")]
     public async Task<IActionResult> Users()
     {
@@ -98,9 +117,93 @@ public sealed class AdminController : Controller
         return View(rows);
     }
 
+    [HttpPost("/Admin/Users/{id}/Ban")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BanUser(string id, [FromForm] string duration)
+    {
+        var me = _userManager.GetUserId(User);
+        if (!string.IsNullOrWhiteSpace(me) && string.Equals(me, id, StringComparison.Ordinal))
+        {
+            return BadRequest("You cannot ban yourself.");
+        }
+
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null) return NotFound();
+
+        var until = ParseBanDuration(duration);
+        user.LockoutEnabled = true;
+        await _userManager.UpdateAsync(user);
+        await _userManager.SetLockoutEndDateAsync(user, until);
+
+        return RedirectToAction(nameof(Users));
+    }
+
+    [HttpPost("/Admin/Users/{id}/Unban")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UnbanUser(string id)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+        if (user is null) return NotFound();
+
+        await _userManager.SetLockoutEndDateAsync(user, null);
+        return RedirectToAction(nameof(Users));
+    }
+
+    public sealed class AdminReportRow
+    {
+        public ProductReviewReport Report { get; init; } = new();
+        public ProductReview Review { get; init; } = new();
+        public string? ReporterEmail { get; init; }
+        public string? AuthorEmail { get; init; }
+        public string? ProductName { get; init; }
+    }
+
     [HttpGet("/Admin/Reviews")]
     public async Task<IActionResult> Reviews()
     {
+        var unresolvedReports = await _db.ProductReviewReports.AsNoTracking()
+            .Include(r => r.Review)
+            .Where(r => !r.Resolved)
+            .OrderByDescending(r => r.CreatedAtUtc)
+            .Take(200)
+            .ToListAsync();
+
+        var reviewIds = unresolvedReports
+            .Select(r => r.ReviewId)
+            .Distinct()
+            .ToList();
+
+        var reviewsById = await _db.ProductReviews.AsNoTracking()
+            .Include(r => r.Product)
+            .Where(r => reviewIds.Contains(r.Id))
+            .ToDictionaryAsync(r => r.Id);
+
+        var userIds = unresolvedReports
+            .Select(r => r.ReporterUserId)
+            .Concat(reviewsById.Values.Select(r => r.UserId))
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct()
+            .ToList();
+
+        var emailsByUserId = await _db.Users.AsNoTracking()
+            .Where(u => userIds.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id, u => u.Email ?? u.UserName ?? u.Id);
+
+        var reportRows = new List<AdminReportRow>();
+        foreach (var rep in unresolvedReports)
+        {
+            if (!reviewsById.TryGetValue(rep.ReviewId, out var rev)) continue;
+
+            reportRows.Add(new AdminReportRow
+            {
+                Report = rep,
+                Review = rev,
+                ReporterEmail = emailsByUserId.TryGetValue(rep.ReporterUserId, out var re) ? re : rep.ReporterUserId,
+                AuthorEmail = emailsByUserId.TryGetValue(rev.UserId, out var ae) ? ae : rev.UserId,
+                ProductName = rev.Product?.Name
+            });
+        }
+
         var pending = await _db.ProductReviews.AsNoTracking()
             .Include(r => r.Product)
             .Where(r => !r.IsApproved)
@@ -117,6 +220,7 @@ public sealed class AdminController : Controller
 
         return View(new AdminReviewsViewModel
         {
+            Reports = reportRows,
             Pending = pending,
             Approved = approved
         });
@@ -124,8 +228,50 @@ public sealed class AdminController : Controller
 
     public sealed class AdminReviewsViewModel
     {
+        public List<AdminReportRow> Reports { get; init; } = new();
         public List<ProductReview> Pending { get; init; } = new();
         public List<ProductReview> Approved { get; init; } = new();
+    }
+
+    [HttpPost("/Admin/Reports/{id:int}/Resolve")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResolveReport(int id)
+    {
+        var report = await _db.ProductReviewReports.FirstOrDefaultAsync(r => r.Id == id);
+        if (report is null) return NotFound();
+        report.Resolved = true;
+        await _db.SaveChangesAsync();
+        return RedirectToAction(nameof(Reviews));
+    }
+
+    [HttpPost("/Admin/Reports/{id:int}/BanAuthor")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> BanAuthorFromReport(int id, [FromForm] string duration)
+    {
+        var rep = await _db.ProductReviewReports.AsNoTracking()
+            .Include(r => r.Review)
+            .FirstOrDefaultAsync(r => r.Id == id);
+        if (rep?.Review is null) return NotFound();
+
+        var authorId = rep.Review.UserId;
+        var until = ParseBanDuration(duration);
+        var user = await _userManager.FindByIdAsync(authorId);
+        if (user is not null)
+        {
+            user.LockoutEnabled = true;
+            await _userManager.UpdateAsync(user);
+            await _userManager.SetLockoutEndDateAsync(user, until);
+        }
+
+        // resolve the report too
+        var report = await _db.ProductReviewReports.FirstOrDefaultAsync(r => r.Id == id);
+        if (report is not null)
+        {
+            report.Resolved = true;
+            await _db.SaveChangesAsync();
+        }
+
+        return RedirectToAction(nameof(Reviews));
     }
 
     [HttpPost("/Admin/Reviews/{id:int}/Approve")]

@@ -345,6 +345,42 @@
   <data name="Admin_NoApprovedReviews" xml:space="preserve">
     <value>Henüz onaylanan yorum yok.</value>
   </data>
+  <data name="Admin_Ban" xml:space="preserve">
+    <value>Yasakla</value>
+  </data>
+  <data name="Admin_Unban" xml:space="preserve">
+    <value>Yasağı kaldır</value>
+  </data>
+  <data name="Admin_Permanent" xml:space="preserve">
+    <value>Kalıcı</value>
+  </data>
+  <data name="Admin_ReportsTitle" xml:space="preserve">
+    <value>Bildiriler</value>
+  </data>
+  <data name="Admin_NoReports" xml:space="preserve">
+    <value>Bildiriler yok.</value>
+  </data>
+  <data name="Admin_ReportedReviewFor" xml:space="preserve">
+    <value>Şu ürün için bildirilen yorum:</value>
+  </data>
+  <data name="Admin_Reporter" xml:space="preserve">
+    <value>Bildireni:</value>
+  </data>
+  <data name="Admin_Author" xml:space="preserve">
+    <value>Yazar:</value>
+  </data>
+  <data name="Admin_Reason" xml:space="preserve">
+    <value>Neden:</value>
+  </data>
+  <data name="Admin_ReviewText" xml:space="preserve">
+    <value>Yorum metni</value>
+  </data>
+  <data name="Admin_BanAuthor" xml:space="preserve">
+    <value>Yazarı yasakla</value>
+  </data>
+  <data name="Admin_Resolve" xml:space="preserve">
+    <value>Çöz</value>
+  </data>
 
   <!-- Product translations (seeded products) -->
   <data name="Product_1_Name" xml:space="preserve">

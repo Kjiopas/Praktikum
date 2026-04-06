@@ -345,6 +345,42 @@
   <data name="Admin_NoApprovedReviews" xml:space="preserve">
     <value>Все още няма одобрени отзиви.</value>
   </data>
+  <data name="Admin_Ban" xml:space="preserve">
+    <value>Блокирай</value>
+  </data>
+  <data name="Admin_Unban" xml:space="preserve">
+    <value>Отблокирай</value>
+  </data>
+  <data name="Admin_Permanent" xml:space="preserve">
+    <value>Постоянно</value>
+  </data>
+  <data name="Admin_ReportsTitle" xml:space="preserve">
+    <value>Доклади</value>
+  </data>
+  <data name="Admin_NoReports" xml:space="preserve">
+    <value>Няма доклади.</value>
+  </data>
+  <data name="Admin_ReportedReviewFor" xml:space="preserve">
+    <value>Докладван отзив за</value>
+  </data>
+  <data name="Admin_Reporter" xml:space="preserve">
+    <value>Докладвал:</value>
+  </data>
+  <data name="Admin_Author" xml:space="preserve">
+    <value>Автор:</value>
+  </data>
+  <data name="Admin_Reason" xml:space="preserve">
+    <value>Причина:</value>
+  </data>
+  <data name="Admin_ReviewText" xml:space="preserve">
+    <value>Текст на отзива</value>
+  </data>
+  <data name="Admin_BanAuthor" xml:space="preserve">
+    <value>Блокирай автора</value>
+  </data>
+  <data name="Admin_Resolve" xml:space="preserve">
+    <value>Приключи</value>
+  </data>
 
   <!-- Product translations (seeded products) -->
   <data name="Product_1_Name" xml:space="preserve">

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LumiSense")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute(" ")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34eaf16ade4651af5298649ebd420cabe024d6db")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac237120d67193e61945bcf3d377e9b8c124f455")]
 [assembly: System.Reflection.AssemblyProductAttribute("LumiSense")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LumiSense")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

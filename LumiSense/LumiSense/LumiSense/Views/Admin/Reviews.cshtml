@@ -16,6 +16,64 @@
     </div>
 
     <div style="margin-top:14px;">
+        <h3 style="margin:0 0 10px;">@L["Admin_ReportsTitle"] (@Model.Reports.Count)</h3>
+        @if (Model.Reports.Count == 0)
+        {
+            <div style="color:#666;">@L["Admin_NoReports"]</div>
+        }
+        else
+        {
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                @foreach (var row in Model.Reports)
+                {
+                    <div style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px;">
+                        <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                            <div style="font-weight:950;">
+                                <i class="fas fa-flag" style="color:#F27121;"></i>
+                                @L["Admin_ReportedReviewFor"] <a href="/Shop/Product/@row.Review.ProductId" style="text-decoration:none;">@(row.ProductName ?? $"#{row.Review.ProductId}")</a>
+                            </div>
+                            <div style="color:#777; font-size:0.9rem;">@row.Report.CreatedAtUtc.ToLocalTime().ToString("g")</div>
+                        </div>
+                        <div style="margin-top:8px; color:#555;">
+                            <div><strong>@L["Admin_Reporter"]</strong> @row.ReporterEmail</div>
+                            <div><strong>@L["Admin_Author"]</strong> @row.AuthorEmail</div>
+                            <div><strong>@L["Admin_Reason"]</strong> @(string.IsNullOrWhiteSpace(row.Report.Reason) ? "—" : row.Report.Reason)</div>
+                        </div>
+                        <div style="margin-top:10px; background:#f9fafb; border:1px solid rgba(0,0,0,0.06); padding:10px 12px; border-radius:12px;">
+                            <div style="font-weight:900; margin-bottom:6px;">@L["Admin_ReviewText"]</div>
+                            <div style="white-space:pre-wrap;">@row.Review.Text</div>
+                        </div>
+
+                        <div style="margin-top:12px; display:flex; justify-content:flex-end; gap:10px; flex-wrap:wrap;">
+                            <form method="post" action="/Admin/Reports/@row.Report.Id/BanAuthor" style="margin:0; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                                @Html.AntiForgeryToken()
+                                <select class="form-control" name="duration" style="min-width:160px;">
+                                    <option value="6h">6h</option>
+                                    <option value="12h">12h</option>
+                                    <option value="1d" selected>1d</option>
+                                    <option value="2d">2d</option>
+                                    <option value="7d">7d</option>
+                                    <option value="permanent">@L["Admin_Permanent"]</option>
+                                </select>
+                                <button type="submit" class="cancel-btn" style="margin-top:0;">
+                                    <i class="fas fa-ban"></i> @L["Admin_BanAuthor"]
+                                </button>
+                            </form>
+
+                            <form method="post" action="/Admin/Reports/@row.Report.Id/Resolve" style="margin:0;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="buy-btn" style="margin-top:0;">
+                                    <i class="fas fa-check"></i> @L["Admin_Resolve"]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <div style="margin-top:14px;">
         <h3 style="margin:0 0 10px;">@L["Admin_PendingReviews"] (@Model.Pending.Count)</h3>
         @if (Model.Pending.Count == 0)
         {

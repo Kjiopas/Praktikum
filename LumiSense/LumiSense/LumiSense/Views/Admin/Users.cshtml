@@ -23,6 +23,7 @@
                     <th style="text-align:left; padding:12px;">@L["Admin_UserPhone"]</th>
                     <th style="text-align:left; padding:12px;">@L["Admin_UserRoles"]</th>
                     <th style="text-align:left; padding:12px;">@L["Admin_UserLockout"]</th>
+                    <th style="text-align:left; padding:12px;">@L["Admin_Ban"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,6 +60,31 @@
                         {
                             <span style="color:#777;">—</span>
                         }
+                    </td>
+                    <td style="padding:12px;">
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                            <form method="post" action="/Admin/Users/@u.Id/Ban" style="margin:0; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                                @Html.AntiForgeryToken()
+                                <select class="form-control" name="duration" style="min-width:160px;">
+                                    <option value="6h">6h</option>
+                                    <option value="12h">12h</option>
+                                    <option value="1d" selected>1d</option>
+                                    <option value="2d">2d</option>
+                                    <option value="7d">7d</option>
+                                    <option value="permanent">@L["Admin_Permanent"]</option>
+                                </select>
+                                <button type="submit" class="cancel-btn" style="margin-top:0;">
+                                    <i class="fas fa-ban"></i> @L["Admin_Ban"]
+                                </button>
+                            </form>
+
+                            <form method="post" action="/Admin/Users/@u.Id/Unban" style="margin:0;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="buy-btn" style="margin-top:0;">
+                                    <i class="fas fa-unlock"></i> @L["Admin_Unban"]
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }

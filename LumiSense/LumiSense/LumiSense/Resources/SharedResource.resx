@@ -20,7 +20,7 @@
     <value>Orders</value>
   </data>
   <data name="Nav_About" xml:space="preserve">
-    <value>About</value>
+    <value>About us</value>
   </data>
   <data name="Nav_Admin" xml:space="preserve">
     <value>Admin</value>
@@ -149,7 +149,7 @@
   </data>
 
   <data name="About_Title" xml:space="preserve">
-    <value>About</value>
+    <value>About us</value>
   </data>
   <data name="About_Heading" xml:space="preserve">
     <value>About LumiSense</value>
@@ -344,6 +344,42 @@
   </data>
   <data name="Admin_NoApprovedReviews" xml:space="preserve">
     <value>No approved reviews yet.</value>
+  </data>
+  <data name="Admin_Ban" xml:space="preserve">
+    <value>Ban</value>
+  </data>
+  <data name="Admin_Unban" xml:space="preserve">
+    <value>Unban</value>
+  </data>
+  <data name="Admin_Permanent" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
+  <data name="Admin_ReportsTitle" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="Admin_NoReports" xml:space="preserve">
+    <value>No reports.</value>
+  </data>
+  <data name="Admin_ReportedReviewFor" xml:space="preserve">
+    <value>Reported review for</value>
+  </data>
+  <data name="Admin_Reporter" xml:space="preserve">
+    <value>Reporter:</value>
+  </data>
+  <data name="Admin_Author" xml:space="preserve">
+    <value>Author:</value>
+  </data>
+  <data name="Admin_Reason" xml:space="preserve">
+    <value>Reason:</value>
+  </data>
+  <data name="Admin_ReviewText" xml:space="preserve">
+    <value>Review text</value>
+  </data>
+  <data name="Admin_BanAuthor" xml:space="preserve">
+    <value>Ban author</value>
+  </data>
+  <data name="Admin_Resolve" xml:space="preserve">
+    <value>Resolve</value>
   </data>
 
   <!-- Product translations (seeded products) -->
