@@ -302,6 +302,42 @@
   <data name="Reviews_Report" xml:space="preserve">
     <value>Докладвай</value>
   </data>
+  <data name="Reviews_ReportTitle" xml:space="preserve">
+    <value>Докладвай отзив</value>
+  </data>
+  <data name="Reviews_ReportSubtitle" xml:space="preserve">
+    <value>Изберете причина за доклада.</value>
+  </data>
+  <data name="Reviews_ReportReasonLabel" xml:space="preserve">
+    <value>Причина</value>
+  </data>
+  <data name="Reviews_ReportReasonSpam" xml:space="preserve">
+    <value>Спам или реклама</value>
+  </data>
+  <data name="Reviews_ReportReasonAbusive" xml:space="preserve">
+    <value>Обидно или омразно съдържание</value>
+  </data>
+  <data name="Reviews_ReportReasonOffTopic" xml:space="preserve">
+    <value>Не по темата</value>
+  </data>
+  <data name="Reviews_ReportReasonScam" xml:space="preserve">
+    <value>Измама или подвеждащо</value>
+  </data>
+  <data name="Reviews_ReportReasonOther" xml:space="preserve">
+    <value>Друго</value>
+  </data>
+  <data name="Reviews_ReportDetailsLabel" xml:space="preserve">
+    <value>Детайли (по избор)</value>
+  </data>
+  <data name="Reviews_ReportDetailsPlaceholder" xml:space="preserve">
+    <value>Добавете кратко обяснение…</value>
+  </data>
+  <data name="Reviews_ReportCancel" xml:space="preserve">
+    <value>Отказ</value>
+  </data>
+  <data name="Reviews_ReportSubmit" xml:space="preserve">
+    <value>Изпрати доклад</value>
+  </data>
   <data name="Reviews_ErrorTextRequired" xml:space="preserve">
     <value>Текстът на отзива е задължителен.</value>
   </data>
@@ -335,6 +371,9 @@
   </data>
   <data name="Admin_UserLockout" xml:space="preserve">
     <value>Блокиране</value>
+  </data>
+  <data name="Admin_ReportedBy" xml:space="preserve">
+    <value>Докладван от</value>
   </data>
   <data name="Admin_LockedUntil" xml:space="preserve">
     <value>Блокиран до</value>

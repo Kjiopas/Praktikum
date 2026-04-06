@@ -23,6 +23,7 @@
                     <th style="text-align:left; padding:12px;">@L["Admin_UserPhone"]</th>
                     <th style="text-align:left; padding:12px;">@L["Admin_UserRoles"]</th>
                     <th style="text-align:left; padding:12px;">@L["Admin_UserLockout"]</th>
+                    <th style="text-align:left; padding:12px;">@L["Admin_ReportedBy"]</th>
                     <th style="text-align:left; padding:12px;">@L["Admin_Ban"]</th>
                 </tr>
             </thead>
@@ -59,6 +60,27 @@
                         else
                         {
                             <span style="color:#777;">—</span>
+                        }
+                    </td>
+                    <td style="padding:12px; min-width:220px;">
+                        @if (u.UnresolvedReportCount <= 0 || u.ReportedByEmails.Count == 0)
+                        {
+                            <span style="color:#777;">—</span>
+                        }
+                        else
+                        {
+                            var shown = u.ReportedByEmails.Take(3).ToList();
+                            var more = Math.Max(0, u.ReportedByEmails.Count - shown.Count);
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                <div style="font-weight:900; color:#444;">@u.UnresolvedReportCount</div>
+                                <div style="color:#666; font-size:0.9rem;">
+                                    @string.Join(", ", shown)
+                                    @if (more > 0)
+                                    {
+                                        <span style="color:#999;"> +@more</span>
+                                    }
+                                </div>
+                            </div>
                         }
                     </td>
                     <td style="padding:12px;">

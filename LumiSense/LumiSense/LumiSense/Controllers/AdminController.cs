@@ -72,6 +72,8 @@ public sealed class AdminController : Controller
         public string? PhoneNumber { get; init; }
         public bool IsAdmin { get; init; }
         public DateTimeOffset? LockoutEnd { get; init; }
+        public int UnresolvedReportCount { get; init; }
+        public List<string> ReportedByEmails { get; init; } = new();
     }
 
     private static DateTimeOffset? ParseBanDuration(string? duration)
@@ -101,16 +103,60 @@ public sealed class AdminController : Controller
             .Take(400)
             .ToListAsync();
 
+        var userIds = users.Select(u => u.Id).ToList();
+
+        // unresolved reports against reviews authored by these users
+        var reportPairs = await (
+                from rep in _db.ProductReviewReports.AsNoTracking()
+                join rev in _db.ProductReviews.AsNoTracking() on rep.ReviewId equals rev.Id
+                where !rep.Resolved && userIds.Contains(rev.UserId)
+                select new { AuthorId = rev.UserId, ReporterId = rep.ReporterUserId }
+            )
+            .ToListAsync();
+
+        var reportCountByAuthor = reportPairs
+            .GroupBy(x => x.AuthorId)
+            .ToDictionary(g => g.Key, g => g.Count());
+
+        var reporterIds = reportPairs
+            .Select(x => x.ReporterId)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct()
+            .ToList();
+
+        var reporterEmailById = await _db.Users.AsNoTracking()
+            .Where(u => reporterIds.Contains(u.Id))
+            .ToDictionaryAsync(u => u.Id, u => u.Email ?? u.UserName ?? u.Id);
+
+        var reportersByAuthor = reportPairs
+            .GroupBy(x => x.AuthorId)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(x => x.ReporterId).Distinct().ToList()
+            );
+
         var rows = new List<AdminUserRow>(users.Count);
         foreach (var u in users)
         {
+            var reporterEmails = new List<string>();
+            if (reportersByAuthor.TryGetValue(u.Id, out var reps))
+            {
+                reporterEmails = reps
+                    .Select(id => reporterEmailById.TryGetValue(id, out var e) ? e : id)
+                    .Distinct()
+                    .OrderBy(x => x)
+                    .ToList();
+            }
+
             rows.Add(new AdminUserRow
             {
                 Id = u.Id,
                 Email = u.Email ?? u.UserName ?? u.Id,
                 PhoneNumber = u.PhoneNumber,
                 IsAdmin = await _userManager.IsInRoleAsync(u, "Admin"),
-                LockoutEnd = u.LockoutEnd
+                LockoutEnd = u.LockoutEnd,
+                UnresolvedReportCount = reportCountByAuthor.TryGetValue(u.Id, out var c) ? c : 0,
+                ReportedByEmails = reporterEmails
             });
         }
 

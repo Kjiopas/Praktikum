@@ -302,6 +302,42 @@
   <data name="Reviews_Report" xml:space="preserve">
     <value>Report</value>
   </data>
+  <data name="Reviews_ReportTitle" xml:space="preserve">
+    <value>Report review</value>
+  </data>
+  <data name="Reviews_ReportSubtitle" xml:space="preserve">
+    <value>Choose a reason for this report.</value>
+  </data>
+  <data name="Reviews_ReportReasonLabel" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="Reviews_ReportReasonSpam" xml:space="preserve">
+    <value>Spam or advertising</value>
+  </data>
+  <data name="Reviews_ReportReasonAbusive" xml:space="preserve">
+    <value>Abusive or hateful content</value>
+  </data>
+  <data name="Reviews_ReportReasonOffTopic" xml:space="preserve">
+    <value>Off-topic</value>
+  </data>
+  <data name="Reviews_ReportReasonScam" xml:space="preserve">
+    <value>Scam or misleading</value>
+  </data>
+  <data name="Reviews_ReportReasonOther" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Reviews_ReportDetailsLabel" xml:space="preserve">
+    <value>Details (optional)</value>
+  </data>
+  <data name="Reviews_ReportDetailsPlaceholder" xml:space="preserve">
+    <value>Add a short explanation…</value>
+  </data>
+  <data name="Reviews_ReportCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Reviews_ReportSubmit" xml:space="preserve">
+    <value>Submit report</value>
+  </data>
   <data name="Reviews_ErrorTextRequired" xml:space="preserve">
     <value>Review text is required.</value>
   </data>
@@ -335,6 +371,9 @@
   </data>
   <data name="Admin_UserLockout" xml:space="preserve">
     <value>Lockout</value>
+  </data>
+  <data name="Admin_ReportedBy" xml:space="preserve">
+    <value>Reported by</value>
   </data>
   <data name="Admin_LockedUntil" xml:space="preserve">
     <value>Locked until</value>

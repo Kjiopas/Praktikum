@@ -148,11 +148,9 @@
                     <div style="margin-top:10px; display:flex; justify-content:flex-end; gap:10px;">
                         @if (User.Identity?.IsAuthenticated == true && !mine)
                         {
-                            <form method="post" action="/Reviews/@r.Id/Report" style="margin:0;">
-                                <button type="submit" class="cancel-btn" style="padding:6px 10px;">
+                            <button type="button" class="cancel-btn reportReviewBtn" data-review-id="@r.Id" style="padding:6px 10px; margin-top:0;">
                                     <i class="fas fa-flag"></i> @L["Reviews_Report"]
-                                </button>
-                            </form>
+                            </button>
                         }
                     </div>
                 </div>
@@ -162,6 +160,47 @@
 </div>
 
 @section Scripts {
+    <div id="reportOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;">
+        <div style="width:min(520px, 100%); background:#fff; border-radius:18px; padding:16px; box-shadow:0 18px 40px rgba(0,0,0,0.25); border:1px solid rgba(0,0,0,0.08);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <div style="width:42px; height:42px; border-radius:999px; display:grid; place-items:center; background:rgba(242,113,33,0.12); color:#F27121;">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:950; font-size:1.1rem;">@L["Reviews_ReportTitle"]</div>
+                        <div style="color:#666; margin-top:2px;">@L["Reviews_ReportSubtitle"]</div>
+                    </div>
+                </div>
+                <button type="button" id="reportCloseX" class="nav-auth-button" style="font-size:1.2rem; line-height:1; padding:0 6px;">×</button>
+            </div>
+
+            <form id="reportForm" method="post" action="" style="margin-top:12px;">
+                @Html.AntiForgeryToken()
+                <div class="form-group" style="margin:0;">
+                    <label>@L["Reviews_ReportReasonLabel"]</label>
+                    <select class="form-control" name="reason">
+                        <option value="spam">@L["Reviews_ReportReasonSpam"]</option>
+                        <option value="abusive">@L["Reviews_ReportReasonAbusive"]</option>
+                        <option value="off_topic">@L["Reviews_ReportReasonOffTopic"]</option>
+                        <option value="scam">@L["Reviews_ReportReasonScam"]</option>
+                        <option value="other">@L["Reviews_ReportReasonOther"]</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>@L["Reviews_ReportDetailsLabel"]</label>
+                    <textarea class="form-control" name="details" maxlength="250" rows="3" placeholder="@L["Reviews_ReportDetailsPlaceholder"]"></textarea>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:12px;">
+                    <button type="button" id="reportCancelBtn" class="cancel-btn" style="margin-top:0;">@L["Reviews_ReportCancel"]</button>
+                    <button type="submit" class="buy-btn" style="margin-top:0;">@L["Reviews_ReportSubmit"]</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         const btn = document.getElementById('writeReviewBtn');
         const form = document.getElementById('reviewForm');
@@ -174,6 +213,39 @@
                 }
             });
         }
+
+        (function () {
+            const overlay = document.getElementById('reportOverlay');
+            const reportForm = document.getElementById('reportForm');
+            if (!overlay || !reportForm) return;
+
+            const close = () => { overlay.style.display = 'none'; };
+            const openFor = (reviewId) => {
+                reportForm.setAttribute('action', `/Reviews/${reviewId}/Report`);
+                // reset fields
+                const sel = reportForm.querySelector('select[name="reason"]');
+                const ta = reportForm.querySelector('textarea[name="details"]');
+                if (sel) sel.selectedIndex = 0;
+                if (ta) ta.value = '';
+                overlay.style.display = 'flex';
+                if (sel) sel.focus();
+            };
+
+            document.querySelectorAll('.reportReviewBtn').forEach(b => {
+                b.addEventListener('click', () => {
+                    const id = b.getAttribute('data-review-id');
+                    if (!id) return;
+                    openFor(id);
+                });
+            });
+
+            const cancel = document.getElementById('reportCancelBtn');
+            const x = document.getElementById('reportCloseX');
+            if (cancel) cancel.addEventListener('click', close);
+            if (x) x.addEventListener('click', close);
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+        })();
     </script>
 }
 

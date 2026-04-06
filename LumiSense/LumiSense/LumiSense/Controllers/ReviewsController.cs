@@ -20,7 +20,8 @@ public sealed class ReviewsController : Controller
     }
 
     [HttpPost("/Reviews/{id:int}/Report")]
-    public async Task<IActionResult> Report(int id, [FromForm] string? reason = null)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Report(int id, [FromForm] string? reason = null, [FromForm] string? details = null)
     {
         var review = await _db.ProductReviews.AsNoTracking().FirstOrDefaultAsync(r => r.Id == id);
         if (review is null) return NotFound();
@@ -29,18 +30,44 @@ public sealed class ReviewsController : Controller
         if (string.IsNullOrWhiteSpace(reporterId)) return Forbid();
 
         reason = (reason ?? string.Empty).Trim();
-        if (reason.Length > 250) reason = reason[..250];
+        details = (details ?? string.Empty).Trim();
+
+        // Keep reason values stable (sent as codes from UI), so admin sees consistent output.
+        // Special rule: if user chose "other", admin should see only the typed text.
+        var mappedReason = MapReason(reason);
+        if (string.Equals(reason, "other", StringComparison.OrdinalIgnoreCase))
+        {
+            mappedReason = details;
+        }
+        else if (!string.IsNullOrWhiteSpace(details))
+        {
+            mappedReason = string.IsNullOrWhiteSpace(mappedReason) ? details : $"{mappedReason} — {details}";
+        }
+
+        mappedReason = (mappedReason ?? string.Empty).Trim();
+        if (mappedReason.Length > 250) mappedReason = mappedReason[..250];
 
         // De-dupe (same reporter + same review) unresolved.
-        var exists = await _db.ProductReviewReports.AnyAsync(r =>
-            r.ReviewId == id && r.ReporterUserId == reporterId && !r.Resolved);
-        if (!exists)
+        // If it exists, update the reason if the user provided one.
+        var existing = await _db.ProductReviewReports
+            .FirstOrDefaultAsync(r => r.ReviewId == id && r.ReporterUserId == reporterId && !r.Resolved);
+
+        if (existing is not null)
+        {
+            if (!string.IsNullOrWhiteSpace(mappedReason))
+            {
+                existing.Reason = mappedReason;
+                existing.CreatedAtUtc = DateTime.UtcNow;
+                await _db.SaveChangesAsync();
+            }
+        }
+        else
         {
             _db.ProductReviewReports.Add(new ProductReviewReport
             {
                 ReviewId = id,
                 ReporterUserId = reporterId,
-                Reason = string.IsNullOrWhiteSpace(reason) ? null : reason,
+                Reason = string.IsNullOrWhiteSpace(mappedReason) ? null : mappedReason,
                 CreatedAtUtc = DateTime.UtcNow,
                 Resolved = false
             });
@@ -48,6 +75,21 @@ public sealed class ReviewsController : Controller
         }
 
         return RedirectToAction("Product", "Shop", new { id = review.ProductId });
+    }
+
+    private static string? MapReason(string? reason)
+    {
+        reason = (reason ?? string.Empty).Trim().ToLowerInvariant();
+        return reason switch
+        {
+            "spam" => "Spam or advertising",
+            "abusive" => "Abusive or hateful content",
+            "off_topic" => "Off-topic",
+            "scam" => "Scam or misleading",
+            "other" => "Other",
+            "" => null,
+            _ => reason // backward compatibility (older localized values)
+        };
     }
 }
 

@@ -302,6 +302,42 @@
   <data name="Reviews_Report" xml:space="preserve">
     <value>Bildir</value>
   </data>
+  <data name="Reviews_ReportTitle" xml:space="preserve">
+    <value>Yorumu bildir</value>
+  </data>
+  <data name="Reviews_ReportSubtitle" xml:space="preserve">
+    <value>Bildirim için bir neden seçin.</value>
+  </data>
+  <data name="Reviews_ReportReasonLabel" xml:space="preserve">
+    <value>Neden</value>
+  </data>
+  <data name="Reviews_ReportReasonSpam" xml:space="preserve">
+    <value>Spam veya reklam</value>
+  </data>
+  <data name="Reviews_ReportReasonAbusive" xml:space="preserve">
+    <value>Hakaret veya nefret içeriği</value>
+  </data>
+  <data name="Reviews_ReportReasonOffTopic" xml:space="preserve">
+    <value>Konu dışı</value>
+  </data>
+  <data name="Reviews_ReportReasonScam" xml:space="preserve">
+    <value>Dolandırıcılık veya yanıltıcı</value>
+  </data>
+  <data name="Reviews_ReportReasonOther" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="Reviews_ReportDetailsLabel" xml:space="preserve">
+    <value>Ayrıntılar (isteğe bağlı)</value>
+  </data>
+  <data name="Reviews_ReportDetailsPlaceholder" xml:space="preserve">
+    <value>Kısa bir açıklama ekleyin…</value>
+  </data>
+  <data name="Reviews_ReportCancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="Reviews_ReportSubmit" xml:space="preserve">
+    <value>Bildirimi gönder</value>
+  </data>
   <data name="Reviews_ErrorTextRequired" xml:space="preserve">
     <value>Yorum metni zorunludur.</value>
   </data>
@@ -335,6 +371,9 @@
   </data>
   <data name="Admin_UserLockout" xml:space="preserve">
     <value>Kilit</value>
+  </data>
+  <data name="Admin_ReportedBy" xml:space="preserve">
+    <value>Bildireni</value>
   </data>
   <data name="Admin_LockedUntil" xml:space="preserve">
     <value>Şu zamana kadar kilitli</value>

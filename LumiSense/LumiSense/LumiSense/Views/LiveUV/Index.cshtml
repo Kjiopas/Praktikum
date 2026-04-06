@@ -120,11 +120,26 @@
 
         <div id="uvChartWrap" style="width:100%; height:260px; background:white; border-radius:14px; padding:12px; box-sizing:border-box;">
             <svg id="uvChart" viewBox="0 0 800 260" preserveAspectRatio="none" style="width:100%; height:100%; display:block;">
+                <defs>
+                    <linearGradient id="uvLineGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#F9A826" />
+                        <stop offset="100%" stop-color="#F27121" />
+                    </linearGradient>
+                    <linearGradient id="uvAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#F27121" stop-opacity="0.22" />
+                        <stop offset="100%" stop-color="#F27121" stop-opacity="0.00" />
+                    </linearGradient>
+                    <filter id="uvLineShadow" x="-20%" y="-40%" width="140%" height="200%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="2.2" flood-color="#F27121" flood-opacity="0.25" />
+                    </filter>
+                </defs>
                 <rect x="0" y="0" width="800" height="260" fill="transparent"></rect>
                 <g id="uvChartGrid"></g>
-                <polyline id="uvChartLine" fill="none" stroke="#F27121" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points=""></polyline>
+                <path id="uvChartArea" d="" fill="url(#uvAreaGrad)"></path>
+                <path id="uvChartLine" d="" fill="none" stroke="url(#uvLineGrad)" stroke-width="3.25" stroke-linejoin="round" stroke-linecap="round" filter="url(#uvLineShadow)"></path>
                 <g id="uvChartDots"></g>
-                <g id="uvChartLabels"></g>
+                <g id="uvChartYLabels"></g>
+                <g id="uvChartXLabels"></g>
             </svg>
         </div>
         <div id="uvChartHint" style="margin-top:0.5rem; font-size:0.85rem; color:#777;"></div>
@@ -174,21 +189,53 @@
             svg: document.getElementById('uvChart'),
             grid: document.getElementById('uvChartGrid'),
             line: document.getElementById('uvChartLine'),
+            area: document.getElementById('uvChartArea'),
             dots: document.getElementById('uvChartDots'),
-            labels: document.getElementById('uvChartLabels'),
+            yLabels: document.getElementById('uvChartYLabels'),
+            xLabels: document.getElementById('uvChartXLabels'),
             hint: document.getElementById('uvChartHint')
         };
 
         function clearChart() {
             if (chart.grid) chart.grid.innerHTML = '';
             if (chart.dots) chart.dots.innerHTML = '';
-            if (chart.labels) chart.labels.innerHTML = '';
-            if (chart.line) chart.line.setAttribute('points', '');
+            if (chart.yLabels) chart.yLabels.innerHTML = '';
+            if (chart.xLabels) chart.xLabels.innerHTML = '';
+            if (chart.line) chart.line.setAttribute('d', '');
+            if (chart.area) chart.area.setAttribute('d', '');
+        }
+
+        function fmtTimeHHmm(d) {
+            try {
+                return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
+            } catch {
+                const hh = String(d.getHours()).padStart(2, '0');
+                const mm = String(d.getMinutes()).padStart(2, '0');
+                return `${hh}:${mm}`;
+            }
+        }
+
+        function buildSmoothPath(coords) {
+            // coords: [{x,y}]
+            if (!coords || coords.length < 2) return '';
+            if (coords.length === 2) {
+                return `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)} L ${coords[1].x.toFixed(1)} ${coords[1].y.toFixed(1)}`;
+            }
+
+            let d = `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+            for (let i = 1; i < coords.length - 1; i++) {
+                const midX = (coords[i].x + coords[i + 1].x) / 2;
+                const midY = (coords[i].y + coords[i + 1].y) / 2;
+                d += ` Q ${coords[i].x.toFixed(1)} ${coords[i].y.toFixed(1)} ${midX.toFixed(1)} ${midY.toFixed(1)}`;
+            }
+            const last = coords[coords.length - 1];
+            d += ` T ${last.x.toFixed(1)} ${last.y.toFixed(1)}`;
+            return d;
         }
 
         function drawChart(points) {
             // points: [{ ts: Date, value: number, label: string }]
-            if (!chart.svg || !chart.line || !chart.grid || !chart.dots || !chart.labels) return;
+            if (!chart.svg || !chart.line || !chart.grid || !chart.dots || !chart.yLabels || !chart.xLabels || !chart.area) return;
             clearChart();
 
             if (!Array.isArray(points) || points.length < 2) {
@@ -220,38 +267,71 @@
                 const v = minV + (i / yTicks) * (maxV - minV);
                 const yy = y(v);
                 chart.grid.insertAdjacentHTML('beforeend',
-                    `<line x1="${pad.l}" y1="${yy}" x2="${W - pad.r}" y2="${yy}" stroke="rgba(0,0,0,0.06)" stroke-width="1" />`
+                    `<line x1="${pad.l}" y1="${yy}" x2="${W - pad.r}" y2="${yy}" stroke="rgba(17,24,39,${i === 0 ? 0.10 : 0.06})" stroke-width="1" />`
                 );
-                chart.labels.insertAdjacentHTML('beforeend',
-                    `<text x="${pad.l - 8}" y="${yy + 4}" text-anchor="end" font-size="11" fill="#777">${v.toFixed(0)}</text>`
+                chart.yLabels.insertAdjacentHTML('beforeend',
+                    `<text x="${pad.l - 10}" y="${yy + 4}" text-anchor="end" font-size="11" font-weight="800" fill="rgba(17,24,39,0.62)">${v.toFixed(0)}</text>`
                 );
             }
 
-            // X labels (up to 6 evenly spaced)
+            // X labels (designed pills, up to 6)
             const xTicks = Math.min(6, points.length);
             for (let i = 0; i < xTicks; i++) {
                 const idx = Math.round((i / (xTicks - 1)) * (points.length - 1));
                 const p = points[idx];
                 const xx = x(p.ts.getTime());
+
+                // vertical grid at tick
                 chart.grid.insertAdjacentHTML('beforeend',
-                    `<line x1="${xx}" y1="${pad.t}" x2="${xx}" y2="${H - pad.b}" stroke="rgba(0,0,0,0.04)" stroke-width="1" />`
+                    `<line x1="${xx}" y1="${pad.t}" x2="${xx}" y2="${H - pad.b}" stroke="rgba(17,24,39,0.04)" stroke-width="1" />`
                 );
-                chart.labels.insertAdjacentHTML('beforeend',
-                    `<text x="${xx}" y="${H - 10}" text-anchor="middle" font-size="11" fill="#777">${p.label}</text>`
+
+                // bottom tick mark
+                chart.grid.insertAdjacentHTML('beforeend',
+                    `<line x1="${xx}" y1="${H - pad.b + 1}" x2="${xx}" y2="${H - pad.b + 7}" stroke="rgba(17,24,39,0.18)" stroke-width="1" />`
+                );
+
+                const label = fmtTimeHHmm(p.ts);
+                const pillW = 54;
+                const pillH = 18;
+                const pillX = Math.max(pad.l, Math.min(W - pad.r - pillW, xx - pillW / 2));
+                const pillY = H - 24;
+                const textX = pillX + pillW / 2;
+                const textY = pillY + 13;
+
+                chart.xLabels.insertAdjacentHTML('beforeend',
+                    `<g>
+                        <rect x="${pillX}" y="${pillY}" width="${pillW}" height="${pillH}" rx="9"
+                              fill="rgba(244,245,247,0.92)" stroke="rgba(17,24,39,0.10)" />
+                        <text x="${textX}" y="${textY}" text-anchor="middle"
+                              font-size="11" font-weight="900" fill="rgba(17,24,39,0.78)">${label}</text>
+                    </g>`
                 );
             }
 
-            const pts = points.map(p => `${x(p.ts.getTime()).toFixed(1)},${y(p.value).toFixed(1)}`).join(' ');
-            chart.line.setAttribute('points', pts);
+            const coords = points.map(p => ({ x: x(p.ts.getTime()), y: y(p.value) }));
+            const dLine = buildSmoothPath(coords);
+            chart.line.setAttribute('d', dLine);
+
+            const baseY = y(minV);
+            const first = coords[0];
+            const lastCoord = coords[coords.length - 1];
+            const dArea = `${dLine} L ${lastCoord.x.toFixed(1)} ${baseY.toFixed(1)} L ${first.x.toFixed(1)} ${baseY.toFixed(1)} Z`;
+            chart.area.setAttribute('d', dArea);
 
             // Dots
-            const last = points[points.length - 1];
+            const lastPoint = points[points.length - 1];
             for (const p of points) {
                 const cx = x(p.ts.getTime());
                 const cy = y(p.value);
-                const isLast = p === last;
+                const isLast = p === lastPoint;
                 chart.dots.insertAdjacentHTML('beforeend',
-                    `<circle cx="${cx}" cy="${cy}" r="${isLast ? 4.2 : 3}" fill="${isLast ? '#F27121' : 'rgba(242,113,33,0.65)'}" />`
+                    isLast
+                        ? `<g>
+                               <circle cx="${cx}" cy="${cy}" r="7.2" fill="rgba(242,113,33,0.14)" />
+                               <circle cx="${cx}" cy="${cy}" r="4.2" fill="#F27121" />
+                           </g>`
+                        : `<circle cx="${cx}" cy="${cy}" r="2.8" fill="rgba(242,113,33,0.60)" />`
                 );
             }
         }
@@ -266,10 +346,9 @@
                     .map(d => {
                         const v = pick(d, ['value', 'Value']);
                         const tsRaw = pick(d, ['timestamp', 'Timestamp']);
-                        const label = pick(d, ['label', 'Label', 'timestampLabel']) || pick(d, ['Timestamp']);
                         const ts = tsRaw ? new Date(tsRaw) : null;
                         if (typeof v !== 'number' || !ts || Number.isNaN(ts.getTime())) return null;
-                        return { value: v, ts, label: (typeof label === 'string' ? label : ts.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) };
+                        return { value: v, ts, label: fmtTimeHHmm(ts) };
                     })
                     .filter(Boolean);
 
