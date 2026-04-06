@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LumiSense")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+66e9b454e48ee8ef7f874341ea035ffc1837fd73")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c2b53834be7baf51af02312b829593c970295ab0")]
 [assembly: System.Reflection.AssemblyProductAttribute("LumiSense")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LumiSense")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
