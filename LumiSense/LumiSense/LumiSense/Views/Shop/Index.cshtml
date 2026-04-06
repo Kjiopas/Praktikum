@@ -252,7 +252,18 @@
                             <i class="far fa-star" style="opacity:0.55;"></i>
                         }
                     }
-                    <span style="color:#666; margin-left:8px;">
+                    <span style="color:#666; margin-left:8px; font-weight:900;">
+                        @if (item.ApprovedReviewCount > 0)
+                        {
+                            @item.AvgRating.ToString("0.0")
+                        }
+                        else
+                        {
+                            @("0.0")
+                        }
+                        /5
+                    </span>
+                    <span style="color:#888; margin-left:8px;">
                         (@item.ApprovedReviewCount)
                     </span>
                 </div>

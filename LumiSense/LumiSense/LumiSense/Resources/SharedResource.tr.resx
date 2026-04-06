@@ -51,6 +51,9 @@
   <data name="Common_Apply" xml:space="preserve">
     <value>Uygula</value>
   </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
   <data name="Common_AccessDenied" xml:space="preserve">
     <value>Erişim reddedildi.</value>
   </data>
@@ -272,6 +275,9 @@
   <data name="Reviews_Subtitle" xml:space="preserve">
     <value>Satın almadan önce diğer kullanıcıların görüşlerine bakın.</value>
   </data>
+  <data name="Reviews_AverageHint" xml:space="preserve">
+    <value>Onaylı yorumların ortalaması</value>
+  </data>
   <data name="Reviews_WriteButton" xml:space="preserve">
     <value>Yorum yaz</value>
   </data>
@@ -353,6 +359,9 @@
   </data>
   <data name="Admin_Status" xml:space="preserve">
     <value>Durum</value>
+  </data>
+  <data name="Admin_ProductStock" xml:space="preserve">
+    <value>Stok adedi</value>
   </data>
   <data name="Admin_DeliveryOffice" xml:space="preserve">
     <value>Ofis/Locker</value>

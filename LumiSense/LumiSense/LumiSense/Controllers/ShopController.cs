@@ -144,6 +144,22 @@ namespace LumiSense.Controllers
             return RedirectToAction(nameof(Product), new { id = productId });
         }
 
+        [HttpPost("/Shop/Product/{id:int}/Stock")]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStock(int id, [FromForm] int stock)
+        {
+            if (stock < 0) stock = 0;
+
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            if (product is null) return NotFound();
+
+            product.Stock = stock;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Product), new { id });
+        }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> PlaceOrder(string customerName, string customerEmail, int productId, int quantity)

@@ -51,6 +51,9 @@
   <data name="Common_Apply" xml:space="preserve">
     <value>Приложи</value>
   </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Запази</value>
+  </data>
   <data name="Common_AccessDenied" xml:space="preserve">
     <value>Отказан достъп.</value>
   </data>
@@ -272,6 +275,9 @@
   <data name="Reviews_Subtitle" xml:space="preserve">
     <value>Вижте мненията на другите преди да купите.</value>
   </data>
+  <data name="Reviews_AverageHint" xml:space="preserve">
+    <value>Средно от одобрени отзиви</value>
+  </data>
   <data name="Reviews_WriteButton" xml:space="preserve">
     <value>Напиши отзив</value>
   </data>
@@ -353,6 +359,9 @@
   </data>
   <data name="Admin_Status" xml:space="preserve">
     <value>Статус</value>
+  </data>
+  <data name="Admin_ProductStock" xml:space="preserve">
+    <value>Количество в наличност</value>
   </data>
   <data name="Admin_DeliveryOffice" xml:space="preserve">
     <value>Офис/локър</value>

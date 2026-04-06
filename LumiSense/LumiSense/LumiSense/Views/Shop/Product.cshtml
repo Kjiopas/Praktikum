@@ -43,6 +43,22 @@
                     @L["Shop_BuyNow"] <i class="fas fa-shopping-cart"></i>
                 </a>
             }
+
+            @if (Model.IsAdmin)
+            {
+                <div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(0,0,0,0.08);">
+                    <div style="font-weight:950; margin-bottom:8px; color:#444;">
+                        <i class="fas fa-warehouse" style="color:#F27121;"></i> @L["Admin_ProductStock"]
+                    </div>
+                    <form method="post" action="/Shop/Product/@Model.Product.Id/Stock" style="display:flex; gap:10px; justify-content:flex-end; align-items:center; flex-wrap:wrap; margin:0;">
+                        @Html.AntiForgeryToken()
+                        <input class="form-control" type="number" name="stock" min="0" value="@Model.Product.Stock" style="width:120px;" />
+                        <button type="submit" class="buy-btn" style="margin-top:0;">
+                            @L["Common_Save"]
+                        </button>
+                    </form>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -52,6 +68,28 @@
         <i class="fas fa-star" style="color:#F27121;"></i>
         @L["Reviews_Title"]
     </h3>
+
+    @{
+        var approved = Model.Reviews.Where(r => r.IsApproved).ToList();
+        var approvedCount = approved.Count;
+        var avgRating = approvedCount == 0 ? 0.0 : approved.Average(r => (double)r.Rating);
+        var avgStars = approvedCount == 0 ? 0 : (int)Math.Round(avgRating, MidpointRounding.AwayFromZero);
+    }
+
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:-2px 0 10px;">
+        <div style="display:flex; align-items:center; gap:10px; color:#666;">
+            <span style="font-weight:950;">@avgRating.ToString("0.0")</span>
+            <span style="color:#F27121;">
+                @for (var i = 1; i <= 5; i++)
+                {
+                    if (i <= avgStars) { <i class="fas fa-star"></i> }
+                    else { <i class="far fa-star" style="opacity:0.55;"></i> }
+                }
+            </span>
+            <span style="color:#777;">(@approvedCount)</span>
+        </div>
+        <div style="color:#777; font-size:0.9rem;">@L["Reviews_AverageHint"]</div>
+    </div>
 
     <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:12px;">
         <div style="color:#666;">@L["Reviews_Subtitle"]</div>
