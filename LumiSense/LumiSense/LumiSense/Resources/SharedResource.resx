@@ -76,6 +76,21 @@
   <data name="Login_ResendEmailConfirmation" xml:space="preserve">
     <value>Resend email confirmation</value>
   </data>
+  <data name="Common_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Login_BannedTitle" xml:space="preserve">
+    <value>Account banned</value>
+  </data>
+  <data name="Login_BannedBody" xml:space="preserve">
+    <value>This account is banned. You can sign in again when the ban expires.</value>
+  </data>
+  <data name="Login_BannedUntil" xml:space="preserve">
+    <value>Banned until</value>
+  </data>
+  <data name="Login_BannedRemaining" xml:space="preserve">
+    <value>Time remaining</value>
+  </data>
 
   <data name="Logout_Title" xml:space="preserve">
     <value>Logout</value>

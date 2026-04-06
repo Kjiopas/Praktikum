@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -20,11 +20,13 @@ namespace LumiSense.Areas.Identity.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
+            _userManager = userManager;
             _logger = logger;
         }
 
@@ -46,6 +48,11 @@ namespace LumiSense.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
+
+        public bool ShowBannedPopup { get; set; }
+        public bool IsPermanentBan { get; set; }
+        public string BannedUntilText { get; set; }
+        public string BannedRemainingText { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -124,7 +131,9 @@ namespace LumiSense.Areas.Identity.Pages.Account
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    await PopulateBanPopupAsync(Input.Email);
+                    ModelState.AddModelError(string.Empty, "This account is banned.");
+                    return Page();
                 }
                 else
                 {
@@ -135,6 +144,56 @@ namespace LumiSense.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task PopulateBanPopupAsync(string email)
+        {
+            ShowBannedPopup = true;
+            IsPermanentBan = false;
+            BannedUntilText = null;
+            BannedRemainingText = null;
+
+            email = (email ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(email)) return;
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user is null) return;
+
+            var lockoutEnd = await _userManager.GetLockoutEndDateAsync(user);
+            if (!lockoutEnd.HasValue) return;
+
+            // Treat very far future lockout as permanent.
+            var utcNow = DateTimeOffset.UtcNow;
+            if (lockoutEnd.Value > utcNow.AddYears(50))
+            {
+                IsPermanentBan = true;
+                BannedUntilText = "∞";
+                BannedRemainingText = "∞";
+                return;
+            }
+
+            var untilLocal = lockoutEnd.Value.ToLocalTime();
+            BannedUntilText = untilLocal.ToString("yyyy-MM-dd HH:mm");
+
+            var remaining = lockoutEnd.Value - utcNow;
+            if (remaining < TimeSpan.Zero) remaining = TimeSpan.Zero;
+
+            var days = remaining.Days;
+            var hours = remaining.Hours;
+            var minutes = remaining.Minutes;
+
+            if (days > 0)
+            {
+                BannedRemainingText = $"{days}d {hours}h {minutes}m";
+            }
+            else if (hours > 0)
+            {
+                BannedRemainingText = $"{hours}h {minutes}m";
+            }
+            else
+            {
+                BannedRemainingText = $"{minutes}m";
+            }
         }
     }
 }

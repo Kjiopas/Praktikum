@@ -44,3 +44,60 @@
         </form>
     </div>
 </div>
+
+@if (Model.ShowBannedPopup)
+{
+    <div id="banOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; padding:18px; z-index:9999;">
+        <div style="width:min(520px, 100%); background:#fff; border-radius:18px; padding:16px; box-shadow:0 18px 40px rgba(0,0,0,0.25); border:1px solid rgba(0,0,0,0.08);">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <div style="width:42px; height:42px; border-radius:999px; display:grid; place-items:center; background:rgba(220,53,69,0.12); color:#dc3545;">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight:950; font-size:1.1rem;">@L["Login_BannedTitle"]</div>
+                        <div style="color:#666; margin-top:2px;">@L["Login_BannedBody"]</div>
+                    </div>
+                </div>
+                <button type="button" id="banCloseX" class="nav-auth-button" style="font-size:1.2rem; line-height:1; padding:0 6px;">×</button>
+            </div>
+
+            <div style="margin-top:12px; background:#f9fafb; border:1px solid rgba(0,0,0,0.06); border-radius:14px; padding:12px;">
+                <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+                    <div>
+                        <div style="font-weight:900; color:#444;">@L["Login_BannedUntil"]</div>
+                        <div style="margin-top:4px; font-weight:950; font-size:1.15rem;">@Model.BannedUntilText</div>
+                    </div>
+                    <div>
+                        <div style="font-weight:900; color:#444;">@L["Login_BannedRemaining"]</div>
+                        <div style="margin-top:4px; font-weight:950; font-size:1.15rem;">@Model.BannedRemainingText</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:12px;">
+                <button type="button" id="banCloseBtn" class="buy-btn" style="margin-top:0;">@L["Common_OK"]</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const overlay = document.getElementById('banOverlay');
+            if (!overlay) return;
+
+            const close = () => { overlay.style.display = 'none'; };
+            overlay.style.display = 'flex';
+
+            const btn = document.getElementById('banCloseBtn');
+            const x = document.getElementById('banCloseX');
+            if (btn) btn.addEventListener('click', close);
+            if (x) x.addEventListener('click', close);
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+        })();
+    </script>
+}
