@@ -1,11 +1,13 @@
 /* BACKGROUND */
 html, body {
     height: 100%;
+    background: #f5f6fa;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a75d1 0%, #7b5bbd 100%);
+    /* Neutral background (matches Bootstrap pages) */
+    background: #f5f6fa;
     color: #333;
     /* FIX FOOTER */
     display: flex;
@@ -21,7 +23,31 @@ main {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    /* Better vertical rhythm + nicer bottom spacing */
+    padding: clamp(1rem, 2.2vw, 2rem);
+    padding-bottom: clamp(2.25rem, 4vw, 3.75rem);
+}
+
+/* FOOTER */
+.footer {
+    margin-top: auto;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    color: rgba(255,255,255,0.92);
+    background: rgba(17,24,39,0.22);
+    border-top: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(8px);
+}
+
+.footer p {
+    margin: 0.25rem 0;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        padding-bottom: 3rem;
+    }
 }
 
 /* UV CARD */

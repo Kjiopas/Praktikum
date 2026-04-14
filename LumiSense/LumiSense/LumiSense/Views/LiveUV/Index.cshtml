@@ -12,6 +12,79 @@
     var rec = Model?.SafetyRecommendation;
 }
 
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .solar-shell {
+            background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.82));
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 18px;
+            box-shadow: 0 14px 34px rgba(0,0,0,0.12);
+        }
+
+        .solar-card {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+        }
+
+        .help-muted {
+            color: rgba(17,24,39,0.60);
+            font-size: 0.9rem;
+        }
+
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(242,113,33,0.12);
+            border: 1px solid rgba(242,113,33,0.22);
+            color: rgba(17,24,39,0.85);
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .solar-kpi {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(102,126,234,0.12), rgba(242,113,33,0.10));
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 14px;
+            padding: 12px 12px;
+        }
+
+        .solar-kpi .value {
+            font-weight: 950;
+            font-size: 1.35rem;
+            color: #111827;
+            letter-spacing: 0.2px;
+        }
+
+        .solar-kpi .unit {
+            font-weight: 900;
+            color: rgba(17,24,39,0.72);
+        }
+
+        .chart-frame {
+            width: 100%;
+            height: 240px;
+            background: radial-gradient(circle at 20% 10%, rgba(102,126,234,0.10), transparent 55%),
+                        radial-gradient(circle at 80% 0%, rgba(242,113,33,0.10), transparent 55%),
+                        #fff;
+            border-radius: 16px;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+    </style>
+}
+
 <div class="container">
 
     <div class="uv-card">
@@ -42,6 +115,13 @@
             <div class="uv-value-container">
                 <div class="uv-value" id="uvValue">@currentUv.ToString("0.0")</div>
                 <div class="uv-label">@L["Live_UvIndexLabel"]</div>
+
+                <div style="margin-top:10px;">
+                    <span class="pill-badge" title="Solar estimate from UV Index">
+                        <i class="fas fa-solar-panel" style="color:#F27121;"></i>
+                        <span id="solarKwhInline">Solar: — kWh</span>
+                    </span>
+                </div>
 
                 <div id="safetyMessage" class="safety-badge" style="background:@(rec?.ColorCode ?? "#2ecc71");">
                     <i class="fas @(string.IsNullOrWhiteSpace(rec?.Icon) ? "fa-smile" : rec!.Icon)"></i>
@@ -143,6 +223,115 @@
             </svg>
         </div>
         <div id="uvChartHint" style="margin-top:0.5rem; font-size:0.85rem; color:#777;"></div>
+    </div>
+
+    <div class="uv-card solar-shell" style="padding:1.5rem;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:0.75rem;">
+            <h3 style="margin:0; display:flex; align-items:center; gap:0.5rem;">
+                <i class="fas fa-solar-panel" style="color:#F27121;"></i>
+                Solar energy estimate (kWh)
+            </h3>
+            <div style="font-size:0.85rem; color:#666;">
+                E = A × (1.6 / UV) × η × t
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-12 col-lg-6">
+                <div class="solar-card">
+                    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                        <div>
+                            <div style="font-weight:950;">Calculator</div>
+                            <div class="help-muted">
+                                Fill <strong>t</strong> (hours) and <strong>η</strong> (efficiency).
+                                Reminder: efficiency is typically <strong>15%–22%</strong>.
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="help-muted">Using current UV</div>
+                            <div style="font-weight:950; font-size:1.05rem;">
+                                <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08);">
+                                    UV <span id="solarUvUsed">—</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-1">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-weight:900;">t (hours)</label>
+                            <div class="input-group">
+                                <input id="solarHours" class="form-control" type="number" min="0" step="0.25" placeholder="e.g. 4">
+                                <span class="input-group-text">h</span>
+                            </div>
+                            <div class="invalid-feedback">Please enter time in hours (t).</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-weight:900;">η (efficiency)</label>
+                            <div class="input-group">
+                                <input id="solarEta" class="form-control" type="number" min="0" step="0.01" placeholder="e.g. 0.18 or 18">
+                                <span class="input-group-text">%</span>
+                            </div>
+                            <div class="invalid-feedback">Please enter efficiency (η) between 0.15 and 0.22 (15%–22%).</div>
+                            <div class="help-muted mt-1">Accepts <strong>0.15–0.22</strong> or <strong>15–22</strong>.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" style="font-weight:900;">A (panel area, m²)</label>
+                            <div class="input-group">
+                                <input id="solarArea" class="form-control" type="number" value="1" min="0" step="0.1" placeholder="e.g. 1.6">
+                                <span class="input-group-text">m²</span>
+                            </div>
+                            <div class="invalid-feedback">Please enter panel area (A) in m².</div>
+                        </div>
+                        <div class="col-12 col-md-6 d-flex align-items-end">
+                            <button id="solarCalcBtn" type="button" class="btn btn-primary" style="margin-top:0; width:100%; border-radius:12px; font-weight:900;">
+                                <i class="fas fa-bolt"></i> Calculate kWh
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 solar-kpi">
+                        <div>
+                            <div style="font-weight:950;">Estimated energy</div>
+                            <div id="solarStatus" class="help-muted mt-1"></div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div class="value"><span id="solarKwh">—</span></div>
+                            <div class="unit">kWh</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="solar-card">
+                    <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2">
+                        <div style="font-weight:950;">Diagram</div>
+                        <div class="help-muted">Y: kWh, X: hours</div>
+                    </div>
+                    <div class="chart-frame">
+                        <svg id="solarChart" viewBox="0 0 800 240" preserveAspectRatio="none" style="width:100%; height:100%; display:block;">
+                            <defs>
+                                <linearGradient id="solarLineGrad" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="#667eea" />
+                                    <stop offset="100%" stop-color="#F27121" />
+                                </linearGradient>
+                                <linearGradient id="solarAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#667eea" stop-opacity="0.20" />
+                                    <stop offset="100%" stop-color="#667eea" stop-opacity="0.00" />
+                                </linearGradient>
+                            </defs>
+                            <rect x="0" y="0" width="800" height="240" fill="transparent"></rect>
+                            <g id="solarGrid"></g>
+                            <path id="solarAreaPath" d="" fill="url(#solarAreaGrad)"></path>
+                            <path id="solarLinePath" d="" fill="none" stroke="url(#solarLineGrad)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <g id="solarLabels"></g>
+                        </svg>
+                    </div>
+                    <div id="solarHint" class="help-muted mt-2"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
@@ -358,6 +547,161 @@
             }
         }
 
+        // ---- Solar calculator ----
+        const solarEls = {
+            hours: document.getElementById('solarHours'),
+            eta: document.getElementById('solarEta'),
+            btn: document.getElementById('solarCalcBtn'),
+            area: document.getElementById('solarArea'),
+            kwh: document.getElementById('solarKwh'),
+            inline: document.getElementById('solarKwhInline'),
+            status: document.getElementById('solarStatus'),
+            uvUsed: document.getElementById('solarUvUsed'),
+            chart: document.getElementById('solarChart'),
+            grid: document.getElementById('solarGrid'),
+            labels: document.getElementById('solarLabels'),
+            line: document.getElementById('solarLinePath'),
+            area: document.getElementById('solarAreaPath'),
+            hint: document.getElementById('solarHint')
+        };
+
+        function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+        function parseEta(raw) {
+            if (raw == null) return null;
+            let v = Number(raw);
+            if (!Number.isFinite(v)) return null;
+            if (v > 1) v = v / 100.0; // percent input
+            return v;
+        }
+
+        function setInvalid(el, isInvalid) {
+            if (!el) return;
+            el.classList.toggle('is-invalid', !!isInvalid);
+        }
+
+        function solarClearChart() {
+            if (solarEls.grid) solarEls.grid.innerHTML = '';
+            if (solarEls.labels) solarEls.labels.innerHTML = '';
+            if (solarEls.line) solarEls.line.setAttribute('d', '');
+            if (solarEls.area) solarEls.area.setAttribute('d', '');
+        }
+
+        function solarDrawChart(tHours, perHourKwh) {
+            if (!solarEls.chart || !solarEls.grid || !solarEls.labels || !solarEls.line || !solarEls.area) return;
+            solarClearChart();
+
+            const W = 800, H = 240;
+            const pad = { l: 44, r: 16, t: 12, b: 32 };
+
+            const maxX = Math.max(1, tHours);
+            const maxY = Math.max(0.001, perHourKwh * maxX);
+
+            const x = (hh) => pad.l + (hh / maxX) * (W - pad.l - pad.r);
+            const y = (kwh) => pad.t + (1 - (kwh / maxY)) * (H - pad.t - pad.b);
+
+            // grid + y labels
+            const yTicks = 4;
+            for (let i = 0; i <= yTicks; i++) {
+                const v = (i / yTicks) * maxY;
+                const yy = y(v);
+                solarEls.grid.insertAdjacentHTML('beforeend',
+                    `<line x1="${pad.l}" y1="${yy}" x2="${W - pad.r}" y2="${yy}" stroke="rgba(17,24,39,${i===0?0.10:0.06})" stroke-width="1" />`
+                );
+                solarEls.labels.insertAdjacentHTML('beforeend',
+                    `<text x="${pad.l - 10}" y="${yy + 4}" text-anchor="end" font-size="11" font-weight="800" fill="rgba(17,24,39,0.62)">${v.toFixed(2)}</text>`
+                );
+            }
+
+            // x labels at 0, mid, end
+            const xTicks = 3;
+            for (let i = 0; i < xTicks; i++) {
+                const hh = (i / (xTicks - 1)) * maxX;
+                const xx = x(hh);
+                solarEls.grid.insertAdjacentHTML('beforeend',
+                    `<line x1="${xx}" y1="${pad.t}" x2="${xx}" y2="${H - pad.b}" stroke="rgba(17,24,39,0.04)" stroke-width="1" />`
+                );
+                solarEls.labels.insertAdjacentHTML('beforeend',
+                    `<text x="${xx}" y="${H - 10}" text-anchor="middle" font-size="11" font-weight="900" fill="rgba(17,24,39,0.78)">${hh.toFixed(0)}h</text>`
+                );
+            }
+
+            // line (cumulative energy)
+            const steps = Math.max(2, Math.min(60, Math.ceil(maxX * 6))); // up to 10-min resolution
+            const coords = [];
+            for (let i = 0; i <= steps; i++) {
+                const hh = (i / steps) * maxX;
+                const e = perHourKwh * hh;
+                coords.push({ x: x(hh), y: y(e) });
+            }
+
+            let d = `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+            for (let i = 1; i < coords.length; i++) {
+                d += ` L ${coords[i].x.toFixed(1)} ${coords[i].y.toFixed(1)}`;
+            }
+            solarEls.line.setAttribute('d', d);
+
+            const baseY = y(0);
+            const dArea = `${d} L ${coords[coords.length - 1].x.toFixed(1)} ${baseY.toFixed(1)} L ${coords[0].x.toFixed(1)} ${baseY.toFixed(1)} Z`;
+            solarEls.area.setAttribute('d', dArea);
+        }
+
+        function solarRecalc() {
+            if (!solarEls.hours || !solarEls.eta || !solarEls.area || !solarEls.kwh || !solarEls.inline || !solarEls.status || !solarEls.uvUsed) return;
+
+            const uv = Number((els.uvValue && els.uvValue.textContent) ? els.uvValue.textContent : '0');
+            solarEls.uvUsed.textContent = Number.isFinite(uv) ? uv.toFixed(1) : '—';
+
+            const t = Number(solarEls.hours.value);
+            const eta = parseEta(solarEls.eta.value);
+            const A = Number(solarEls.area.value);
+
+            const badT = !(Number.isFinite(t) && t > 0);
+            const badEta = !(eta != null && eta > 0);
+            const badA = !(Number.isFinite(A) && A > 0);
+            setInvalid(solarEls.hours, badT);
+            setInvalid(solarEls.eta, badEta);
+            setInvalid(solarEls.area, badA);
+
+            if (badT || badEta || badA) {
+                solarEls.status.textContent = 'Please fill A (area), t (hours), and η (efficiency).';
+                solarEls.kwh.textContent = '—';
+                solarEls.inline.textContent = 'Solar: — kWh';
+                if (solarEls.hint) solarEls.hint.textContent = 'Enter t and η to draw the diagram.';
+                solarClearChart();
+                return;
+            }
+
+            if (!Number.isFinite(uv) || uv <= 0) {
+                solarEls.status.textContent = 'Cannot calculate when UV is 0. Refresh UV first.';
+                solarEls.kwh.textContent = '—';
+                solarEls.inline.textContent = 'Solar: — kWh';
+                if (solarEls.hint) solarEls.hint.textContent = 'Waiting for UV data.';
+                solarClearChart();
+                return;
+            }
+
+            const perHour = A * (1.6 / uv) * eta; // user-provided formula
+            const E = perHour * t;
+
+            solarEls.kwh.textContent = E.toFixed(3);
+            solarEls.inline.textContent = `Solar: ${E.toFixed(2)} kWh`;
+            solarEls.status.textContent = `Using A=${A.toFixed(2)}m², UV=${uv.toFixed(1)}, η=${eta.toFixed(2)}, t=${t.toFixed(2)}h`;
+            if (solarEls.hint) solarEls.hint.textContent = 'Cumulative kWh over time.';
+            solarDrawChart(t, perHour);
+        }
+
+        if (solarEls.btn) solarEls.btn.addEventListener('click', solarRecalc);
+        if (solarEls.hours) solarEls.hours.addEventListener('input', () => {
+            setInvalid(solarEls.hours, false);
+        });
+        if (solarEls.eta) solarEls.eta.addEventListener('input', () => {
+            setInvalid(solarEls.eta, false);
+        });
+        if (solarEls.area) solarEls.area.addEventListener('input', () => {
+            setInvalid(solarEls.area, false);
+        });
+
         function renderPayload(payload) {
             const reading = payload && payload.reading;
             const rec = payload && payload.recommendation;
@@ -378,6 +722,10 @@
                 const formatted = uv.toFixed(1);
                 if (els.uvValue) els.uvValue.textContent = formatted;
                 if (els.currentUv) els.currentUv.textContent = formatted;
+                // if user already filled calculator, keep it in sync with UV changes
+                if (solarEls && solarEls.hours && solarEls.eta && (solarEls.hours.value || solarEls.eta.value)) {
+                    solarRecalc();
+                }
             }
 
             if (rec) {
