@@ -326,8 +326,18 @@
                             <path id="solarAreaPath" d="" fill="url(#solarAreaGrad)"></path>
                             <path id="solarLinePath" d="" fill="none" stroke="url(#solarLineGrad)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round"></path>
                             <g id="solarLabels"></g>
+                            <g id="solarOverlay"></g>
                         </svg>
                     </div>
+                    <div class="d-flex flex-wrap gap-2 mt-2" style="align-items:center;">
+                        <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08);">UV <span id="solarDiagUv">—</span></span>
+                        <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08);">A <span id="solarDiagA">—</span> m²</span>
+                        <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08);">η <span id="solarDiagEta">—</span></span>
+                        <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08);">t <span id="solarDiagT">—</span> h</span>
+                        <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08);">kWh/h <span id="solarDiagPerHour">—</span></span>
+                        <span class="badge text-bg-light" style="border:1px solid rgba(0,0,0,0.08); font-weight:950;">E <span id="solarDiagE">—</span> kWh</span>
+                    </div>
+                    <div id="solarEquation" class="help-muted mt-2" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"></div>
                     <div id="solarHint" class="help-muted mt-2"></div>
                 </div>
             </div>
@@ -552,7 +562,7 @@
             hours: document.getElementById('solarHours'),
             eta: document.getElementById('solarEta'),
             btn: document.getElementById('solarCalcBtn'),
-            area: document.getElementById('solarArea'),
+            areaInput: document.getElementById('solarArea'),
             kwh: document.getElementById('solarKwh'),
             inline: document.getElementById('solarKwhInline'),
             status: document.getElementById('solarStatus'),
@@ -561,16 +571,31 @@
             grid: document.getElementById('solarGrid'),
             labels: document.getElementById('solarLabels'),
             line: document.getElementById('solarLinePath'),
-            area: document.getElementById('solarAreaPath'),
-            hint: document.getElementById('solarHint')
+            areaPath: document.getElementById('solarAreaPath'),
+            hint: document.getElementById('solarHint'),
+            diagUv: document.getElementById('solarDiagUv'),
+            diagA: document.getElementById('solarDiagA'),
+            diagEta: document.getElementById('solarDiagEta'),
+            diagT: document.getElementById('solarDiagT'),
+            diagPerHour: document.getElementById('solarDiagPerHour'),
+            diagE: document.getElementById('solarDiagE'),
+            equation: document.getElementById('solarEquation'),
+            overlay: document.getElementById('solarOverlay')
         };
 
         function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
 
-        function parseEta(raw) {
+        function parseNum(raw) {
             if (raw == null) return null;
-            let v = Number(raw);
-            if (!Number.isFinite(v)) return null;
+            const s = String(raw).trim().replace(',', '.');
+            if (!s) return null;
+            const v = Number.parseFloat(s);
+            return Number.isFinite(v) ? v : null;
+        }
+
+        function parseEta(raw) {
+            let v = parseNum(raw);
+            if (v == null) return null;
             if (v > 1) v = v / 100.0; // percent input
             return v;
         }
@@ -584,11 +609,43 @@
             if (solarEls.grid) solarEls.grid.innerHTML = '';
             if (solarEls.labels) solarEls.labels.innerHTML = '';
             if (solarEls.line) solarEls.line.setAttribute('d', '');
-            if (solarEls.area) solarEls.area.setAttribute('d', '');
+            if (solarEls.areaPath) solarEls.areaPath.setAttribute('d', '');
+            if (solarEls.overlay) solarEls.overlay.innerHTML = '';
+        }
+
+        function escXml(s) {
+            return String(s)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#39;');
+        }
+
+        function solarSetOverlay(lines) {
+            if (!solarEls.overlay) return;
+            const safe = (lines || []).map(escXml);
+            const pad = { x: 14, y: 14 };
+            const lineH = 16;
+            const fontSize = 12;
+            const w = 360;
+            const h = 12 + safe.length * lineH;
+            let y = pad.y + 20;
+
+            let html = `
+                <rect x="${pad.x}" y="${pad.y}" rx="12" ry="12" width="${w}" height="${h}"
+                      fill="rgba(255,255,255,0.78)" stroke="rgba(17,24,39,0.10)" />
+                <text x="${pad.x + 14}" y="${pad.y + 22}" font-size="${fontSize}" font-weight="900"
+                      fill="rgba(17,24,39,0.90)">Calculation</text>
+            `;
+            for (let i = 0; i < safe.length; i++) {
+                html += `<text x="${pad.x + 14}" y="${y + i * lineH}" font-size="${fontSize}" font-weight="700" fill="rgba(17,24,39,0.78)">${safe[i]}</text>`;
+            }
+            solarEls.overlay.innerHTML = html;
         }
 
         function solarDrawChart(tHours, perHourKwh) {
-            if (!solarEls.chart || !solarEls.grid || !solarEls.labels || !solarEls.line || !solarEls.area) return;
+            if (!solarEls.chart || !solarEls.grid || !solarEls.labels || !solarEls.line || !solarEls.areaPath) return;
             solarClearChart();
 
             const W = 800, H = 240;
@@ -643,63 +700,143 @@
 
             const baseY = y(0);
             const dArea = `${d} L ${coords[coords.length - 1].x.toFixed(1)} ${baseY.toFixed(1)} L ${coords[0].x.toFixed(1)} ${baseY.toFixed(1)} Z`;
-            solarEls.area.setAttribute('d', dArea);
+            solarEls.areaPath.setAttribute('d', dArea);
         }
 
         function solarRecalc() {
-            if (!solarEls.hours || !solarEls.eta || !solarEls.area || !solarEls.kwh || !solarEls.inline || !solarEls.status || !solarEls.uvUsed) return;
+            if (!solarEls.hours || !solarEls.eta || !solarEls.areaInput || !solarEls.kwh || !solarEls.inline || !solarEls.status || !solarEls.uvUsed) return;
 
             const uv = Number((els.uvValue && els.uvValue.textContent) ? els.uvValue.textContent : '0');
             solarEls.uvUsed.textContent = Number.isFinite(uv) ? uv.toFixed(1) : '—';
 
-            const t = Number(solarEls.hours.value);
+            const t = parseNum(solarEls.hours.value);
             const eta = parseEta(solarEls.eta.value);
-            const A = Number(solarEls.area.value);
+            const A = parseNum(solarEls.areaInput.value);
 
-            const badT = !(Number.isFinite(t) && t > 0);
+            const badT = !(t != null && t > 0);
             const badEta = !(eta != null && eta > 0);
-            const badA = !(Number.isFinite(A) && A > 0);
+            const badA = !(A != null && A > 0);
             setInvalid(solarEls.hours, badT);
             setInvalid(solarEls.eta, badEta);
-            setInvalid(solarEls.area, badA);
+            setInvalid(solarEls.areaInput, badA);
 
             if (badT || badEta || badA) {
-                solarEls.status.textContent = 'Please fill A (area), t (hours), and η (efficiency).';
+                const missing = [];
+                if (badA) missing.push('A');
+                if (badT) missing.push('t');
+                if (badEta) missing.push('η');
+                solarEls.status.textContent = `Please fill ${missing.join(', ')} to calculate.`;
                 solarEls.kwh.textContent = '—';
                 solarEls.inline.textContent = 'Solar: — kWh';
-                if (solarEls.hint) solarEls.hint.textContent = 'Enter t and η to draw the diagram.';
+                if (solarEls.hint) solarEls.hint.textContent = 'Enter A (m²), t (hours), and η, then press Calculate.';
+                if (solarEls.diagUv) solarEls.diagUv.textContent = Number.isFinite(uv) ? uv.toFixed(1) : '—';
+                if (solarEls.diagA) solarEls.diagA.textContent = (A != null && A > 0) ? A.toFixed(2) : '—';
+                if (solarEls.diagEta) solarEls.diagEta.textContent = (eta != null && eta > 0) ? eta.toFixed(3) : '—';
+                if (solarEls.diagT) solarEls.diagT.textContent = (t != null && t > 0) ? t.toFixed(2) : '—';
+                if (solarEls.diagPerHour) solarEls.diagPerHour.textContent = '—';
+                if (solarEls.diagE) solarEls.diagE.textContent = '—';
+                if (solarEls.equation) {
+                    solarEls.equation.innerHTML =
+                        `<div>E = A × (1.6 / UV) × η × t</div>
+                         <div class="help-muted">Fill missing values to show the full calculation steps.</div>`;
+                }
+                solarSetOverlay([
+                    'E = A × (1.6/UV) × η × t',
+                    `UV = ${Number.isFinite(uv) ? uv.toFixed(1) : '—'}`,
+                    `A = ${(A != null && A > 0) ? A.toFixed(2) : '—'} m²`,
+                    `η = ${(eta != null && eta > 0) ? eta.toFixed(3) : '—'}`,
+                    `t = ${(t != null && t > 0) ? t.toFixed(2) : '—'} h`,
+                    'Fill missing values to calculate.'
+                ]);
                 solarClearChart();
                 return;
             }
 
             if (!Number.isFinite(uv) || uv <= 0) {
-                solarEls.status.textContent = 'Cannot calculate when UV is 0. Refresh UV first.';
-                solarEls.kwh.textContent = '—';
-                solarEls.inline.textContent = 'Solar: — kWh';
-                if (solarEls.hint) solarEls.hint.textContent = 'Waiting for UV data.';
-                solarClearChart();
+                // Avoid "doesn't work" feel when UV is 0 (night time / no data yet).
+                // We treat UV<=0 as 0 production for this estimate.
+                const perHourZero = 0;
+                const E0 = 0;
+                solarEls.kwh.textContent = E0.toFixed(3);
+                solarEls.inline.textContent = `Solar: ${E0.toFixed(2)} kWh`;
+                solarEls.status.textContent = `UV is 0.0 → estimated production is 0 kWh. (A=${A.toFixed(2)}m², η=${eta.toFixed(2)}, t=${t.toFixed(2)}h)`;
+                if (solarEls.hint) solarEls.hint.textContent = 'UV is 0, so the diagram is flat at 0 kWh.';
+                if (solarEls.diagUv) solarEls.diagUv.textContent = '0.0';
+                if (solarEls.diagA) solarEls.diagA.textContent = A.toFixed(2);
+                if (solarEls.diagEta) solarEls.diagEta.textContent = eta.toFixed(3);
+                if (solarEls.diagT) solarEls.diagT.textContent = t.toFixed(2);
+                if (solarEls.diagPerHour) solarEls.diagPerHour.textContent = perHourZero.toFixed(3);
+                if (solarEls.diagE) solarEls.diagE.textContent = E0.toFixed(3);
+                if (solarEls.equation) {
+                    const etaPct = (eta * 100);
+                    solarEls.equation.innerHTML =
+                        `<div>E = A × (1.6 / UV) × η × t</div>
+                         <div>UV ≤ 0 ⇒ E = 0 kWh</div>
+                         <div>A = ${A.toFixed(2)} m²</div>
+                         <div>η = ${eta.toFixed(3)} (${etaPct.toFixed(1)}%)</div>
+                         <div>t = ${t.toFixed(2)} h</div>`;
+                }
+                solarSetOverlay([
+                    'E = A × (1.6/UV) × η × t',
+                    `UV = 0.0 → E = 0.0000 kWh`,
+                    `A = ${A.toFixed(2)} m²`,
+                    `η = ${eta.toFixed(3)} (${(eta * 100).toFixed(1)}%)`,
+                    `t = ${t.toFixed(2)} h`
+                ]);
+                solarDrawChart(t, perHourZero);
                 return;
             }
 
-            const perHour = A * (1.6 / uv) * eta; // user-provided formula
+            const factor = 1.6 / uv;
+            const aScaled = A * factor;
+            const perHour = aScaled * eta; // kWh per hour
             const E = perHour * t;
 
             solarEls.kwh.textContent = E.toFixed(3);
             solarEls.inline.textContent = `Solar: ${E.toFixed(2)} kWh`;
             solarEls.status.textContent = `Using A=${A.toFixed(2)}m², UV=${uv.toFixed(1)}, η=${eta.toFixed(2)}, t=${t.toFixed(2)}h`;
             if (solarEls.hint) solarEls.hint.textContent = 'Cumulative kWh over time.';
+            if (solarEls.diagUv) solarEls.diagUv.textContent = uv.toFixed(1);
+            if (solarEls.diagA) solarEls.diagA.textContent = A.toFixed(2);
+            if (solarEls.diagEta) solarEls.diagEta.textContent = eta.toFixed(3);
+            if (solarEls.diagT) solarEls.diagT.textContent = t.toFixed(2);
+            if (solarEls.diagPerHour) solarEls.diagPerHour.textContent = perHour.toFixed(3);
+            if (solarEls.diagE) solarEls.diagE.textContent = E.toFixed(3);
+            if (solarEls.equation) {
+                const etaPct = (eta * 100);
+                solarEls.equation.innerHTML =
+                    `<div>E = A × (1.6 / UV) × η × t</div>
+                     <div>1.6 / UV = 1.6 / ${uv.toFixed(1)} = ${factor.toFixed(4)}</div>
+                     <div>A × (1.6 / UV) = ${A.toFixed(2)} × ${factor.toFixed(4)} = ${aScaled.toFixed(4)}</div>
+                     <div>kWh/h = ${aScaled.toFixed(4)} × η = ${aScaled.toFixed(4)} × ${eta.toFixed(3)} (${etaPct.toFixed(1)}%) = ${perHour.toFixed(4)}</div>
+                     <div>E = (kWh/h) × t = ${perHour.toFixed(4)} × ${t.toFixed(2)} = <strong>${E.toFixed(4)} kWh</strong></div>`;
+            }
+            solarSetOverlay([
+                'E = A × (1.6/UV) × η × t',
+                `UV = ${uv.toFixed(1)}`,
+                `1.6/UV = 1.6/${uv.toFixed(1)} = ${factor.toFixed(6)}`,
+                `A = ${A.toFixed(2)} m²`,
+                `A×(1.6/UV) = ${A.toFixed(2)}×${factor.toFixed(6)} = ${aScaled.toFixed(6)}`,
+                `η = ${eta.toFixed(3)} (${(eta * 100).toFixed(1)}%)`,
+                `kWh/h = ${aScaled.toFixed(6)}×${eta.toFixed(3)} = ${perHour.toFixed(6)}`,
+                `t = ${t.toFixed(2)} h`,
+                `E = ${perHour.toFixed(6)}×${t.toFixed(2)} = ${E.toFixed(6)} kWh`
+            ]);
             solarDrawChart(t, perHour);
         }
 
         if (solarEls.btn) solarEls.btn.addEventListener('click', solarRecalc);
         if (solarEls.hours) solarEls.hours.addEventListener('input', () => {
             setInvalid(solarEls.hours, false);
+            if (solarEls.hours.value || solarEls.eta?.value || solarEls.areaInput?.value) solarRecalc();
         });
         if (solarEls.eta) solarEls.eta.addEventListener('input', () => {
             setInvalid(solarEls.eta, false);
+            if (solarEls.hours?.value || solarEls.eta.value || solarEls.areaInput?.value) solarRecalc();
         });
-        if (solarEls.area) solarEls.area.addEventListener('input', () => {
-            setInvalid(solarEls.area, false);
+        if (solarEls.areaInput) solarEls.areaInput.addEventListener('input', () => {
+            setInvalid(solarEls.areaInput, false);
+            if (solarEls.hours?.value || solarEls.eta?.value || solarEls.areaInput.value) solarRecalc();
         });
 
         function renderPayload(payload) {
